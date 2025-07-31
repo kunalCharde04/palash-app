@@ -309,5 +309,9 @@ model UserMembership {
   parentMembership   UserMembership?  @relation("MembershipGroup", fields: [parentMembershipId], references: [id])
   memberMemberships  UserMembership[] @relation("MembershipGroup")
   payments           Payment[] // Relation to payments for this membership
+  rfidCardId         String?          @unique // RFID card assigned to this membership (shared by all users)
+  rfidScanHistory    Json[] // New: RFID-level scan history
+  lastScanTime       DateTime?        @default(now()) // New: Last RFID scan time
+  counter            Int              @default(0)
   createdAt          DateTime         @default(now())
 }

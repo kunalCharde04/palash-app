@@ -355,7 +355,7 @@ export default class MembershipController {
                 // Cancel the primary membership
                 const updatedPrimaryMembership = await prisma.userMembership.update({
                     where: { id: membershipId },
-                    data: { isActive: false }
+                    data: { isActive: false, rfidCardId: null }
                 });
 
                 // Find and cancel all related member memberships using parentMembershipId
@@ -785,4 +785,6 @@ export default class MembershipController {
             throw new ValidationError("Failed to check if user is already subscribed");
         }
     });
+
+  
 }

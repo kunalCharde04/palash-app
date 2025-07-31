@@ -16,5 +16,14 @@ ManagementRouter.post('/bookings/availability/bulk/:serviceId', bookingManagemen
 ManagementRouter.put('/bookings/availability/:serviceId/:date', bookingManagementControllerInstance.updateAvailablityForSpecificDate);
 ManagementRouter.delete('/users/delete-user/:userId', userManagementControllerInstance.deleteUser);
 ManagementRouter.get('/users/fetch-users', userManagementControllerInstance.fetchUsers);
+ManagementRouter.post('/users/assign-rfid', userManagementControllerInstance.assignRFIDToUser);
+ManagementRouter.get('/users/membership-groups', userManagementControllerInstance.fetchAllMembershipGroupsWithRFID);
+// ManagementRouter.patch('/users/update-rfid', userManagementControllerInstance.updateRFIDForMembership);
+ManagementRouter.delete('/users/unassign-rfid', userManagementControllerInstance.unassignRFIDForMembership);
+ManagementRouter.post('/users/check-rfid-access', userManagementControllerInstance.checkUserRFIDAccess);
+ManagementRouter.get('/users/rfid-access/:rfidCardId', userManagementControllerInstance.getUsersWithRFIDAccess);
+ManagementRouter.post('/attendance/rfid-tap', userManagementControllerInstance.recordRFIDAttendance);
+ManagementRouter.get('/attendance/rfid-usage', userManagementControllerInstance.getRFIDUsage);
+ManagementRouter.get('/fetch-all-subscribed-memberships', userManagementControllerInstance.fetchAllUserMemberships)
 
 export default ManagementRouter;

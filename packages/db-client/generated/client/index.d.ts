@@ -15629,8 +15629,18 @@ export namespace Prisma {
 
   export type AggregateUserMembership = {
     _count: UserMembershipCountAggregateOutputType | null
+    _avg: UserMembershipAvgAggregateOutputType | null
+    _sum: UserMembershipSumAggregateOutputType | null
     _min: UserMembershipMinAggregateOutputType | null
     _max: UserMembershipMaxAggregateOutputType | null
+  }
+
+  export type UserMembershipAvgAggregateOutputType = {
+    counter: number | null
+  }
+
+  export type UserMembershipSumAggregateOutputType = {
+    counter: number | null
   }
 
   export type UserMembershipMinAggregateOutputType = {
@@ -15642,6 +15652,9 @@ export namespace Prisma {
     isPrimary: boolean | null
     isActive: boolean | null
     parentMembershipId: string | null
+    rfidCardId: string | null
+    lastScanTime: Date | null
+    counter: number | null
     createdAt: Date | null
   }
 
@@ -15654,6 +15667,9 @@ export namespace Prisma {
     isPrimary: boolean | null
     isActive: boolean | null
     parentMembershipId: string | null
+    rfidCardId: string | null
+    lastScanTime: Date | null
+    counter: number | null
     createdAt: Date | null
   }
 
@@ -15666,10 +15682,22 @@ export namespace Prisma {
     isPrimary: number
     isActive: number
     parentMembershipId: number
+    rfidCardId: number
+    rfidScanHistory: number
+    lastScanTime: number
+    counter: number
     createdAt: number
     _all: number
   }
 
+
+  export type UserMembershipAvgAggregateInputType = {
+    counter?: true
+  }
+
+  export type UserMembershipSumAggregateInputType = {
+    counter?: true
+  }
 
   export type UserMembershipMinAggregateInputType = {
     id?: true
@@ -15680,6 +15708,9 @@ export namespace Prisma {
     isPrimary?: true
     isActive?: true
     parentMembershipId?: true
+    rfidCardId?: true
+    lastScanTime?: true
+    counter?: true
     createdAt?: true
   }
 
@@ -15692,6 +15723,9 @@ export namespace Prisma {
     isPrimary?: true
     isActive?: true
     parentMembershipId?: true
+    rfidCardId?: true
+    lastScanTime?: true
+    counter?: true
     createdAt?: true
   }
 
@@ -15704,6 +15738,10 @@ export namespace Prisma {
     isPrimary?: true
     isActive?: true
     parentMembershipId?: true
+    rfidCardId?: true
+    rfidScanHistory?: true
+    lastScanTime?: true
+    counter?: true
     createdAt?: true
     _all?: true
   }
@@ -15746,6 +15784,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: UserMembershipAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserMembershipSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserMembershipMinAggregateInputType
@@ -15776,6 +15826,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserMembershipCountAggregateInputType | true
+    _avg?: UserMembershipAvgAggregateInputType
+    _sum?: UserMembershipSumAggregateInputType
     _min?: UserMembershipMinAggregateInputType
     _max?: UserMembershipMaxAggregateInputType
   }
@@ -15789,8 +15841,14 @@ export namespace Prisma {
     isPrimary: boolean
     isActive: boolean
     parentMembershipId: string | null
+    rfidCardId: string | null
+    rfidScanHistory: JsonValue[]
+    lastScanTime: Date | null
+    counter: number
     createdAt: Date
     _count: UserMembershipCountAggregateOutputType | null
+    _avg: UserMembershipAvgAggregateOutputType | null
+    _sum: UserMembershipSumAggregateOutputType | null
     _min: UserMembershipMinAggregateOutputType | null
     _max: UserMembershipMaxAggregateOutputType | null
   }
@@ -15818,6 +15876,10 @@ export namespace Prisma {
     isPrimary?: boolean
     isActive?: boolean
     parentMembershipId?: boolean
+    rfidCardId?: boolean
+    rfidScanHistory?: boolean
+    lastScanTime?: boolean
+    counter?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     plan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
@@ -15836,6 +15898,10 @@ export namespace Prisma {
     isPrimary?: boolean
     isActive?: boolean
     parentMembershipId?: boolean
+    rfidCardId?: boolean
+    rfidScanHistory?: boolean
+    lastScanTime?: boolean
+    counter?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     plan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
@@ -15851,6 +15917,10 @@ export namespace Prisma {
     isPrimary?: boolean
     isActive?: boolean
     parentMembershipId?: boolean
+    rfidCardId?: boolean
+    rfidScanHistory?: boolean
+    lastScanTime?: boolean
+    counter?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     plan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
@@ -15866,10 +15936,14 @@ export namespace Prisma {
     isPrimary?: boolean
     isActive?: boolean
     parentMembershipId?: boolean
+    rfidCardId?: boolean
+    rfidScanHistory?: boolean
+    lastScanTime?: boolean
+    counter?: boolean
     createdAt?: boolean
   }
 
-  export type UserMembershipOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "planId" | "startDate" | "endDate" | "isPrimary" | "isActive" | "parentMembershipId" | "createdAt", ExtArgs["result"]["userMembership"]>
+  export type UserMembershipOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "planId" | "startDate" | "endDate" | "isPrimary" | "isActive" | "parentMembershipId" | "rfidCardId" | "rfidScanHistory" | "lastScanTime" | "counter" | "createdAt", ExtArgs["result"]["userMembership"]>
   export type UserMembershipInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     plan?: boolean | MembershipPlanDefaultArgs<ExtArgs>
@@ -15907,6 +15981,10 @@ export namespace Prisma {
       isPrimary: boolean
       isActive: boolean
       parentMembershipId: string | null
+      rfidCardId: string | null
+      rfidScanHistory: Prisma.JsonValue[]
+      lastScanTime: Date | null
+      counter: number
       createdAt: Date
     }, ExtArgs["result"]["userMembership"]>
     composites: {}
@@ -16344,6 +16422,10 @@ export namespace Prisma {
     readonly isPrimary: FieldRef<"UserMembership", 'Boolean'>
     readonly isActive: FieldRef<"UserMembership", 'Boolean'>
     readonly parentMembershipId: FieldRef<"UserMembership", 'String'>
+    readonly rfidCardId: FieldRef<"UserMembership", 'String'>
+    readonly rfidScanHistory: FieldRef<"UserMembership", 'Json[]'>
+    readonly lastScanTime: FieldRef<"UserMembership", 'DateTime'>
+    readonly counter: FieldRef<"UserMembership", 'Int'>
     readonly createdAt: FieldRef<"UserMembership", 'DateTime'>
   }
     
@@ -17047,6 +17129,10 @@ export namespace Prisma {
     isPrimary: 'isPrimary',
     isActive: 'isActive',
     parentMembershipId: 'parentMembershipId',
+    rfidCardId: 'rfidCardId',
+    rfidScanHistory: 'rfidScanHistory',
+    lastScanTime: 'lastScanTime',
+    counter: 'counter',
     createdAt: 'createdAt'
   };
 
@@ -17327,6 +17413,13 @@ export namespace Prisma {
    * Reference to a field of type 'PaymentType[]'
    */
   export type ListEnumPaymentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PaymentType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json[]'
+   */
+  export type ListJsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json[]'>
     
   /**
    * Deep Input Types
@@ -18403,6 +18496,10 @@ export namespace Prisma {
     isPrimary?: BoolFilter<"UserMembership"> | boolean
     isActive?: BoolFilter<"UserMembership"> | boolean
     parentMembershipId?: StringNullableFilter<"UserMembership"> | string | null
+    rfidCardId?: StringNullableFilter<"UserMembership"> | string | null
+    rfidScanHistory?: JsonNullableListFilter<"UserMembership">
+    lastScanTime?: DateTimeNullableFilter<"UserMembership"> | Date | string | null
+    counter?: IntFilter<"UserMembership"> | number
     createdAt?: DateTimeFilter<"UserMembership"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     plan?: XOR<MembershipPlanScalarRelationFilter, MembershipPlanWhereInput>
@@ -18420,6 +18517,10 @@ export namespace Prisma {
     isPrimary?: SortOrder
     isActive?: SortOrder
     parentMembershipId?: SortOrderInput | SortOrder
+    rfidCardId?: SortOrderInput | SortOrder
+    rfidScanHistory?: SortOrder
+    lastScanTime?: SortOrderInput | SortOrder
+    counter?: SortOrder
     createdAt?: SortOrder
     user?: UserOrderByWithRelationInput
     plan?: MembershipPlanOrderByWithRelationInput
@@ -18430,6 +18531,7 @@ export namespace Prisma {
 
   export type UserMembershipWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    rfidCardId?: string
     AND?: UserMembershipWhereInput | UserMembershipWhereInput[]
     OR?: UserMembershipWhereInput[]
     NOT?: UserMembershipWhereInput | UserMembershipWhereInput[]
@@ -18440,13 +18542,16 @@ export namespace Prisma {
     isPrimary?: BoolFilter<"UserMembership"> | boolean
     isActive?: BoolFilter<"UserMembership"> | boolean
     parentMembershipId?: StringNullableFilter<"UserMembership"> | string | null
+    rfidScanHistory?: JsonNullableListFilter<"UserMembership">
+    lastScanTime?: DateTimeNullableFilter<"UserMembership"> | Date | string | null
+    counter?: IntFilter<"UserMembership"> | number
     createdAt?: DateTimeFilter<"UserMembership"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     plan?: XOR<MembershipPlanScalarRelationFilter, MembershipPlanWhereInput>
     parentMembership?: XOR<UserMembershipNullableScalarRelationFilter, UserMembershipWhereInput> | null
     memberMemberships?: UserMembershipListRelationFilter
     payments?: PaymentListRelationFilter
-  }, "id">
+  }, "id" | "rfidCardId">
 
   export type UserMembershipOrderByWithAggregationInput = {
     id?: SortOrder
@@ -18457,10 +18562,16 @@ export namespace Prisma {
     isPrimary?: SortOrder
     isActive?: SortOrder
     parentMembershipId?: SortOrderInput | SortOrder
+    rfidCardId?: SortOrderInput | SortOrder
+    rfidScanHistory?: SortOrder
+    lastScanTime?: SortOrderInput | SortOrder
+    counter?: SortOrder
     createdAt?: SortOrder
     _count?: UserMembershipCountOrderByAggregateInput
+    _avg?: UserMembershipAvgOrderByAggregateInput
     _max?: UserMembershipMaxOrderByAggregateInput
     _min?: UserMembershipMinOrderByAggregateInput
+    _sum?: UserMembershipSumOrderByAggregateInput
   }
 
   export type UserMembershipScalarWhereWithAggregatesInput = {
@@ -18475,6 +18586,10 @@ export namespace Prisma {
     isPrimary?: BoolWithAggregatesFilter<"UserMembership"> | boolean
     isActive?: BoolWithAggregatesFilter<"UserMembership"> | boolean
     parentMembershipId?: StringNullableWithAggregatesFilter<"UserMembership"> | string | null
+    rfidCardId?: StringNullableWithAggregatesFilter<"UserMembership"> | string | null
+    rfidScanHistory?: JsonNullableListFilter<"UserMembership">
+    lastScanTime?: DateTimeNullableWithAggregatesFilter<"UserMembership"> | Date | string | null
+    counter?: IntWithAggregatesFilter<"UserMembership"> | number
     createdAt?: DateTimeWithAggregatesFilter<"UserMembership"> | Date | string
   }
 
@@ -19685,6 +19800,10 @@ export namespace Prisma {
     endDate: Date | string
     isPrimary?: boolean
     isActive?: boolean
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutMembershipsInput
     plan: MembershipPlanCreateNestedOneWithoutUsersInput
@@ -19702,6 +19821,10 @@ export namespace Prisma {
     isPrimary?: boolean
     isActive?: boolean
     parentMembershipId?: string | null
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
     memberMemberships?: UserMembershipUncheckedCreateNestedManyWithoutParentMembershipInput
     payments?: PaymentUncheckedCreateNestedManyWithoutMembershipInput
@@ -19713,6 +19836,10 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutMembershipsNestedInput
     plan?: MembershipPlanUpdateOneRequiredWithoutUsersNestedInput
@@ -19730,6 +19857,10 @@ export namespace Prisma {
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     parentMembershipId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberMemberships?: UserMembershipUncheckedUpdateManyWithoutParentMembershipNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutMembershipNestedInput
@@ -19744,6 +19875,10 @@ export namespace Prisma {
     isPrimary?: boolean
     isActive?: boolean
     parentMembershipId?: string | null
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
   }
 
@@ -19753,6 +19888,10 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -19765,6 +19904,10 @@ export namespace Prisma {
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     parentMembershipId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -20993,6 +21136,31 @@ export namespace Prisma {
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
   }
+  export type JsonNullableListFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableListFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableListFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableListFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableListFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableListFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel> | null
+    has?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    hasEvery?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel>
+    hasSome?: InputJsonValue[] | ListJsonFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
 
   export type MembershipPlanScalarRelationFilter = {
     is?: MembershipPlanWhereInput
@@ -21008,7 +21176,15 @@ export namespace Prisma {
     isPrimary?: SortOrder
     isActive?: SortOrder
     parentMembershipId?: SortOrder
+    rfidCardId?: SortOrder
+    rfidScanHistory?: SortOrder
+    lastScanTime?: SortOrder
+    counter?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type UserMembershipAvgOrderByAggregateInput = {
+    counter?: SortOrder
   }
 
   export type UserMembershipMaxOrderByAggregateInput = {
@@ -21020,6 +21196,9 @@ export namespace Prisma {
     isPrimary?: SortOrder
     isActive?: SortOrder
     parentMembershipId?: SortOrder
+    rfidCardId?: SortOrder
+    lastScanTime?: SortOrder
+    counter?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -21032,7 +21211,28 @@ export namespace Prisma {
     isPrimary?: SortOrder
     isActive?: SortOrder
     parentMembershipId?: SortOrder
+    rfidCardId?: SortOrder
+    lastScanTime?: SortOrder
+    counter?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type UserMembershipSumOrderByAggregateInput = {
+    counter?: SortOrder
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type ReviewCreateNestedManyWithoutUserInput = {
@@ -22016,6 +22216,10 @@ export namespace Prisma {
     deleteMany?: UserMembershipScalarWhereInput | UserMembershipScalarWhereInput[]
   }
 
+  export type UserMembershipCreaterfidScanHistoryInput = {
+    set: InputJsonValue[]
+  }
+
   export type UserCreateNestedOneWithoutMembershipsInput = {
     create?: XOR<UserCreateWithoutMembershipsInput, UserUncheckedCreateWithoutMembershipsInput>
     connectOrCreate?: UserCreateOrConnectWithoutMembershipsInput
@@ -22060,6 +22264,15 @@ export namespace Prisma {
     connectOrCreate?: PaymentCreateOrConnectWithoutMembershipInput | PaymentCreateOrConnectWithoutMembershipInput[]
     createMany?: PaymentCreateManyMembershipInputEnvelope
     connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
+  }
+
+  export type UserMembershipUpdaterfidScanHistoryInput = {
+    set?: InputJsonValue[]
+    push?: InputJsonValue | InputJsonValue[]
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type UserUpdateOneRequiredWithoutMembershipsNestedInput = {
@@ -22629,6 +22842,31 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
   export type ReviewCreateWithoutUserInput = {
     id?: string
     rating: number
@@ -22783,6 +23021,10 @@ export namespace Prisma {
     endDate: Date | string
     isPrimary?: boolean
     isActive?: boolean
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
     plan: MembershipPlanCreateNestedOneWithoutUsersInput
     parentMembership?: UserMembershipCreateNestedOneWithoutMemberMembershipsInput
@@ -22798,6 +23040,10 @@ export namespace Prisma {
     isPrimary?: boolean
     isActive?: boolean
     parentMembershipId?: string | null
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
     memberMemberships?: UserMembershipUncheckedCreateNestedManyWithoutParentMembershipInput
     payments?: PaymentUncheckedCreateNestedManyWithoutMembershipInput
@@ -23041,6 +23287,10 @@ export namespace Prisma {
     isPrimary?: BoolFilter<"UserMembership"> | boolean
     isActive?: BoolFilter<"UserMembership"> | boolean
     parentMembershipId?: StringNullableFilter<"UserMembership"> | string | null
+    rfidCardId?: StringNullableFilter<"UserMembership"> | string | null
+    rfidScanHistory?: JsonNullableListFilter<"UserMembership">
+    lastScanTime?: DateTimeNullableFilter<"UserMembership"> | Date | string | null
+    counter?: IntFilter<"UserMembership"> | number
     createdAt?: DateTimeFilter<"UserMembership"> | Date | string
   }
 
@@ -24725,6 +24975,10 @@ export namespace Prisma {
     endDate: Date | string
     isPrimary?: boolean
     isActive?: boolean
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutMembershipsInput
     plan: MembershipPlanCreateNestedOneWithoutUsersInput
@@ -24741,6 +24995,10 @@ export namespace Prisma {
     isPrimary?: boolean
     isActive?: boolean
     parentMembershipId?: string | null
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
     memberMemberships?: UserMembershipUncheckedCreateNestedManyWithoutParentMembershipInput
   }
@@ -24942,6 +25200,10 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutMembershipsNestedInput
     plan?: MembershipPlanUpdateOneRequiredWithoutUsersNestedInput
@@ -24958,6 +25220,10 @@ export namespace Prisma {
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     parentMembershipId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberMemberships?: UserMembershipUncheckedUpdateManyWithoutParentMembershipNestedInput
   }
@@ -25011,6 +25277,10 @@ export namespace Prisma {
     endDate: Date | string
     isPrimary?: boolean
     isActive?: boolean
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutMembershipsInput
     parentMembership?: UserMembershipCreateNestedOneWithoutMemberMembershipsInput
@@ -25026,6 +25296,10 @@ export namespace Prisma {
     isPrimary?: boolean
     isActive?: boolean
     parentMembershipId?: string | null
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
     memberMemberships?: UserMembershipUncheckedCreateNestedManyWithoutParentMembershipInput
     payments?: PaymentUncheckedCreateNestedManyWithoutMembershipInput
@@ -25155,6 +25429,10 @@ export namespace Prisma {
     endDate: Date | string
     isPrimary?: boolean
     isActive?: boolean
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutMembershipsInput
     plan: MembershipPlanCreateNestedOneWithoutUsersInput
@@ -25171,6 +25449,10 @@ export namespace Prisma {
     isPrimary?: boolean
     isActive?: boolean
     parentMembershipId?: string | null
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
     payments?: PaymentUncheckedCreateNestedManyWithoutMembershipInput
   }
@@ -25186,6 +25468,10 @@ export namespace Prisma {
     endDate: Date | string
     isPrimary?: boolean
     isActive?: boolean
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutMembershipsInput
     plan: MembershipPlanCreateNestedOneWithoutUsersInput
@@ -25201,6 +25487,10 @@ export namespace Prisma {
     endDate: Date | string
     isPrimary?: boolean
     isActive?: boolean
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
     memberMemberships?: UserMembershipUncheckedCreateNestedManyWithoutParentMembershipInput
     payments?: PaymentUncheckedCreateNestedManyWithoutMembershipInput
@@ -25385,6 +25675,10 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutMembershipsNestedInput
     plan?: MembershipPlanUpdateOneRequiredWithoutUsersNestedInput
@@ -25401,6 +25695,10 @@ export namespace Prisma {
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     parentMembershipId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     payments?: PaymentUncheckedUpdateManyWithoutMembershipNestedInput
   }
@@ -25497,6 +25795,10 @@ export namespace Prisma {
     isPrimary?: boolean
     isActive?: boolean
     parentMembershipId?: string | null
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
   }
 
@@ -25690,6 +25992,10 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     plan?: MembershipPlanUpdateOneRequiredWithoutUsersNestedInput
     parentMembership?: UserMembershipUpdateOneWithoutMemberMembershipsNestedInput
@@ -25705,6 +26011,10 @@ export namespace Prisma {
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     parentMembershipId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberMemberships?: UserMembershipUncheckedUpdateManyWithoutParentMembershipNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutMembershipNestedInput
@@ -25718,6 +26028,10 @@ export namespace Prisma {
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     parentMembershipId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -26123,6 +26437,10 @@ export namespace Prisma {
     isPrimary?: boolean
     isActive?: boolean
     parentMembershipId?: string | null
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
   }
 
@@ -26132,6 +26450,10 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutMembershipsNestedInput
     parentMembership?: UserMembershipUpdateOneWithoutMemberMembershipsNestedInput
@@ -26147,6 +26469,10 @@ export namespace Prisma {
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     parentMembershipId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberMemberships?: UserMembershipUncheckedUpdateManyWithoutParentMembershipNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutMembershipNestedInput
@@ -26160,6 +26486,10 @@ export namespace Prisma {
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
     parentMembershipId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -26171,6 +26501,10 @@ export namespace Prisma {
     endDate: Date | string
     isPrimary?: boolean
     isActive?: boolean
+    rfidCardId?: string | null
+    rfidScanHistory?: UserMembershipCreaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: Date | string | null
+    counter?: number
     createdAt?: Date | string
   }
 
@@ -26199,6 +26533,10 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutMembershipsNestedInput
     plan?: MembershipPlanUpdateOneRequiredWithoutUsersNestedInput
@@ -26214,6 +26552,10 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     memberMemberships?: UserMembershipUncheckedUpdateManyWithoutParentMembershipNestedInput
     payments?: PaymentUncheckedUpdateManyWithoutMembershipNestedInput
@@ -26227,6 +26569,10 @@ export namespace Prisma {
     endDate?: DateTimeFieldUpdateOperationsInput | Date | string
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    rfidCardId?: NullableStringFieldUpdateOperationsInput | string | null
+    rfidScanHistory?: UserMembershipUpdaterfidScanHistoryInput | InputJsonValue[]
+    lastScanTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    counter?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

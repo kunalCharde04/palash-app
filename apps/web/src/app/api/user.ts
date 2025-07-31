@@ -63,6 +63,7 @@ export const fetchUsers = async (): Promise<any> => {
 };
 
 export const deleteUser = async (id: string): Promise<any> => {
+  console.log(id)
   const response = await api.delete(`/admin/users/delete-user/${id}`);
   return response.data;
 };
