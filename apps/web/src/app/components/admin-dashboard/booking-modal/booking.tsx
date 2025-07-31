@@ -136,7 +136,7 @@ export function BookingDetailModal({ isOpen, booking, onClose, getServiceName }:
             <DialogTitle>Booking Details</DialogTitle>
             <div className="flex items-center gap-2">
               {renderStatusBadge(booking.status)}
-              <DropdownMenu>
+              {/* <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button size="icon" className="h-8 w-8 bg-transparent border border-solid border-gray-200 hover:bg-gray-100 rounded-full">
                     <MoreHorizontal className="h-4 w-4 text-gray-500" />
@@ -152,7 +152,7 @@ export function BookingDetailModal({ isOpen, booking, onClose, getServiceName }:
                     Send receipt
                   </DropdownMenuItem>
                 </DropdownMenuContent>
-              </DropdownMenu>
+              </DropdownMenu> */}
             </div>
           </div>
         </DialogHeader>
@@ -221,7 +221,7 @@ export function BookingDetailModal({ isOpen, booking, onClose, getServiceName }:
                 )}
               </div>
 
-              <div>
+              {/* <div>
                 <div className="mb-1 text-sm font-medium text-gray-500">Status Management</div>
                 <Select value={bookingStatus} onValueChange={handleStatusChange}>
                   <SelectTrigger>
@@ -233,7 +233,7 @@ export function BookingDetailModal({ isOpen, booking, onClose, getServiceName }:
                     <SelectItem value="COMPLETED">Completed</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
+              </div> */}
 
               {booking.invoice_id && (
                 <div>
@@ -290,12 +290,10 @@ export function BookingDetailModal({ isOpen, booking, onClose, getServiceName }:
           </div>
         </div>
 
-        <DialogFooter className="sticky bottom-0 bg-white/20 backdrop-blur-md py-4 px-6 border border-solid border-gray-200 rounded-full mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
+        {/* <DialogFooter className="sticky bottom-0 bg-white/20 backdrop-blur-md py-4 px-6 border border-solid border-gray-200 rounded-full mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
           <SecondaryButton  onClick={onClose}>Close</SecondaryButton>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <Button className=" bg-destructive hover:bg-red-600">Cancel Booking</Button>
-          </div>
-        </DialogFooter>
+          
+        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   )

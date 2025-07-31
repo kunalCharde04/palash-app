@@ -132,7 +132,7 @@ export default function UserPage() {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <DropdownMenu>
+          {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="rounded-lg bg-white flex items-center justify-center border border-solid border-gray-300  p-2">
                 <SlidersHorizontal className="h-4 w-4" />
@@ -145,7 +145,7 @@ export default function UserPage() {
               <DropdownMenuItem>Export to CSV</DropdownMenuItem>
               <DropdownMenuItem>Bulk actions</DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
         </div>
       </div>
 
@@ -160,7 +160,7 @@ export default function UserPage() {
                   <TableHead>Username</TableHead>
                   <TableHead>Role</TableHead>
                   <TableHead>Joined Date</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  {/* <TableHead className="text-right">Actions</TableHead> */}
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -188,22 +188,17 @@ export default function UserPage() {
                       <TableCell className="text-sm text-gray-600">
                         {format(new Date(user.created_at), 'MMM d, yyyy')}
                       </TableCell>
-                      <TableCell className="text-right">
-                        <Button
+                      {/* <TableCell className="text-right"> */}
+                        {/* <Button
                           onClick={() => {
                             setIsModalOpen(true);
                             setDeletingUserId(user.id);
                           }}
-                          disabled={deletingUserId === user.id}
                           className="text-red-600 bg-white hover:text-red-700 hover:bg-red-50"
                         >
-                          {deletingUserId === user.id ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : (
-                            <Trash2 className="h-4 w-4" />
-                          )}
-                        </Button>
-                      </TableCell>
+                         <Trash2 className="h-4 w-4" />
+                        </Button> */}
+                      {/* </TableCell> */}
                     </TableRow>
                   ))
                 ) : (

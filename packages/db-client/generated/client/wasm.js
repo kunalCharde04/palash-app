@@ -294,6 +294,10 @@ exports.Prisma.UserMembershipScalarFieldEnum = {
   isPrimary: 'isPrimary',
   isActive: 'isActive',
   parentMembershipId: 'parentMembershipId',
+  rfidCardId: 'rfidCardId',
+  rfidScanHistory: 'rfidScanHistory',
+  lastScanTime: 'lastScanTime',
+  counter: 'counter',
   createdAt: 'createdAt'
 };
 
