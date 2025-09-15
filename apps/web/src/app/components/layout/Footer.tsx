@@ -39,9 +39,9 @@ export default function Footer() {
       { label: "Terms of Service", href: "/terms" }
     ],
     contact: [
-      { label: "+91 98765 43210", href: "tel:+919876543210", icon: Phone },
-      { label: "contact@palash.com", href: "mailto:contact@palash.com", icon: Mail },
-      { label: "New Delhi, India", href: "#", icon: MapPin }
+      { label: "+91 9422115180", href: "tel:+919422115180", icon: Phone },
+      { label: "thepalashclub@gmail.com", href: "mailto:thepalashclub@gmail.com", icon: Mail },
+      { label: "Khasra No. 107, Village Sawangi (Amgaon Deoli), Taluka Hingna, District Nagpur", href: "#", icon: MapPin }
     ]
   }
 
