@@ -35,8 +35,10 @@ export default function Footer() {
     support: [
       { label: "FAQ", href: "/faq" },
       { label: "Support", href: "/support" },
-      { label: "Privacy Policy", href: "/privacy" },
-      { label: "Terms of Service", href: "/terms" }
+      { label: "Privacy Policy", href: "/privacy-policy" },
+      { label: "Terms of Service", href: "/terms-and-conditions" },
+      { label: "Cancellation Policy", href: "/cancellation-policy" },
+      { label: "Refund Policy", href: "/refund-policy" }
     ],
     contact: [
       { label: "+91 9422115180", href: "tel:+919422115180", icon: Phone },
