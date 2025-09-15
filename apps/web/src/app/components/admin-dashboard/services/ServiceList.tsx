@@ -201,11 +201,10 @@ return (
               
               <CardFooter className="flex justify-between pt-2 mt-auto">
                 <div className="flex gap-2 w-full">
-                  <Link href={`/services/${service.id}/edit`} passHref className="w-1/2 pointer-events-none">
+                  <Link href={`/admin-dashboard/services/${service.id}/edit`} passHref className="w-1/2">
                     <Button 
-                      className="p-2 h-10 w-full pointer-events-none flex items-center justify-center"
+                      className="p-2 h-10 w-full flex items-center justify-center"
                       aria-label={`Edit ${service.name}`}
-                      disabled={true}
                     >
                       <Edit size={16} /> Edit
                     </Button>

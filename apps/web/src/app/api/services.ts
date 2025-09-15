@@ -166,6 +166,39 @@ export const createService = async (service: any) => {
 };
 
 
+export const updateService = async (serviceId: string, serviceData: any) => {
+  try {
+    const response = await api.put(`/admin/services/update-service-data/${serviceId}`, serviceData, {
+      headers: {
+        "Content-Type": 'multipart/form-data'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating service:', error);
+    throw error;
+  }
+};
+
+export const updateServiceImages = async (serviceId: string, mediaFiles: File[]) => {
+  try {
+    const formData = new FormData();
+    mediaFiles.forEach((file: File) => {
+      formData.append("media", file);
+    });
+
+    const response = await api.put(`/admin/services/update-service-images/${serviceId}`, formData, {
+      headers: {
+        "Content-Type": 'multipart/form-data'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating service images:', error);
+    throw error;
+  }
+};
+
 export const deleteService = async (serviceId: string) => {
   const response = await api.delete(`/admin/services/delete-service`, {data: {serviceId: serviceId}});
   return response.data;

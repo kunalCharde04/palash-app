@@ -22,7 +22,7 @@ import { LocationPicker } from "@/app/components/ui/location-picker/location-pic
 import { TagInput } from "@/app/components/ui/tag-input/tag-input"
 import { SubmitHandler } from "react-hook-form"
 import { SecondaryButton } from "../../ui/buttons/SecondaryButton"
-import { createService } from "@/app/api/services"
+import { createService, updateService, updateServiceImages } from "@/app/api/services"
 // Define the form schema using Zod
 const serviceFormSchema = z.object({
   // Basic info
@@ -31,7 +31,7 @@ const serviceFormSchema = z.object({
   shortDescription: z.string().optional(),
 
   // Media
-  media: z.any().refine((files) => files && files.length > 0, { message: "At least one image is required" }),
+  media: z.any().optional(),
 
   // Categorization
   category: z.string().min(1, { message: "Category is required" }),
@@ -108,7 +108,14 @@ const formSteps = [
   { id: "settings", label: "Settings" },
 ]
 
-export function ServiceForm({ initialData }: { initialData?: unknown }) {
+interface ServiceFormProps {
+  initialData?: unknown;
+  serviceId?: string;
+  isEditMode?: boolean;
+  existingImages?: string[];
+}
+
+export function ServiceForm({ initialData, serviceId, isEditMode = false, existingImages = [] }: ServiceFormProps) {
   const [currentStep, setCurrentStep] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
@@ -208,28 +215,48 @@ export function ServiceForm({ initialData }: { initialData?: unknown }) {
         }));
       }
       
-      // Add media files
-      if (data.media && data.media.length > 0) {
-        data.media.forEach((file: File) => {
-          formData.append("media", file);
-        });
+      // Handle media files differently for create vs update
+      if (isEditMode) {
+        // For updates, only send new media files
+        if (data.media && data.media.length > 0) {
+          const newMediaFiles = data.media.filter((file: any) => file instanceof File);
+          if (newMediaFiles.length > 0) {
+            await updateServiceImages(serviceId!, newMediaFiles);
+          }
+        }
+        
+        // Update service data
+        await updateService(serviceId!, formData);
+        
+        toast({
+          variant: "default",
+          title: "Service updated successfully!",
+          description: `${data.name} has been updated.`,
+        })
+      } else {
+        // For create, add all media files
+        if (data.media && data.media.length > 0) {
+          data.media.forEach((file: File) => {
+            formData.append("media", file);
+          });
+        }
+
+        await createService(formData)
+
+        toast({
+          variant: "default",
+          title: "Service created successfully!",
+          description: `${data.name} has been added to your services.`,
+        })
       }
-
-      await createService(formData)
-
-      toast({
-        variant: "default",
-        title: "Service created successfully!",
-        description: `${data.name} has been added to your services.`,
-      })
 
       // Redirect to services list
       router.push("/admin-dashboard/services")
     } catch (error) {
       console.error("Error submitting form:", error)
       toast({
-        title: "Error creating service",
-        description: "There was a problem creating your service. Please try again.",
+        title: isEditMode ? "Error updating service" : "Error creating service",
+        description: `There was a problem ${isEditMode ? 'updating' : 'creating'} your service. Please try again.`,
         variant: "destructive",
       })
     } finally {
@@ -259,7 +286,7 @@ export function ServiceForm({ initialData }: { initialData?: unknown }) {
       case 0: // Basic Info
         return ["name", "description", "shortDescription", "category", "tags"]
       case 1: // Media
-        return ["media"]
+        return isEditMode ? [] : ["media"] // Only validate media for new services
       case 2: // Pricing
         return ["price", "currency", "discountPrice"]
       case 3: // Scheduling
@@ -449,9 +476,33 @@ export function ServiceForm({ initialData }: { initialData?: unknown }) {
             <div className="space-y-4">
               <h2 className="text-xl font-semibold">Media</h2>
               <p className="text-sm text-gray-500">
-                Upload images that showcase your service. You can add multiple images.
+                {isEditMode 
+                  ? "Add new images or keep existing ones. You can add multiple images."
+                  : "Upload images that showcase your service. You can add multiple images."
+                }
               </p>
             </div>
+
+            {/* Show existing images in edit mode */}
+            {isEditMode && existingImages.length > 0 && (
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">Current Images</h3>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {existingImages.map((imageUrl, index) => (
+                    <div key={index} className="relative group">
+                      <img
+                        src={imageUrl}
+                        alt={`Service image ${index + 1}`}
+                        className="w-full h-24 object-cover rounded-lg border"
+                      />
+                      <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                        <span className="text-white text-sm">Current Image</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <div className="space-y-4">
               <Controller
@@ -847,7 +898,10 @@ export function ServiceForm({ initialData }: { initialData?: unknown }) {
             </Button>
           ) : (
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Creating..." : "Create Service"}
+              {isSubmitting 
+                ? (isEditMode ? "Updating..." : "Creating...") 
+                : (isEditMode ? "Update Service" : "Create Service")
+              }
             </Button>
           )}
         </div>
