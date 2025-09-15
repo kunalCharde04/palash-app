@@ -3,7 +3,7 @@ import {WebhookEventType} from "./types.js";
 export interface RequestBody_Create {
     // Basic info
     name: string;
-    description: string;
+    description: string[]; // Array of description points
     shortDescription?: string; // Brief summary for cards/listings
     
     // Media
@@ -16,19 +16,10 @@ export interface RequestBody_Create {
     // Pricing
     price: string; // Base price
     currency?: string; // USD, EUR, etc.
-    pricingType?: 'FIXED' | 'HOURLY' | 'PACKAGE'; // Pricing structure
     discountPrice?: string; // Optional sale price
     
     // Scheduling
-    duration: number; // Length in hours
-    sessionType: 'GROUP' | 'PRIVATE' | 'SELF_GUIDED'; // Type of session
-    maxParticipants?: number; // For group sessions
-    
-    // Details
-    difficultyLevel?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCE' | 'ALL_LEVELS';
-    prerequisites?: string[];
-    equipmentRequired?: string[];
-    benefitsAndOutcomes?: string[];
+    duration: number; // Length in minutes
     
     // Instructor/provider info
     instructorId?: string;
@@ -72,7 +63,7 @@ export interface RequestBody_Create {
   export interface RequestBody_Update {
     // Basic info
     name?: string;
-    description?: string;
+    description?: string[]; // Array of description points
     shortDescription?: string; // Brief summary for cards/listings
     
     // Media
@@ -85,19 +76,10 @@ export interface RequestBody_Create {
     // Pricing
     price?: string; // Base price
     currency?: string; // USD, EUR, etc.
-    pricingType?: 'fixed' | 'hourly' | 'package'; // Pricing structure
     discountPrice?: string; // Optional sale price
     
     // Scheduling
     duration?: number; // Length in minutes
-    sessionType?: 'group' | 'private' | 'self-guided'; // Type of session
-    maxParticipants?: number; // For group sessions
-    
-    // Details
-    difficultyLevel?: 'beginner' | 'intermediate' | 'advanced' | 'all-levels';
-    prerequisites?: string[];
-    equipmentRequired?: string[];
-    benefitsAndOutcomes?: string[];
     
     // Instructor/provider info
     instructorId?: string;
@@ -145,11 +127,9 @@ export interface RequestBody_Create {
 
 export interface SignUpDTO {
    name: string;
-   username: string;
    phoneOrEmail: string;
    is_agreed_to_terms: boolean;
    is_verified: boolean;
-   dob: string;
 }
 
 

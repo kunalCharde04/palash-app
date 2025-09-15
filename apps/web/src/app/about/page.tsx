@@ -87,7 +87,7 @@ that is water, earth, air, space, and fire."
             <div className='p-3 rounded-xl border border-solid border-gray-200'>
               <div className="relative h-[600px] rounded-xl overflow-hidden">
                 <Image 
-                  src="https://images.pexels.com/photos/8872793/pexels-photo-8872793.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                  src="/images/komal.jpg" 
                   alt="Dr. Komal Kashikar, Director" 
                   layout="fill" 
                   objectFit="cover" 

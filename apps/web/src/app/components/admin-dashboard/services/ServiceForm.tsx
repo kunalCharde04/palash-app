@@ -1,21 +1,20 @@
 "use client"
 
 import { useState } from "react"
-import { useForm, Controller, useFieldArray, Resolver } from "react-hook-form"
+import { useForm, Controller, Resolver } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { useRouter } from "next/navigation"
-import { ChevronRight, ChevronLeft, Plus, X, Check, Info } from "lucide-react"
+import { ChevronRight, Check, Info } from "lucide-react"
 import { PrimaryButton as Button } from "@/app/components/ui/buttons/PrimaryButton"
 import { Input } from "@/app/components/ui/input/input"
 import { Textarea } from "@/app/components/ui/textarea/textarea"
+import { BulletPointsInput } from "@/app/components/ui/bullet-points-input/bullet-points-input"
 import { Label } from "@/app/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/app/components/ui/radio-group"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select/select"
 import { Switch } from "@/app/components/ui/switch/switch"
 import { Separator } from "@/app/components/ui/separator/separator"
 import { Card, CardContent } from "@/app/components/ui/card/Card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/ui/tabs/tabs"
 import { toast } from "@/app/components/ui/toast/use-toast"
 import { cn } from "@/lib/utils"
 import { FileUploader } from "@/app/components/ui/file-uploader/file-uploader"
@@ -23,12 +22,12 @@ import { LocationPicker } from "@/app/components/ui/location-picker/location-pic
 import { TagInput } from "@/app/components/ui/tag-input/tag-input"
 import { SubmitHandler } from "react-hook-form"
 import { SecondaryButton } from "../../ui/buttons/SecondaryButton"
-import { createService, Service } from "@/app/api/services"
+import { createService } from "@/app/api/services"
 // Define the form schema using Zod
 const serviceFormSchema = z.object({
   // Basic info
   name: z.string().min(3, { message: "Name must be at least 3 characters" }),
-  description: z.string().min(20, { message: "Description must be at least 20 characters" }),
+  description: z.array(z.string()).min(1, { message: "At least one description point is required" }),
   shortDescription: z.string().optional(),
 
   // Media
@@ -41,19 +40,10 @@ const serviceFormSchema = z.object({
   // Pricing
   price: z.string().min(1, { message: "Price is required" }),
   currency: z.string().default("INR"),
-  pricingType: z.enum(["FIXED", "HOURLY", "PACKAGE"]).default("FIXED"),
   discountPrice: z.string().optional(),
 
   // Scheduling
   duration: z.number().min(15, { message: "Duration must be at least 15 minutes" }),
-  sessionType: z.enum(["GROUP", "PRIVATE", "SELF_GUIDED"]),
-  maxParticipants: z.number().optional(),
-
-  // Details
-  difficultyLevel: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCE", "ALL_LEVELS"]).default("ALL_LEVELS"),
-  prerequisites: z.array(z.string()).default([]),
-  equipmentRequired: z.array(z.string()).optional(),
-  benefitsAndOutcomes: z.array(z.string()).optional(),
 
   // Instructor info
   instructorId: z.string().optional(),
@@ -97,17 +87,28 @@ const serviceFormSchema = z.object({
 
 type ServiceFormValues = z.infer<typeof serviceFormSchema>
 
+interface LocationData {
+  address?: string
+  city?: string
+  state?: string
+  country?: string
+  postalCode?: string
+  coordinates?: {
+    latitude?: number
+    longitude?: number
+  }
+}
+
 const formSteps = [
   { id: "basic", label: "Basic Info" },
   { id: "media", label: "Media" },
   { id: "pricing", label: "Pricing" },
   { id: "scheduling", label: "Scheduling" },
-  { id: "details", label: "Details" },
   { id: "location", label: "Location" },
   { id: "settings", label: "Settings" },
 ]
 
-export function ServiceForm({ initialData }: { initialData?: any }) {
+export function ServiceForm({ initialData }: { initialData?: unknown }) {
   const [currentStep, setCurrentStep] = useState(0)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const router = useRouter()
@@ -117,22 +118,15 @@ export function ServiceForm({ initialData }: { initialData?: any }) {
     resolver: zodResolver(serviceFormSchema) as Resolver<ServiceFormValues>,
     defaultValues: initialData || {
       name: "",
-      description: "",
+      description: [],
       shortDescription: "",
       media: [],
       category: "",
       tags: [],
       price: "",
       currency: "INR",
-      pricingType: "FIXED",
       discountPrice: "",
       duration: 15,
-      sessionType: "GROUP",
-      maxParticipants: 10,
-      difficultyLevel: "ALL_LEVELS",
-      prerequisites: [],
-      equipmentRequired: [],
-      benefitsAndOutcomes: [],
       instructorName: "",
       instructorBio: "",
       cancellationPolicy: "",
@@ -168,7 +162,7 @@ export function ServiceForm({ initialData }: { initialData?: any }) {
       
       // Add basic info
       formData.append("name", data.name);
-      formData.append("description", data.description);
+      formData.append("description", JSON.stringify(data.description));
       if (data.shortDescription) formData.append("shortDescription", data.shortDescription);
       
       // Add categorization
@@ -180,25 +174,12 @@ export function ServiceForm({ initialData }: { initialData?: any }) {
       // Add pricing
       formData.append("price", data.price);
       formData.append("currency", data.currency);
-      formData.append("pricingType", data.pricingType);
       if (data.discountPrice) formData.append("discountPrice", data.discountPrice);
       
       // Add scheduling
       formData.append("duration", data.duration.toString());
-      formData.append("sessionType", data.sessionType);
-      if (data.maxParticipants) formData.append("maxParticipants", data.maxParticipants.toString());
       
-      // Add details
-      formData.append("difficultyLevel", data.difficultyLevel);
-      if (data.prerequisites && data.prerequisites.length > 0) {
-        formData.append("prerequisites", JSON.stringify(data.prerequisites));
-      }
-      if (data.equipmentRequired && data.equipmentRequired.length > 0) {
-        formData.append("equipmentRequired", JSON.stringify(data.equipmentRequired));
-      }
-      if (data.benefitsAndOutcomes && data.benefitsAndOutcomes.length > 0) {
-        formData.append("benefitsAndOutcomes", JSON.stringify(data.benefitsAndOutcomes));
-      }
+      // Add instructor details
       if (data.instructorName) formData.append("instructorName", data.instructorName);
       if (data.instructorBio) formData.append("instructorBio", data.instructorBio);
       if (data.cancellationPolicy) formData.append("cancellationPolicy", data.cancellationPolicy);
@@ -259,7 +240,7 @@ export function ServiceForm({ initialData }: { initialData?: any }) {
   // Navigation between form steps
   const nextStep = () => {
     const fieldsToValidate = getFieldsForStep(currentStep)
-    form.trigger(fieldsToValidate as any).then((isValid) => {
+    form.trigger(fieldsToValidate as (keyof ServiceFormValues)[]).then((isValid) => {
       if (isValid) {
         setCurrentStep((prev) => Math.min(prev + 1, formSteps.length - 1))
         window.scrollTo(0, 0)
@@ -280,14 +261,12 @@ export function ServiceForm({ initialData }: { initialData?: any }) {
       case 1: // Media
         return ["media"]
       case 2: // Pricing
-        return ["price", "currency", "pricingType", "discountPrice"]
+        return ["price", "currency", "discountPrice"]
       case 3: // Scheduling
-        return ["duration", "sessionType", "maxParticipants"]
-      case 4: // Details
-        return ["difficultyLevel", "prerequisites", "equipmentRequired", "benefitsAndOutcomes", "cancellationPolicy"]
-      case 5: // Location
-        return form.watch("isOnline") ? ["virtualMeetingDetails"] : ["location"]
-      case 6: // Settings
+        return ["duration"]
+      case 4: // Location
+        return form.watch("isOnline") ? ["virtualMeetingDetails", "instructorName", "instructorBio", "cancellationPolicy"] : ["location", "instructorName", "instructorBio", "cancellationPolicy"]
+      case 5: // Settings
         return ["featured", "isActive", "isOnline", "isRecurring"]
       default:
         return []
@@ -295,7 +274,7 @@ export function ServiceForm({ initialData }: { initialData?: any }) {
   }
 
   // Handle location selection
-  const handleLocationSelect = (location: any) => {
+  const handleLocationSelect = (location: LocationData) => {
     form.setValue("location", {
       ...form.getValues("location"),
       address: location.address,
@@ -351,7 +330,7 @@ export function ServiceForm({ initialData }: { initialData?: any }) {
             </div>
           ))}
         </div>
-        <div className="mt-2 grid grid-cols-7 gap-1">
+        <div className="mt-2 grid grid-cols-6 gap-1">
           {formSteps.map((_, index) => (
             <div
               key={index}
@@ -397,18 +376,25 @@ export function ServiceForm({ initialData }: { initialData?: any }) {
 
               <div className="space-y-2">
                 <Label htmlFor="description">
-                  Full Description <span className="text-red-500">*</span>
+                  Service Description Points <span className="text-red-500">*</span>
                 </Label>
-                <Textarea
-                  id="description"
-                  placeholder="Detailed description of your service"
-                  rows={5}
-                  {...form.register("description")}
-                  className={cn(form.formState.errors.description && "border-red-500")}
+                <Controller
+                  name="description"
+                  control={form.control}
+                  render={({ field }) => (
+                    <BulletPointsInput
+                      value={field.value}
+                      onChange={field.onChange}
+                      placeholder="Add a description point..."
+                      error={!!form.formState.errors.description}
+                      maxPoints={10}
+                    />
+                  )}
                 />
                 {form.formState.errors.description && (
                   <p className="text-xs text-red-500">{form.formState.errors.description.message}</p>
                 )}
+                <p className="text-xs text-gray-500">Add key points about your service. Each point will be displayed as a bullet point.</p>
               </div>
 
               <div className="space-y-2">
@@ -540,29 +526,6 @@ export function ServiceForm({ initialData }: { initialData?: any }) {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="pricingType">Pricing Type</Label>
-                <Controller
-                  name="pricingType"
-                  control={form.control}
-                  render={({ field }) => (
-                    <RadioGroup onValueChange={field.onChange} value={field.value} className="flex flex-wrap gap-4">
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="FIXED" id="fixed" />
-                        <Label htmlFor="fixed">Fixed Price</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="HOURLY" id="hourly" />
-                        <Label htmlFor="hourly">Hourly Rate</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="PACKAGE" id="package" />
-                        <Label htmlFor="package">Package</Label>
-                      </div>
-                    </RadioGroup>
-                  )}
-                />
-              </div>
 
               <div className="space-y-2">
                 <Label htmlFor="discountPrice">Discount Price (Optional)</Label>
@@ -625,186 +588,13 @@ export function ServiceForm({ initialData }: { initialData?: any }) {
                 )}
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="sessionType">
-                  Session Type <span className="text-red-500">*</span>
-                </Label>
-                <Controller
-                  name="sessionType"
-                  control={form.control}
-                  render={({ field }) => (
-                    <RadioGroup onValueChange={field.onChange} value={field.value} className="flex flex-wrap gap-4">
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="GROUP" id="group" />
-                        <Label htmlFor="group">Group Session</Label>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="PRIVATE" id="private" />
-                        <Label htmlFor="private">Private Session</Label>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="SELF_GUIDED" id="self_guided" />
-                        <Label htmlFor="self_guided">Self-Guided</Label>
-                      </div>
-                    </RadioGroup>
-                  )}
-                />
-              </div>
-
-              {form.watch("sessionType") === "GROUP" && (
-                <div className="space-y-2">
-                  <Label htmlFor="maxParticipants">Maximum Participants</Label>
-                  <Controller
-                    name="maxParticipants"
-                    control={form.control}
-                    render={({ field }) => (
-                      <Input
-                        id="maxParticipants"
-                        type="number"
-                        min={1}
-                        placeholder="e.g., 10"
-                        value={field.value || ""}
-                        onChange={(e) => field.onChange(e.target.value ? Number.parseInt(e.target.value) : undefined)}
-                      />
-                    )}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
         )}
 
-        {/* Step 5: Details */}
+
+        {/* Step 5: Location */}
         {currentStep === 4 && (
-          <div className="space-y-6">
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold">Service Details</h2>
-              <p className="text-sm text-gray-500">Provide additional details about your service.</p>
-            </div>
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="difficultyLevel">Difficulty Level</Label>
-                <Controller
-                  name="difficultyLevel"
-                  control={form.control}
-                  render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select difficulty" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="BEGINNER">Beginner</SelectItem>
-                        <SelectItem value="INTERMEDIATE">Intermediate</SelectItem>
-                        <SelectItem value="ADVANCE">Advanced</SelectItem>
-                        <SelectItem value="ALL_LEVELS">All Levels</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-              </div>
-
-              <Tabs defaultValue="prerequisites" className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="prerequisites">Prerequisites</TabsTrigger>
-                  <TabsTrigger value="equipment">Equipment</TabsTrigger>
-                  <TabsTrigger value="benefits">Benefits</TabsTrigger>
-                </TabsList>
-                <TabsContent value="prerequisites" className="space-y-4 pt-4">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <Label>Prerequisites <span className="text-xs text-gray-500">(Optional - comma seprated)</span></Label>
-                    </div>
-                    <div className="space-y-2">
-                      <Controller
-                        name="prerequisites"
-                        control={form.control}
-                        render={({ field }) => (
-                          <TagInput
-                            placeholder="Add prerequisite and press Enter"
-                            tags={field.value || []}
-                            setTags={field.onChange}
-                          />
-                        )}
-                      />
-                      <p className="text-xs text-gray-500">Press Enter to add each prerequisite</p>
-                    </div>
-                  </div>
-                </TabsContent>
-                <TabsContent value="equipment" className="space-y-4 pt-4">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <Label>Required Equipment <span className="text-xs text-gray-500">(Optional - comma seprated)</span></Label>
-                    </div>
-                    <div className="space-y-2">
-                      <Controller
-                        name="equipmentRequired"
-                        control={form.control}
-                        render={({ field }) => (
-                          <TagInput
-                            placeholder="Add equipment and press Enter"
-                            tags={field.value || []}
-                            setTags={field.onChange}
-                          />
-                        )}
-                      />
-                      <p className="text-xs text-gray-500">Press Enter to add each equipment item</p>
-                    </div>
-                  </div>
-                </TabsContent>
-                <TabsContent value="benefits" className="space-y-4 pt-4">
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <Label>Benefits & Outcomes <span className="text-xs text-gray-500">(Optional - comma seprated)</span></Label>
-                    </div>
-                    <div className="space-y-2">
-                      <Controller
-                        name="benefitsAndOutcomes"
-                        control={form.control}
-                        render={({ field }) => (
-                          <TagInput
-                            placeholder="Add benefit and press Enter"
-                            tags={field.value || []}
-                            setTags={field.onChange}
-                          />
-                        )}
-                      />
-                      <p className="text-xs text-gray-500">Press Enter to add each benefit</p>
-                    </div>
-                  </div>
-                </TabsContent>
-              </Tabs>
-
-              <div className="space-y-2">
-                <Label htmlFor="cancellationPolicy">Cancellation Policy</Label>
-                <Textarea
-                  id="cancellationPolicy"
-                  placeholder="Describe your cancellation policy"
-                  rows={3}
-                  {...form.register("cancellationPolicy")}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="instructorName">Instructor Name</Label>
-                <Input id="instructorName" placeholder="e.g., Jane Smith" {...form.register("instructorName")} />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="instructorBio">Instructor Bio</Label>
-                <Textarea
-                  id="instructorBio"
-                  placeholder="Brief bio of the instructor"
-                  rows={3}
-                  {...form.register("instructorBio")}
-                />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 6: Location */}
-        {currentStep === 5 && (
           <div className="space-y-6">
             <div className="space-y-4">
               <h2 className="text-xl font-semibold">Location</h2>
@@ -927,12 +717,41 @@ export function ServiceForm({ initialData }: { initialData?: any }) {
                   </div>
                 </div>
               )}
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">Instructor Information</h3>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="instructorName">Instructor Name</Label>
+                  <Input id="instructorName" placeholder="e.g., Jane Smith" {...form.register("instructorName")} />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="instructorBio">Instructor Bio</Label>
+                  <Textarea
+                    id="instructorBio"
+                    placeholder="Brief bio of the instructor"
+                    rows={3}
+                    {...form.register("instructorBio")}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="cancellationPolicy">Cancellation Policy</Label>
+                  <Textarea
+                    id="cancellationPolicy"
+                    placeholder="Describe your cancellation policy"
+                    rows={3}
+                    {...form.register("cancellationPolicy")}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         )}
 
-        {/* Step 7: Settings */}
-        {currentStep === 6 && (
+        {/* Step 6: Settings */}
+        {currentStep === 5 && (
           <div className="space-y-6">
             <div className="space-y-4">
               <h2 className="text-xl font-semibold">Settings</h2>
@@ -964,7 +783,7 @@ export function ServiceForm({ initialData }: { initialData?: any }) {
                         <Label htmlFor="isActive" className="text-base">
                           Active
                         </Label>
-                        <p className="text-sm text-gray-500">Inactive services won't be visible to customers</p>
+                        <p className="text-sm text-gray-500">Inactive services won&apos;t be visible to customers</p>
                       </div>
                       <Controller
                         name="isActive"

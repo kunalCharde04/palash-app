@@ -5,7 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 import { getBookingsByUserId } from '../api/booking';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card/Card';
 import { Badge } from '../components/badge/badge';
-import { Calendar, Clock, MapPin, DollarSign, CheckCircle, XCircle, User, ArrowRight, Crown, Star, AlertTriangle } from 'lucide-react';
+import { Calendar, Clock, MapPin, CheckCircle, XCircle, User, ArrowRight, Crown, Star, AlertTriangle, IndianRupee } from 'lucide-react';
 import { LoadingScreen } from '../components/ui/loader/loading';
 import { useToast } from '../components/ui/toast/use-toast';
 import { Toaster } from '../components/ui/toast/toaster';
@@ -33,7 +33,7 @@ interface Booking {
   service: {
     id: string;
     name: string;
-    description: string;
+    description: string[];
     shortDescription: string;
     media: string[];
     category: string;
@@ -42,15 +42,8 @@ interface Booking {
     currency: string;
     average_rating: number | null;
     total_reviews: number | null;
-    pricingType: 'FIXED' | 'HOURLY' | 'PACKAGE';
     discountPrice: string | null;
     duration: number; // Minutes
-    sessionType: 'GROUP' | 'PRIVATE' | 'SELF_GUIDED';
-    maxParticipants: number | null;
-    difficultyLevel: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCE' | 'ALL_LEVELS';
-    prerequisites: string[];
-    equipmentRequired: string[];
-    benefitsAndOutcomes: string[];
     instructorId: string | null;
     instructorName: string;
     instructorBio: string;
@@ -503,7 +496,7 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive }) => {
             <span>{booking.time_slot}</span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <DollarSign className="w-4 h-4 text-[#517d64]" />
+            <IndianRupee className="w-4 h-4 text-[#517d64]" />
             <span>{formatCurrency(booking.total_amount, booking.service.currency)}</span>
           </div>
           <div className="flex items-center gap-2 text-sm">
@@ -529,23 +522,24 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, isActive }) => {
             </Badge>
           </div>
         </div>
-
+{/* 
         <div className="flex flex-wrap gap-2 pt-2">
-          <Badge variant="outline" className="text-xs">
-            {booking.service.difficultyLevel.charAt(0) + booking.service.difficultyLevel.slice(1).toLowerCase().replace('_', ' ')}
-          </Badge>
           <Badge variant="outline" className="text-xs">
             {formatDuration(booking.service.duration)}
           </Badge>
           <Badge variant="outline" className="text-xs">
-            {booking.service.sessionType.charAt(0) + booking.service.sessionType.slice(1).toLowerCase().replace('_', ' ')}
+            {booking.service.category}
           </Badge>
-          {booking.service.maxParticipants && (
+          {booking.service.isOnline ? (
             <Badge variant="outline" className="text-xs">
-              Max {booking.service.maxParticipants} people
+              Online
+            </Badge>
+          ) : (
+            <Badge variant="outline" className="text-xs">
+              In-Person
             </Badge>
           )}
-        </div>
+        </div> */}
       </CardContent>
     </Card>
   );

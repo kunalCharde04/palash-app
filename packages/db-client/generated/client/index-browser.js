@@ -187,15 +187,8 @@ exports.Prisma.ServiceScalarFieldEnum = {
   currency: 'currency',
   average_rating: 'average_rating',
   total_reviews: 'total_reviews',
-  pricingType: 'pricingType',
   discountPrice: 'discountPrice',
   duration: 'duration',
-  sessionType: 'sessionType',
-  maxParticipants: 'maxParticipants',
-  difficultyLevel: 'difficultyLevel',
-  prerequisites: 'prerequisites',
-  equipmentRequired: 'equipmentRequired',
-  benefitsAndOutcomes: 'benefitsAndOutcomes',
   instructorId: 'instructorId',
   instructorName: 'instructorName',
   instructorBio: 'instructorBio',
@@ -348,25 +341,6 @@ exports.TimeSlotStatus = exports.$Enums.TimeSlotStatus = {
   AVAILABLE: 'AVAILABLE',
   BOOKED: 'BOOKED',
   BLOCKED: 'BLOCKED'
-};
-
-exports.PricingType = exports.$Enums.PricingType = {
-  FIXED: 'FIXED',
-  HOURLY: 'HOURLY',
-  PACKAGE: 'PACKAGE'
-};
-
-exports.SessionType = exports.$Enums.SessionType = {
-  GROUP: 'GROUP',
-  PRIVATE: 'PRIVATE',
-  SELF_GUIDED: 'SELF_GUIDED'
-};
-
-exports.DiffcultyType = exports.$Enums.DiffcultyType = {
-  BEGINNER: 'BEGINNER',
-  INTERMEDIATE: 'INTERMEDIATE',
-  ADVANCE: 'ADVANCE',
-  ALL_LEVELS: 'ALL_LEVELS'
 };
 
 exports.NotificationType = exports.$Enums.NotificationType = {

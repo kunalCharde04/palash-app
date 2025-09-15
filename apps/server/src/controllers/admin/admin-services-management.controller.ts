@@ -7,7 +7,6 @@ import { __dirname } from "../../utils/__dirname-handler.js";
 import winston from "winston";
 import { deleteServicesRedisKeys } from "../../utils/delete-all-redis-keys.js";
 import NotificationService from "../../services/notification/notification.service.js";
-import { PricingType, SessionType, DiffcultyType } from '@palash/db-client';
 import { Prisma } from '@prisma/client';
 
 
@@ -17,7 +16,7 @@ class AdminServiceManagementController {
     try {
       const {
         name,
-        description,
+        description = [],
         shortDescription,
         price,
         category,
@@ -25,23 +24,16 @@ class AdminServiceManagementController {
         currency,
         tags = [],
         duration,
-        sessionType = 'GROUP',
-        maxParticipants,
-        difficultyLevel = 'BEGINNER',
-        prerequisites = [],
-        equipmentRequired = [],
-        benefitsAndOutcomes = [],
         instructorName,
         instructorBio,
         cancellationPolicy,
         isActive = true,
         isOnline = false,
         location,
-        virtualMeetingDetails,
-        pricingType = 'FIXED'
+        virtualMeetingDetails
       }: RequestBody_Create = req.body;
 
-      if (!name || !description || !price || !category || !duration) {
+      if (!name || !description || description.length === 0 || !price || !category || !duration) {
         res.status(400).json({ message: "Missing required fields" });
         return;
       }
@@ -55,21 +47,14 @@ class AdminServiceManagementController {
       const service = await prisma.service.create({
         data: {
           name,
-          description,
+          description: typeof description === 'string' ? JSON.parse(description) : description,
           shortDescription,
           media,
           category,
           tags: typeof tags === 'string' ? JSON.parse(tags) : tags,
           currency,
           price: parseFloat(price).toFixed(4),
-          pricingType: pricingType ? (pricingType.toUpperCase() as PricingType) : undefined,
           duration: Number(duration),
-          sessionType: sessionType ? (sessionType.toUpperCase() as SessionType) : undefined,
-          maxParticipants: Number(maxParticipants),
-          difficultyLevel: difficultyLevel ? (difficultyLevel.toUpperCase() as DiffcultyType) : undefined,
-          prerequisites: typeof prerequisites === 'string' ? JSON.parse(prerequisites) : prerequisites,
-          equipmentRequired: typeof equipmentRequired === 'string' ? JSON.parse(equipmentRequired) : equipmentRequired,
-          benefitsAndOutcomes: typeof benefitsAndOutcomes === 'string' ? JSON.parse(benefitsAndOutcomes) : benefitsAndOutcomes,
           instructorName,
           instructorBio,
           cancellationPolicy,
