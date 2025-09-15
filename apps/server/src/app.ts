@@ -23,7 +23,7 @@ const app: Express = express();
 
 // Pre-route middlewares
 app.use(cors({
-  origin: ["http://localhost:3000", "https://palash.club"],                // Allow requests from any origin
+  origin: ["http://localhost:3000", "https://palash.club", "http://192.168.29.253:3000"],                // Allow requests from any origin
   credentials: true,          // Allow credentials (cookies, authorization headers, etc.)
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],  // Allow all common HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With', 'Origin', 'Access-Control-Request-Method', 'Access-Control-Request-Headers'],  // Allow more headers

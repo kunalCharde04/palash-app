@@ -182,17 +182,29 @@ return (
               </CardHeader>
               
               <CardContent className="pb-2 flex-grow">
-                <p className="text-gray-600 text-sm line-clamp-3">{service.description}</p>
+                <div className="text-gray-600 text-sm line-clamp-3">
+                  {service.description && service.description.length > 0 ? (
+                    <ul className="space-y-1 list-disc list-inside">
+                      {service.description.slice(0, 3).map((point, index) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                      {service.description.length > 3 && (
+                        <li>...and {service.description.length - 3} more points</li>
+                      )}
+                    </ul>
+                  ) : (
+                    <p>No description available</p>
+                  )}
+                </div>
                 <p className="text-gray-400 text-xs mt-2">Added on {formatDate(service.created_at)}</p>
               </CardContent>
               
               <CardFooter className="flex justify-between pt-2 mt-auto">
                 <div className="flex gap-2 w-full">
-                  <Link href={`/services/${service.id}/edit`} passHref className="w-1/2 pointer-events-none">
+                  <Link href={`/admin-dashboard/services/${service.id}/edit`} passHref className="w-1/2">
                     <Button 
-                      className="p-2 h-10 w-full pointer-events-none flex items-center justify-center"
+                      className="p-2 h-10 w-full flex items-center justify-center"
                       aria-label={`Edit ${service.name}`}
-                      disabled={true}
                     >
                       <Edit size={16} /> Edit
                     </Button>

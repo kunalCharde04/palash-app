@@ -25,9 +25,7 @@ export function SignUpForm() {
 
   const initialState = {
     name: "",
-    username: "",
     emailOrPhone: "",
-    dob: "",
     is_agreed_to_terms: false,
   } 
   const [formData, setFormData] = useState(initialState)
@@ -69,45 +67,6 @@ export function SignUpForm() {
         return;
       }
 
-      // Validate date of birth
-      const dobDate = new Date(formData.dob);
-      const today = new Date();
-      const minAge = 13; // Minimum age requirement
-      
-      let age = today.getFullYear() - dobDate.getFullYear();
-      const monthDiff = today.getMonth() - dobDate.getMonth();
-      
-      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dobDate.getDate())) {
-        age--;
-      }
-
-
-      if (isNaN(dobDate.getTime())) {
-        toast({
-          title: "Invalid Input",
-          description: "Please enter a valid date of birth",
-          variant: "destructive"
-        })
-        return;
-      }
-
-      if (dobDate > today) {
-        toast({
-          title: "Invalid Input",
-          description: "Date of birth cannot be in the future",
-          variant: "destructive"
-        })
-        return;
-      }
-
-      if (age < minAge) {
-        toast({
-          title: "Invalid Input",
-          description: `You must be at least ${minAge} years old to sign up`,
-          variant: "destructive"
-        })
-        return;
-      }
       e.preventDefault()
       console.log(formData);
       dispatch(signUpStart())
@@ -154,17 +113,6 @@ export function SignUpForm() {
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="username">Choose a username</Label>
-          <Input 
-            id="username" 
-            name="username" 
-            placeholder="eg. johndoe" 
-            required 
-            onChange={handleChange}
-            value={formData.username}
-          />
-        </div>
-        <div className="space-y-2">
           <Label htmlFor="emailOrPhone">Enter your email or phone</Label>
           <Input 
             id="emailOrPhone" 
@@ -174,17 +122,6 @@ export function SignUpForm() {
             required 
             onChange={handleChange}
             value={formData.emailOrPhone}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="dob">Enter your date of birth</Label>
-          <Input 
-            id="dob" 
-            name="dob" 
-            type="date" 
-            required 
-            onChange={handleChange}
-            value={formData.dob}
           />
         </div>
         <div className="mt-2 flex items-center gap-2 pl-4">
@@ -203,7 +140,7 @@ export function SignUpForm() {
           isLoading={isLoading}
           loadingText="Signing up..."
           className="w-full py-6"
-          disabled={formData.name === "" || formData.username === "" || formData.emailOrPhone === "" || formData.dob === ""}
+          disabled={formData.name === "" || formData.emailOrPhone === ""}
         >
           Sign Up
         </PrimaryButton>

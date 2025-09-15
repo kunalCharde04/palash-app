@@ -1,80 +1,86 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import { useEffect, useState } from "react"
-import { Card, CardContent } from "@/app/components/ui/card/Card"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/app/components/ui/dialog/Dialog"
-import { PrimaryButton as Button } from "@/app/components/ui/buttons/PrimaryButton"
-import { Badge } from "@/app/components/badge/badge"
-import { Clock, MapPin, Star, User, Video, Award, Briefcase } from "lucide-react"
-import { createOrder, verifyPayment } from "@/app/api/payment"
-import { useToast } from "@/app/components/ui/toast/use-toast"
-import { useAuth } from "@/app/hooks/useAuth"
-import Script from "next/script"
-import { BookingCalendar } from "@/app/components/booking/BookingCalendar"
-import { createBooking, getServiceAvailability } from "@/app/api/booking"  
-import { ToastProvider } from "@/app/components/ui/toast/toast"
-import { useRouter } from "next/navigation"   
-import { SecondaryButton } from "../ui/buttons/SecondaryButton"
-import { BookingData } from "@/app/@types/interface"
-import { Input } from "../ui/input/input"
-import { getReviews } from "@/app/api/review"
-import { formatTime } from "@/app/utils/format-time"
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { Card, CardContent } from "@/app/components/ui/card/Card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/app/components/ui/dialog/Dialog";
+import { PrimaryButton as Button } from "@/app/components/ui/buttons/PrimaryButton";
+import { Badge } from "@/app/components/badge/badge";
+import {
+  Clock,
+  MapPin,
+  Star,
+  User,
+  Video,
+  Award,
+  Briefcase,
+} from "lucide-react";
+import { createOrder, verifyPayment } from "@/app/api/payment";
+import { useToast } from "@/app/components/ui/toast/use-toast";
+import { useAuth } from "@/app/hooks/useAuth";
+import Script from "next/script";
+import { BookingCalendar } from "@/app/components/booking/BookingCalendar";
+import { createBooking, getServiceAvailability } from "@/app/api/booking";
+import { ToastProvider } from "@/app/components/ui/toast/toast";
+import { useRouter } from "next/navigation";
+import { SecondaryButton } from "../ui/buttons/SecondaryButton";
+import { BookingData } from "@/app/@types/interface";
+import { Input } from "../ui/input/input";
+import { getReviews } from "@/app/api/review";
+import { formatTime } from "@/app/utils/format-time";
 interface Coordinates {
-  latitude: number
-  longitude: number
+  latitude: number;
+  longitude: number;
 }
 
 interface Location {
-  city: string
-  state: string
-  address: string
-  country: string
-  postalCode: string
-  coordinates: Coordinates
+  city: string;
+  state: string;
+  address: string;
+  country: string;
+  postalCode: string;
+  coordinates: Coordinates;
 }
 
 interface VirtualMeetingDetails {
-  joinLink: string
-  password: string
-  platform: string
+  joinLink: string;
+  password: string;
+  platform: string;
 }
 
 interface Service {
-  id: string
-  name: string
-  description: string
-  shortDescription: string
-  media: string[]
-  category: string
-  tags: string[]
-  price: string
-  currency: string
-  pricingType: string
-  discountPrice: string | null
-  duration: number
-  sessionType: string
-  maxParticipants: number
-  difficultyLevel: string
-  prerequisites: string[]
-  equipmentRequired: string[]
-  benefitsAndOutcomes: string[]
-  instructorId: string | null
-  instructorName: string
-  instructorBio: string
-  cancellationPolicy: string
-  featured: boolean
-  isActive: boolean
-  isOnline: boolean
-  isRecurring: boolean | null
-  location: Location
-  virtualMeetingDetails: VirtualMeetingDetails
-  created_at: string
-  updated_at: string
+  id: string;
+  name: string;
+  description: string[];
+  shortDescription: string;
+  media: string[];
+  category: string;
+  tags: string[];
+  price: string;
+  currency: string;
+  discountPrice: string | null;
+  duration: number;
+  instructorId: string | null;
+  instructorName: string;
+  instructorBio: string;
+  cancellationPolicy: string;
+  featured: boolean;
+  isActive: boolean;
+  isOnline: boolean;
+  isRecurring: boolean | null;
+  location: Location;
+  virtualMeetingDetails: VirtualMeetingDetails;
+  created_at: string;
+  updated_at: string;
 }
 
 interface ServiceCardProps {
-  service: Service
+  service: Service;
 }
 
 export interface ReviewResponse {
@@ -108,7 +114,6 @@ export interface Pagination {
   totalPages: number;
 }
 
-
 declare global {
   interface Window {
     Razorpay: any;
@@ -116,19 +121,19 @@ declare global {
 }
 
 export function ServiceCard({ service }: ServiceCardProps) {
-  const [showDetails, setShowDetails] = useState(false)
-  const [showBooking, setShowBooking] = useState(false)
-  const [imageError, setImageError] = useState(false)
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const [isProcessing, setIsProcessing] = useState(false)
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null)
-  const [reviews, setReviews] = useState<ReviewResponse | null>(null)
-  const [email, setEmail] = useState<string>("")
-  const { user } = useAuth()
-  const { toast } = useToast()
-  const [availability, setAvailability] = useState<any[]>([])
-  const router = useRouter()
+  const [showDetails, setShowDetails] = useState(false);
+  const [showBooking, setShowBooking] = useState(false);
+  const [imageError, setImageError] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
+  const [reviews, setReviews] = useState<ReviewResponse | null>(null);
+  const [email, setEmail] = useState<string>("");
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [availability, setAvailability] = useState<any[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchAvailability = async () => {
@@ -148,34 +153,33 @@ export function ServiceCard({ service }: ServiceCardProps) {
       setReviews(response);
     };
     fetchReviews();
-  }, [service.id]);   
-
+  }, [service.id]);
 
   const renderCurrencySymbol = (currency: string | null) => {
-    if (currency === null) return "₹"
-    if (currency === "INR") return "₹"
-    if (currency === "USD") return "$"
-    if (currency === "EUR") return "€"
-    if (currency === "GBP") return "£"
-    if (currency === "AUD") return "A$"
-    if (currency === "CAD") return "C$"
-    if (currency === "NZD") return "NZ$"
-    if (currency === "SGD") return "S$"
-    if (currency === "HKD") return "HK$"
-    if (currency === "JPY") return "¥"
-    if (currency === "CHF") return "CHF"
-    if (currency === "CNY") return "¥"
-    if (currency === "RUB") return "₽"
-    if (currency === "MXN") return "MX$"
-    if (currency === "BRL") return "R$"
-    if (currency === "ARS") return "$"
-    if (currency === "CLP") return "$"
-    if (currency === "COP") return "$"
-    if (currency === "PEN") return "S/"
-    if (currency === "UYU") return "$U"
-    if (currency === "VEF") return "Bs"
-    return currency
-  }
+    if (currency === null) return "₹";
+    if (currency === "INR") return "₹";
+    if (currency === "USD") return "$";
+    if (currency === "EUR") return "€";
+    if (currency === "GBP") return "£";
+    if (currency === "AUD") return "A$";
+    if (currency === "CAD") return "C$";
+    if (currency === "NZD") return "NZ$";
+    if (currency === "SGD") return "S$";
+    if (currency === "HKD") return "HK$";
+    if (currency === "JPY") return "¥";
+    if (currency === "CHF") return "CHF";
+    if (currency === "CNY") return "¥";
+    if (currency === "RUB") return "₽";
+    if (currency === "MXN") return "MX$";
+    if (currency === "BRL") return "R$";
+    if (currency === "ARS") return "$";
+    if (currency === "CLP") return "$";
+    if (currency === "COP") return "$";
+    if (currency === "PEN") return "S/";
+    if (currency === "UYU") return "$U";
+    if (currency === "VEF") return "Bs";
+    return currency;
+  };
 
   const renderRating = (reviews: Review[]) => {
     if (!reviews || reviews.length === 0) {
@@ -204,29 +208,27 @@ export function ServiceCard({ service }: ServiceCardProps) {
           ))}
         </div>
         <span className="text-sm font-medium">{averageRating}</span>
-        <span className="text-sm text-muted-foreground">({reviews.length})</span>
+        <span className="text-sm text-muted-foreground">
+          ({reviews.length})
+        </span>
       </div>
     );
   };
 
- 
-
   const imageUrl =
     service.media && service.media.length > 0
       ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1${service.media[currentImageIndex]}`
-      : "/placeholder.svg?height=400&width=600"
-    
+      : "/placeholder.svg?height=400&width=600";
+
   console.log("imageUrl: ", imageUrl);
 
   const handlePayment = async () => {
     try {
-
-
       if (!user) {
         toast({
           title: "Authentication Required",
           description: "Please login to book this service",
-          variant: "destructive"
+          variant: "destructive",
         });
         return;
       }
@@ -235,7 +237,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
         toast({
           title: "Email Required",
           description: "Please enter your email",
-          variant: "destructive"
+          variant: "destructive",
         });
       }
 
@@ -243,7 +245,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
         toast({
           title: "Selection Required",
           description: "Please select a date and time slot",
-          variant: "destructive"
+          variant: "destructive",
         });
         return;
       }
@@ -265,8 +267,12 @@ export function ServiceCard({ service }: ServiceCardProps) {
         order_id: orderData.id,
         handler: async (response: any) => {
           try {
-            const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = response;
-            
+            const {
+              razorpay_payment_id,
+              razorpay_order_id,
+              razorpay_signature,
+            } = response;
+
             await verifyPayment({
               orderId: razorpay_order_id,
               paymentId: razorpay_payment_id,
@@ -292,38 +298,43 @@ export function ServiceCard({ service }: ServiceCardProps) {
             toast({
               title: "Payment and Booking Successful",
               description: "Your booking and payment has been confirmed",
-              variant: "default"
+              variant: "default",
             });
 
             setShowBooking(false);
           } catch (error: any) {
-            console.error("Payment verification failed:", error.response.data.message);
+            console.error(
+              "Payment verification failed:",
+              error.response.data.message
+            );
             toast({
-              title: "Payment Verification Failed, If the amount is deducted from your account, it will be refunded within 24 hours. Please contact support if the amount is not refunded.",
+              title:
+                "Payment Verification Failed, If the amount is deducted from your account, it will be refunded within 24 hours. Please contact support if the amount is not refunded.",
               description: error.response.data.message,
-              variant: "destructive"
+              variant: "destructive",
             });
           }
         },
         prefill: {
           name: user.name,
           email: user.phone_or_email,
-          contact: user.phone_or_email
+          contact: user.phone_or_email,
         },
         theme: {
-          color: "#012b2b"
-        }
+          color: "#012b2b",
+        },
       };
 
       const razorpay = new window.Razorpay(options);
       razorpay.open();
     } catch (error: any) {
       console.error("Payment initiation failed:", error);
-          toast({
-            title: "Payment Verification Failed, If the amount is deducted from your account, it will be refunded within 24 hours. Please contact support if the amount is not refunded.",
-            description: error.response.data.message,
-            variant: "destructive"
-          });
+      toast({
+        title:
+          "Payment Verification Failed, If the amount is deducted from your account, it will be refunded within 24 hours. Please contact support if the amount is not refunded.",
+        description: error.response.data.message,
+        variant: "destructive",
+      });
     } finally {
       setIsProcessing(false);
     }
@@ -359,7 +370,10 @@ export function ServiceCard({ service }: ServiceCardProps) {
                 {service.category}
               </Badge>
               {service.featured && (
-                <Badge variant="secondary" className="absolute bg-yellow-200 text-black top-4 flex items-center justify-center gap-2 left-4 z-20">
+                <Badge
+                  variant="secondary"
+                  className="absolute bg-yellow-200 text-black top-4 flex items-center justify-center gap-2 left-4 z-20"
+                >
                   <Star className="w-3 h-3" />
                   <span className="text-xs">Featured</span>
                 </Badge>
@@ -374,7 +388,9 @@ export function ServiceCard({ service }: ServiceCardProps) {
 
         <CardContent className="p-6">
           <div className="mb-2 flex justify-between items-start">
-            <h3 className="text-xl font-semibold text-[#012b2b] leading-tight">{service.name}</h3>
+            <h3 className="text-xl font-semibold text-[#012b2b] leading-tight">
+              {service.name}
+            </h3>
             <div className="flex items-center text-lg font-bold text-green-700">
               <span>
                 {renderCurrencySymbol(service.currency)}
@@ -393,21 +409,36 @@ export function ServiceCard({ service }: ServiceCardProps) {
           </div>
 
           <div className="flex flex-wrap gap-2 mb-4">
-            <Badge variant="outline" className="bg-green-100 text-green-800 hover:bg-green-300/80">
-              {service.difficultyLevel.charAt(0) + service.difficultyLevel.slice(1).toLowerCase()}
+            <Badge
+              variant="outline"
+              className="bg-green-100 text-green-800 hover:bg-green-300/80"
+            >
+              {service.category}
             </Badge>
-            <Badge variant="outline" className="bg-green-100 text-green-800 hover:bg-green-300/80">
+            <Badge
+              variant="outline"
+              className="bg-green-100 text-green-800 hover:bg-green-300/80"
+            >
               {formatTime(service.duration)}
             </Badge>
-            <Badge variant="outline" className="bg-green-100 text-green-800 hover:bg-green-300/80">
-              {service.sessionType.charAt(0) + service.sessionType.slice(1).toLowerCase()}
+            <Badge
+              variant="outline"
+              className="bg-green-100 text-green-800 hover:bg-green-300/80"
+            >
+              {service.isOnline ? "Online" : "In-Person"}
             </Badge>
           </div>
-          <span className="text-xs text-gray-400">Added on {new Date(service.created_at).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+          <span className="text-xs text-gray-400">
+            Added on{" "}
+            {new Date(service.created_at).toLocaleString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </span>
 
           <div className="mt-4 pt-4 border-t border-[#517d64]/20">
-          {
-            user ? (
+            {user ? (
               <Button
                 className="w-full bg-[#012b2b] hover:bg-[#012b2b]/90 text-white transition-all"
                 onClick={(e) => {
@@ -422,19 +453,17 @@ export function ServiceCard({ service }: ServiceCardProps) {
                 className="w-full"
                 onClick={(e) => {
                   e.stopPropagation();
-                  router.push("/sign-in");  
+                  router.push("/sign-in");
                 }}
               >
                 Sign In to Book Session
               </SecondaryButton>
-            )
-          }
+            )}
           </div>
         </CardContent>
       </Card>
 
-
-{/* Primary dialog below */}
+      {/* Primary dialog below */}
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
         <DialogContent className="max-w-3xl bg-white sm:rounded-2xl overflow-hidden p-0 max-h-[90vh] flex flex-col">
           <div className="relative w-full h-72 flex-shrink-0">
@@ -454,11 +483,13 @@ export function ServiceCard({ service }: ServiceCardProps) {
                       <button
                         key={index}
                         className={`w-2.5 h-2.5 rounded-full ${
-                          index === currentImageIndex ? "bg-white" : "bg-white/50"
+                          index === currentImageIndex
+                            ? "bg-white"
+                            : "bg-white/50"
                         }`}
                         onClick={(e) => {
-                          e.stopPropagation()
-                          setCurrentImageIndex(index)
+                          e.stopPropagation();
+                          setCurrentImageIndex(index);
                         }}
                       />
                     ))}
@@ -466,10 +497,16 @@ export function ServiceCard({ service }: ServiceCardProps) {
                 )}
                 <div className="absolute bottom-6 left-6 z-20">
                   <div className="flex gap-2 mb-2">
-                    <Badge className="bg-white/90 text-[#012b2b]">{service.category}</Badge>
-                    {service.featured && <Badge variant="secondary">Featured</Badge>}
+                    <Badge className="bg-white/90 text-[#012b2b]">
+                      {service.category}
+                    </Badge>
+                    {service.featured && (
+                      <Badge variant="secondary">Featured</Badge>
+                    )}
                   </div>
-                  <h2 className="text-3xl font-bold text-white">{service.name}</h2>
+                  <h2 className="text-3xl font-bold text-white">
+                    {service.name}
+                  </h2>
                 </div>
               </>
             ) : (
@@ -487,24 +524,24 @@ export function ServiceCard({ service }: ServiceCardProps) {
                     <User className="w-5 h-5" />
                     <span>{service.instructorName}</span>
                   </div>
-                  <div className="flex items-center">{renderRating(reviews?.data.reviews || [])}</div>
+                  <div className="flex items-center">
+                    {renderRating(reviews?.data.reviews || [])}
+                  </div>
                 </div>
 
-                <div className="prose prose-sm max-w-none mb-6 text-sm text-[#517d64]">
-                  <p>{service.description || service.shortDescription}</p>
+                <div className="mb-6 text-sm text-[#517d64]">
+                  {service.description && service.description.length > 0 ? (
+                    <ul className="space-y-1 list-disc list-inside">
+                      {service.description.map((point, index) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>{service.shortDescription}</p>
+                  )}
                 </div>
-
-                
 
                 <div className="grid grid-cols-2 gap-6 mb-12">
-                  <div className="flex items-center gap-2 text-[#517d64]">
-                    <Clock className="w-5 h-5" />
-                    <span>{formatTime(service.duration)}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-[#517d64]">
-                    <Award className="w-5 h-5" />
-                    <span>{service.difficultyLevel.charAt(0) + service.difficultyLevel.slice(1).toLowerCase()}</span>
-                  </div>
                   {service.isOnline ? (
                     <div className="flex items-center gap-2 text-[#517d64]">
                       <Video className="w-5 h-5" />
@@ -519,90 +556,46 @@ export function ServiceCard({ service }: ServiceCardProps) {
                     </div>
                   )}
                   <div className="flex items-center gap-2 text-[#517d64]">
-                    <Briefcase className="w-5 h-5" />
-                    <span>Max {service.maxParticipants} participants</span>
+                    <Award className="w-5 h-5" />
+                    <span>{service.category}</span>
                   </div>
+
+                
                 </div>
-
-                {(service.prerequisites.length > 0 ||
-                  service.equipmentRequired.length > 0 ||
-                  service.benefitsAndOutcomes.length > 0) && (
-                  <div className="space-y-4 mb-6">
-                    {service.prerequisites.length > 0 && (
-                      <div>
-                        <h3 className="font-medium text-[#012b2b] mb-4">Prerequisites</h3>
-                        <div className="flex flex-wrap gap-2 mb-6">
-                          {service.prerequisites.map((prerequisite, index) => (
-                            <Badge
-                              key={index}
-                              variant="outline"
-                              className="bg-[#517d64]/10 border-[#517d64]/20 text-[#517d64]"
-                            >
-                              {prerequisite}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {service.equipmentRequired.length > 0 && (
-                      <div>
-                        <h3 className="font-medium text-[#012b2b] mb-4">Equipment Required</h3>
-                        <div className="flex flex-wrap gap-2 mb-6">
-                          {service.equipmentRequired.map((equipment, index) => (
-                            <Badge
-                              key={index}
-                              variant="outline"
-                              className="bg-[#517d64]/10 border-[#517d64]/20 text-[#517d64]"
-                            >
-                              {equipment}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {service.benefitsAndOutcomes.length > 0 && (
-                      <div>
-                        <h3 className="font-medium text-[#012b2b] mb-4">Benefits & Outcomes</h3>
-                        <div className="flex flex-wrap gap-2">
-                          {service.benefitsAndOutcomes.map((benefit, index) => (
-                            <Badge
-                              key={index}
-                              variant="outline"
-                              className="bg-[#517d64]/10 border-[#517d64]/20 text-[#517d64]"
-                            >
-                              {benefit}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
 
                 {service.cancellationPolicy && (
                   <div className="bg-red-50 p-4 rounded-lg text-sm">
-                    <h3 className="font-medium text-destructive mb-1">Cancellation Policy</h3>
-                    <p className="text-[#517d64]">{service.cancellationPolicy}</p>
+                    <h3 className="font-medium text-destructive mb-1">
+                      Cancellation Policy
+                    </h3>
+                    <p className="text-[#517d64]">
+                      {service.cancellationPolicy}
+                    </p>
                   </div>
                 )}
 
-<div className="mt-8">
+                <div className="mt-8">
                   <h3 className="font-medium text-[#012b2b] mb-4">Reviews</h3>
                   {reviews?.data.reviews && reviews.data.reviews.length > 0 ? (
                     <div className="space-y-4">
                       {reviews.data.reviews.map((review) => (
-                        <div key={review.id} className="border-b border-[#517d64]/20 pb-4">
+                        <div
+                          key={review.id}
+                          className="border-b border-[#517d64]/20 pb-4"
+                        >
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <div className="w-8 h-8 rounded-full bg-[#517d64]/20 flex items-center justify-center">
                                 <User className="w-4 h-4 text-[#517d64]" />
                               </div>
                               <div>
-                                <p className="font-medium text-[#012b2b]">{review.user.name}</p>
+                                <p className="font-medium text-[#012b2b]">
+                                  {review.user.name}
+                                </p>
                                 <p className="text-xs text-[#517d64]">
-                                  {new Date(review.created_at).toLocaleDateString()}
+                                  {new Date(
+                                    review.created_at
+                                  ).toLocaleDateString()}
                                 </p>
                               </div>
                             </div>
@@ -619,7 +612,9 @@ export function ServiceCard({ service }: ServiceCardProps) {
                               ))}
                             </div>
                           </div>
-                          <p className="text-sm text-[#517d64]">{review.comment}</p>
+                          <p className="text-sm text-[#517d64]">
+                            {review.comment}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -631,7 +626,9 @@ export function ServiceCard({ service }: ServiceCardProps) {
 
               <div className="bg-[#f8f9fa] p-6 rounded-xl">
                 <div className="text-center mb-4">
-                  <div className="text-sm text-[#517d64] mb-1">Price per session</div>
+                  <div className="text-sm text-[#517d64] mb-1">
+                    Price per session
+                  </div>
                   <div className="text-3xl font-bold text-[#012b2b]">
                     {renderCurrencySymbol(service.currency)}
                     {service.price}
@@ -644,42 +641,48 @@ export function ServiceCard({ service }: ServiceCardProps) {
                   )}
                 </div>
 
-                {
-                  user ? (
-                    <Button
-                      className="w-full bg-[#012b2b] hover:bg-[#012b2b]/90 text-white mb-3"
-                  onClick={(e) => {
-                    setShowDetails(false)
-                    setShowBooking(true)
-                  }}
-                >
-                  Book Now
-                </Button>
+                {user ? (
+                  <Button
+                    className="w-full bg-[#012b2b] hover:bg-[#012b2b]/90 text-white mb-3"
+                    onClick={(e) => {
+                      setShowDetails(false);
+                      setShowBooking(true);
+                    }}
+                  >
+                    Book Now
+                  </Button>
                 ) : (
                   <SecondaryButton
                     className="w-full"
                     onClick={(e) => {
                       e.stopPropagation();
-                      router.push("/sign-in");  
+                      router.push("/sign-in");
                     }}
                   >
-                   Sign In 
+                    Sign In
                   </SecondaryButton>
-                )
-                }
+                )}
                 {service.instructorBio && (
                   <div className="mt-6 pt-6 border-t border-[#517d64]/20">
-                    <h3 className="font-medium text-[#012b2b] mb-6">About the Instructor</h3>
+                    <h3 className="font-medium text-[#012b2b] mb-6">
+                      About the Instructor
+                    </h3>
                     <div className="flex items-center gap-3 mb-2">
                       <div className="w-10 h-10 rounded-full bg-[#517d64]/20 flex items-center justify-center text-[#517d64]">
                         <User className="w-5 h-5" />
                       </div>
                       <div>
-                        <div className="font-medium">{service.instructorName}</div>
-                        <div className="text-xs text-[#517d64] mt-2">Wellness Expert</div>
+                        <div className="font-medium">
+                          {service.instructorName}
+                        </div>
+                        <div className="text-xs text-[#517d64] mt-2">
+                          Wellness Expert
+                        </div>
                       </div>
                     </div>
-                    <p className="text-sm text-[#517d64] mt-4">{service.instructorBio}</p>
+                    <p className="text-sm text-[#517d64] mt-4">
+                      {service.instructorBio}
+                    </p>
                   </div>
                 )}
               </div>
@@ -691,13 +694,17 @@ export function ServiceCard({ service }: ServiceCardProps) {
       <Dialog open={showBooking} onOpenChange={setShowBooking}>
         <DialogContent className="max-w-md bg-white sm:rounded-xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl text-[#012b2b] font-semibold">Book {service.name}</DialogTitle>
+            <DialogTitle className="text-2xl text-[#012b2b] font-semibold">
+              Book {service.name}
+            </DialogTitle>
           </DialogHeader>
 
           <div className="mt-4 space-y-4">
-
             <div className="flex items-start flex-col justify-center py-3 border-b border-[#517d64]/20">
-              <span className="text-[#517d64] mb-3 text-sm ml-2">Enter your email where you want to receive the booking confirmation and invoice</span>
+              <span className="text-[#517d64] mb-3 text-sm ml-2">
+                Enter your email where you want to receive the booking
+                confirmation and invoice
+              </span>
               <Input
                 type="email"
                 placeholder="eg. example@gmail.com"
@@ -732,26 +739,16 @@ export function ServiceCard({ service }: ServiceCardProps) {
             <div className="flex items-center justify-between py-3 border-b border-[#517d64]/20">
               <span className="text-[#517d64]">Selected Date</span>
               <span className="font-medium">
-                {selectedDate ? selectedDate.toLocaleDateString() : 'Not selected'}
+                {selectedDate
+                  ? selectedDate.toLocaleDateString()
+                  : "Not selected"}
               </span>
             </div>
 
             <div className="flex items-center justify-between py-3 border-b border-[#517d64]/20">
               <span className="text-[#517d64]">Selected Time</span>
               <span className="font-medium">
-                {selectedTimeSlot || 'Not selected'}
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between py-3 border-b border-[#517d64]/20">
-              <span className="text-[#517d64]">Duration</span>
-              <span className="font-medium">{formatTime(service.duration)}</span>
-            </div>
-
-            <div className="flex items-center justify-between py-3 border-b border-[#517d64]/20">
-              <span className="text-[#517d64]">Session Type</span>
-              <span className="font-medium">
-                {service.sessionType.charAt(0) + service.sessionType.slice(1).toLowerCase()}
+                {selectedTimeSlot || "Not selected"}
               </span>
             </div>
 
@@ -781,7 +778,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
             </div>
 
             <div className="pt-4">
-              <Button 
+              <Button
                 className="w-full bg-[#012b2b] hover:bg-[#012b2b]/90 text-white"
                 onClick={handlePayment}
                 disabled={!selectedDate || !selectedTimeSlot || isProcessing}
@@ -793,5 +790,5 @@ export function ServiceCard({ service }: ServiceCardProps) {
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }

@@ -5,7 +5,7 @@ export interface Service {
   // Basic info
   id: string;
   name: string;
-  description: string;
+  description: string[]; // Array of description points
   shortDescription?: string; // Brief summary for cards/listings
   
   // Media
@@ -18,19 +18,10 @@ export interface Service {
   // Pricing
   price: string; // Base price
   currency?: string; // USD, EUR, etc.
-  pricingType?: 'FIXED' | 'HOURLY' | 'PACKAGE'; // Pricing structure
   discountPrice?: string; // Optional sale price
   
   // Scheduling
-  duration: number; // Length in hours
-  sessionType: 'GROUP' | 'PRIVATE' | 'SELF_GUIDED'; // Type of session
-  maxParticipants?: number; // For group sessions
-  
-  // Details
-  difficultyLevel?: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCE' | 'ALL_LEVELS';
-  prerequisites?: string[];
-  equipmentRequired?: string[];
-  benefitsAndOutcomes?: string[];
+  duration: number; // Length in minutes
   
   // Instructor/provider info
   instructorId?: string;
@@ -174,6 +165,39 @@ export const createService = async (service: any) => {
   }
 };
 
+
+export const updateService = async (serviceId: string, serviceData: any) => {
+  try {
+    const response = await api.put(`/admin/services/update-service-data/${serviceId}`, serviceData, {
+      headers: {
+        "Content-Type": 'multipart/form-data'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating service:', error);
+    throw error;
+  }
+};
+
+export const updateServiceImages = async (serviceId: string, mediaFiles: File[]) => {
+  try {
+    const formData = new FormData();
+    mediaFiles.forEach((file: File) => {
+      formData.append("media", file);
+    });
+
+    const response = await api.put(`/admin/services/update-service-images/${serviceId}`, formData, {
+      headers: {
+        "Content-Type": 'multipart/form-data'
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating service images:', error);
+    throw error;
+  }
+};
 
 export const deleteService = async (serviceId: string) => {
   const response = await api.delete(`/admin/services/delete-service`, {data: {serviceId: serviceId}});

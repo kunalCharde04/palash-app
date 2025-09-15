@@ -20,7 +20,7 @@ model User {
   avatar                String?
   name                  String
   username              String?          @unique
-  date_of_birth         DateTime
+  date_of_birth         DateTime?
   role                  Role             @default(USER)
   is_verified           Boolean          @default(false)
   is_agreed_to_terms    Boolean          @default(false)
@@ -118,7 +118,7 @@ model Availability {
 model Service {
   id                    String         @id @default(uuid())
   name                  String
-  description           String
+  description           String[]
   shortDescription      String?
   media                 String[]
   category              String
@@ -127,15 +127,8 @@ model Service {
   currency              String?
   average_rating        Float?
   total_reviews         Int?
-  pricingType           PricingType    @default(FIXED)
   discountPrice         String?
   duration              Int
-  sessionType           SessionType    @default(GROUP)
-  maxParticipants       Int?
-  difficultyLevel       DiffcultyType  @default(BEGINNER)
-  prerequisites         String[]
-  equipmentRequired     String[]
-  benefitsAndOutcomes   String[]
   instructorId          String?
   instructorName        String?
   instructorBio         String?
@@ -152,25 +145,6 @@ model Service {
   payments              Payment[]
   created_at            DateTime       @default(now())
   updated_at            DateTime       @updatedAt
-}
-
-enum DiffcultyType {
-  BEGINNER
-  INTERMEDIATE
-  ADVANCE
-  ALL_LEVELS
-}
-
-enum PricingType {
-  FIXED
-  HOURLY
-  PACKAGE
-}
-
-enum SessionType {
-  GROUP
-  PRIVATE
-  SELF_GUIDED
 }
 
 model Review {

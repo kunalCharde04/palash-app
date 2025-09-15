@@ -18,22 +18,15 @@ export interface BookingData {
 export interface Service {
   id: string
   name: string
-  description: string
+  description: string[]
   shortDescription?: string
   media: string[]
   category: string
   tags: string[]
   price: string
   currency?: string | null
-  pricingType: 'FIXED' | 'HOURLY' | 'PACKAGE'
   discountPrice?: string | null
   duration: number
-  sessionType: 'PRIVATE' | 'GROUP' | 'SELF_GUIDED'
-  maxParticipants?: number | null
-  difficultyLevel: 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED'
-  prerequisites: string[]
-  equipmentRequired: string[]
-  benefitsAndOutcomes: string[]
   instructorId?: string | null
   instructorName?: string | null
   instructorBio?: string | null

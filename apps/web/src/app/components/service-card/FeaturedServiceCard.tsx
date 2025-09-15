@@ -219,9 +219,20 @@ export function FeaturedServiceCard({ service, index }: FeaturedServiceCardProps
               )}
             </div>
 
-            <p className="text-white/80 line-clamp-2 max-w-2xl">
-              {service.description || service.shortDescription}
-            </p>
+            <div className="text-white/80 line-clamp-2 max-w-2xl">
+              {service.description && service.description.length > 0 ? (
+                <ul className="space-y-1 list-disc list-inside">
+                  {service.description.slice(0, 2).map((point, index) => (
+                    <li key={index}>{point}</li>
+                  ))}
+                  {service.description.length > 2 && (
+                    <li>...and {service.description.length - 2} more points</li>
+                  )}
+                </ul>
+              ) : (
+                <p>{service.shortDescription}</p>
+              )}
+            </div>
 
             <div className="flex items-center gap-4 pt-4">
               <div className="text-2xl font-bold">

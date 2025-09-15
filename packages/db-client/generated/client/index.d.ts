@@ -114,34 +114,6 @@ export const TimeSlotStatus: {
 export type TimeSlotStatus = (typeof TimeSlotStatus)[keyof typeof TimeSlotStatus]
 
 
-export const DiffcultyType: {
-  BEGINNER: 'BEGINNER',
-  INTERMEDIATE: 'INTERMEDIATE',
-  ADVANCE: 'ADVANCE',
-  ALL_LEVELS: 'ALL_LEVELS'
-};
-
-export type DiffcultyType = (typeof DiffcultyType)[keyof typeof DiffcultyType]
-
-
-export const PricingType: {
-  FIXED: 'FIXED',
-  HOURLY: 'HOURLY',
-  PACKAGE: 'PACKAGE'
-};
-
-export type PricingType = (typeof PricingType)[keyof typeof PricingType]
-
-
-export const SessionType: {
-  GROUP: 'GROUP',
-  PRIVATE: 'PRIVATE',
-  SELF_GUIDED: 'SELF_GUIDED'
-};
-
-export type SessionType = (typeof SessionType)[keyof typeof SessionType]
-
-
 export const Role: {
   USER: 'USER',
   ADMIN: 'ADMIN'
@@ -191,18 +163,6 @@ export const PaymentType: typeof $Enums.PaymentType
 export type TimeSlotStatus = $Enums.TimeSlotStatus
 
 export const TimeSlotStatus: typeof $Enums.TimeSlotStatus
-
-export type DiffcultyType = $Enums.DiffcultyType
-
-export const DiffcultyType: typeof $Enums.DiffcultyType
-
-export type PricingType = $Enums.PricingType
-
-export const PricingType: typeof $Enums.PricingType
-
-export type SessionType = $Enums.SessionType
-
-export const SessionType: typeof $Enums.SessionType
 
 export type Role = $Enums.Role
 
@@ -2462,7 +2422,7 @@ export namespace Prisma {
     avatar: string | null
     name: string
     username: string | null
-    date_of_birth: Date
+    date_of_birth: Date | null
     role: $Enums.Role
     is_verified: boolean
     is_agreed_to_terms: boolean
@@ -2582,7 +2542,7 @@ export namespace Prisma {
       avatar: string | null
       name: string
       username: string | null
-      date_of_birth: Date
+      date_of_birth: Date | null
       role: $Enums.Role
       is_verified: boolean
       is_agreed_to_terms: boolean
@@ -8094,7 +8054,6 @@ export namespace Prisma {
     average_rating: number | null
     total_reviews: number | null
     duration: number | null
-    maxParticipants: number | null
   }
 
   export type ServiceSumAggregateOutputType = {
@@ -8102,25 +8061,19 @@ export namespace Prisma {
     average_rating: number | null
     total_reviews: number | null
     duration: number | null
-    maxParticipants: number | null
   }
 
   export type ServiceMinAggregateOutputType = {
     id: string | null
     name: string | null
-    description: string | null
     shortDescription: string | null
     category: string | null
     price: Decimal | null
     currency: string | null
     average_rating: number | null
     total_reviews: number | null
-    pricingType: $Enums.PricingType | null
     discountPrice: string | null
     duration: number | null
-    sessionType: $Enums.SessionType | null
-    maxParticipants: number | null
-    difficultyLevel: $Enums.DiffcultyType | null
     instructorId: string | null
     instructorName: string | null
     instructorBio: string | null
@@ -8136,19 +8089,14 @@ export namespace Prisma {
   export type ServiceMaxAggregateOutputType = {
     id: string | null
     name: string | null
-    description: string | null
     shortDescription: string | null
     category: string | null
     price: Decimal | null
     currency: string | null
     average_rating: number | null
     total_reviews: number | null
-    pricingType: $Enums.PricingType | null
     discountPrice: string | null
     duration: number | null
-    sessionType: $Enums.SessionType | null
-    maxParticipants: number | null
-    difficultyLevel: $Enums.DiffcultyType | null
     instructorId: string | null
     instructorName: string | null
     instructorBio: string | null
@@ -8173,15 +8121,8 @@ export namespace Prisma {
     currency: number
     average_rating: number
     total_reviews: number
-    pricingType: number
     discountPrice: number
     duration: number
-    sessionType: number
-    maxParticipants: number
-    difficultyLevel: number
-    prerequisites: number
-    equipmentRequired: number
-    benefitsAndOutcomes: number
     instructorId: number
     instructorName: number
     instructorBio: number
@@ -8203,7 +8144,6 @@ export namespace Prisma {
     average_rating?: true
     total_reviews?: true
     duration?: true
-    maxParticipants?: true
   }
 
   export type ServiceSumAggregateInputType = {
@@ -8211,25 +8151,19 @@ export namespace Prisma {
     average_rating?: true
     total_reviews?: true
     duration?: true
-    maxParticipants?: true
   }
 
   export type ServiceMinAggregateInputType = {
     id?: true
     name?: true
-    description?: true
     shortDescription?: true
     category?: true
     price?: true
     currency?: true
     average_rating?: true
     total_reviews?: true
-    pricingType?: true
     discountPrice?: true
     duration?: true
-    sessionType?: true
-    maxParticipants?: true
-    difficultyLevel?: true
     instructorId?: true
     instructorName?: true
     instructorBio?: true
@@ -8245,19 +8179,14 @@ export namespace Prisma {
   export type ServiceMaxAggregateInputType = {
     id?: true
     name?: true
-    description?: true
     shortDescription?: true
     category?: true
     price?: true
     currency?: true
     average_rating?: true
     total_reviews?: true
-    pricingType?: true
     discountPrice?: true
     duration?: true
-    sessionType?: true
-    maxParticipants?: true
-    difficultyLevel?: true
     instructorId?: true
     instructorName?: true
     instructorBio?: true
@@ -8282,15 +8211,8 @@ export namespace Prisma {
     currency?: true
     average_rating?: true
     total_reviews?: true
-    pricingType?: true
     discountPrice?: true
     duration?: true
-    sessionType?: true
-    maxParticipants?: true
-    difficultyLevel?: true
-    prerequisites?: true
-    equipmentRequired?: true
-    benefitsAndOutcomes?: true
     instructorId?: true
     instructorName?: true
     instructorBio?: true
@@ -8395,7 +8317,7 @@ export namespace Prisma {
   export type ServiceGroupByOutputType = {
     id: string
     name: string
-    description: string
+    description: string[]
     shortDescription: string | null
     media: string[]
     category: string
@@ -8404,15 +8326,8 @@ export namespace Prisma {
     currency: string | null
     average_rating: number | null
     total_reviews: number | null
-    pricingType: $Enums.PricingType
     discountPrice: string | null
     duration: number
-    sessionType: $Enums.SessionType
-    maxParticipants: number | null
-    difficultyLevel: $Enums.DiffcultyType
-    prerequisites: string[]
-    equipmentRequired: string[]
-    benefitsAndOutcomes: string[]
     instructorId: string | null
     instructorName: string | null
     instructorBio: string | null
@@ -8458,15 +8373,8 @@ export namespace Prisma {
     currency?: boolean
     average_rating?: boolean
     total_reviews?: boolean
-    pricingType?: boolean
     discountPrice?: boolean
     duration?: boolean
-    sessionType?: boolean
-    maxParticipants?: boolean
-    difficultyLevel?: boolean
-    prerequisites?: boolean
-    equipmentRequired?: boolean
-    benefitsAndOutcomes?: boolean
     instructorId?: boolean
     instructorName?: boolean
     instructorBio?: boolean
@@ -8498,15 +8406,8 @@ export namespace Prisma {
     currency?: boolean
     average_rating?: boolean
     total_reviews?: boolean
-    pricingType?: boolean
     discountPrice?: boolean
     duration?: boolean
-    sessionType?: boolean
-    maxParticipants?: boolean
-    difficultyLevel?: boolean
-    prerequisites?: boolean
-    equipmentRequired?: boolean
-    benefitsAndOutcomes?: boolean
     instructorId?: boolean
     instructorName?: boolean
     instructorBio?: boolean
@@ -8533,15 +8434,8 @@ export namespace Prisma {
     currency?: boolean
     average_rating?: boolean
     total_reviews?: boolean
-    pricingType?: boolean
     discountPrice?: boolean
     duration?: boolean
-    sessionType?: boolean
-    maxParticipants?: boolean
-    difficultyLevel?: boolean
-    prerequisites?: boolean
-    equipmentRequired?: boolean
-    benefitsAndOutcomes?: boolean
     instructorId?: boolean
     instructorName?: boolean
     instructorBio?: boolean
@@ -8568,15 +8462,8 @@ export namespace Prisma {
     currency?: boolean
     average_rating?: boolean
     total_reviews?: boolean
-    pricingType?: boolean
     discountPrice?: boolean
     duration?: boolean
-    sessionType?: boolean
-    maxParticipants?: boolean
-    difficultyLevel?: boolean
-    prerequisites?: boolean
-    equipmentRequired?: boolean
-    benefitsAndOutcomes?: boolean
     instructorId?: boolean
     instructorName?: boolean
     instructorBio?: boolean
@@ -8591,7 +8478,7 @@ export namespace Prisma {
     updated_at?: boolean
   }
 
-  export type ServiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "shortDescription" | "media" | "category" | "tags" | "price" | "currency" | "average_rating" | "total_reviews" | "pricingType" | "discountPrice" | "duration" | "sessionType" | "maxParticipants" | "difficultyLevel" | "prerequisites" | "equipmentRequired" | "benefitsAndOutcomes" | "instructorId" | "instructorName" | "instructorBio" | "cancellationPolicy" | "featured" | "isActive" | "isOnline" | "isRecurring" | "location" | "virtualMeetingDetails" | "created_at" | "updated_at", ExtArgs["result"]["service"]>
+  export type ServiceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "shortDescription" | "media" | "category" | "tags" | "price" | "currency" | "average_rating" | "total_reviews" | "discountPrice" | "duration" | "instructorId" | "instructorName" | "instructorBio" | "cancellationPolicy" | "featured" | "isActive" | "isOnline" | "isRecurring" | "location" | "virtualMeetingDetails" | "created_at" | "updated_at", ExtArgs["result"]["service"]>
   export type ServiceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     reviews?: boolean | Service$reviewsArgs<ExtArgs>
     availability?: boolean | Service$availabilityArgs<ExtArgs>
@@ -8613,7 +8500,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
-      description: string
+      description: string[]
       shortDescription: string | null
       media: string[]
       category: string
@@ -8622,15 +8509,8 @@ export namespace Prisma {
       currency: string | null
       average_rating: number | null
       total_reviews: number | null
-      pricingType: $Enums.PricingType
       discountPrice: string | null
       duration: number
-      sessionType: $Enums.SessionType
-      maxParticipants: number | null
-      difficultyLevel: $Enums.DiffcultyType
-      prerequisites: string[]
-      equipmentRequired: string[]
-      benefitsAndOutcomes: string[]
       instructorId: string | null
       instructorName: string | null
       instructorBio: string | null
@@ -9072,7 +8952,7 @@ export namespace Prisma {
   interface ServiceFieldRefs {
     readonly id: FieldRef<"Service", 'String'>
     readonly name: FieldRef<"Service", 'String'>
-    readonly description: FieldRef<"Service", 'String'>
+    readonly description: FieldRef<"Service", 'String[]'>
     readonly shortDescription: FieldRef<"Service", 'String'>
     readonly media: FieldRef<"Service", 'String[]'>
     readonly category: FieldRef<"Service", 'String'>
@@ -9081,15 +8961,8 @@ export namespace Prisma {
     readonly currency: FieldRef<"Service", 'String'>
     readonly average_rating: FieldRef<"Service", 'Float'>
     readonly total_reviews: FieldRef<"Service", 'Int'>
-    readonly pricingType: FieldRef<"Service", 'PricingType'>
     readonly discountPrice: FieldRef<"Service", 'String'>
     readonly duration: FieldRef<"Service", 'Int'>
-    readonly sessionType: FieldRef<"Service", 'SessionType'>
-    readonly maxParticipants: FieldRef<"Service", 'Int'>
-    readonly difficultyLevel: FieldRef<"Service", 'DiffcultyType'>
-    readonly prerequisites: FieldRef<"Service", 'String[]'>
-    readonly equipmentRequired: FieldRef<"Service", 'String[]'>
-    readonly benefitsAndOutcomes: FieldRef<"Service", 'String[]'>
     readonly instructorId: FieldRef<"Service", 'String'>
     readonly instructorName: FieldRef<"Service", 'String'>
     readonly instructorBio: FieldRef<"Service", 'String'>
@@ -17004,15 +16877,8 @@ export namespace Prisma {
     currency: 'currency',
     average_rating: 'average_rating',
     total_reviews: 'total_reviews',
-    pricingType: 'pricingType',
     discountPrice: 'discountPrice',
     duration: 'duration',
-    sessionType: 'sessionType',
-    maxParticipants: 'maxParticipants',
-    difficultyLevel: 'difficultyLevel',
-    prerequisites: 'prerequisites',
-    equipmentRequired: 'equipmentRequired',
-    benefitsAndOutcomes: 'benefitsAndOutcomes',
     instructorId: 'instructorId',
     instructorName: 'instructorName',
     instructorBio: 'instructorBio',
@@ -17319,48 +17185,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'PricingType'
-   */
-  export type EnumPricingTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PricingType'>
-    
-
-
-  /**
-   * Reference to a field of type 'PricingType[]'
-   */
-  export type ListEnumPricingTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PricingType[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'SessionType'
-   */
-  export type EnumSessionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SessionType'>
-    
-
-
-  /**
-   * Reference to a field of type 'SessionType[]'
-   */
-  export type ListEnumSessionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SessionType[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'DiffcultyType'
-   */
-  export type EnumDiffcultyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DiffcultyType'>
-    
-
-
-  /**
-   * Reference to a field of type 'DiffcultyType[]'
-   */
-  export type ListEnumDiffcultyTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DiffcultyType[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Json'
    */
   export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
@@ -17435,7 +17259,7 @@ export namespace Prisma {
     avatar?: StringNullableFilter<"User"> | string | null
     name?: StringFilter<"User"> | string
     username?: StringNullableFilter<"User"> | string | null
-    date_of_birth?: DateTimeFilter<"User"> | Date | string
+    date_of_birth?: DateTimeNullableFilter<"User"> | Date | string | null
     role?: EnumRoleFilter<"User"> | $Enums.Role
     is_verified?: BoolFilter<"User"> | boolean
     is_agreed_to_terms?: BoolFilter<"User"> | boolean
@@ -17456,7 +17280,7 @@ export namespace Prisma {
     avatar?: SortOrderInput | SortOrder
     name?: SortOrder
     username?: SortOrderInput | SortOrder
-    date_of_birth?: SortOrder
+    date_of_birth?: SortOrderInput | SortOrder
     role?: SortOrder
     is_verified?: SortOrder
     is_agreed_to_terms?: SortOrder
@@ -17480,7 +17304,7 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     avatar?: StringNullableFilter<"User"> | string | null
     name?: StringFilter<"User"> | string
-    date_of_birth?: DateTimeFilter<"User"> | Date | string
+    date_of_birth?: DateTimeNullableFilter<"User"> | Date | string | null
     role?: EnumRoleFilter<"User"> | $Enums.Role
     is_verified?: BoolFilter<"User"> | boolean
     is_agreed_to_terms?: BoolFilter<"User"> | boolean
@@ -17501,7 +17325,7 @@ export namespace Prisma {
     avatar?: SortOrderInput | SortOrder
     name?: SortOrder
     username?: SortOrderInput | SortOrder
-    date_of_birth?: SortOrder
+    date_of_birth?: SortOrderInput | SortOrder
     role?: SortOrder
     is_verified?: SortOrder
     is_agreed_to_terms?: SortOrder
@@ -17521,7 +17345,7 @@ export namespace Prisma {
     avatar?: StringNullableWithAggregatesFilter<"User"> | string | null
     name?: StringWithAggregatesFilter<"User"> | string
     username?: StringNullableWithAggregatesFilter<"User"> | string | null
-    date_of_birth?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    date_of_birth?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
     is_verified?: BoolWithAggregatesFilter<"User"> | boolean
     is_agreed_to_terms?: BoolWithAggregatesFilter<"User"> | boolean
@@ -17817,7 +17641,7 @@ export namespace Prisma {
     NOT?: ServiceWhereInput | ServiceWhereInput[]
     id?: StringFilter<"Service"> | string
     name?: StringFilter<"Service"> | string
-    description?: StringFilter<"Service"> | string
+    description?: StringNullableListFilter<"Service">
     shortDescription?: StringNullableFilter<"Service"> | string | null
     media?: StringNullableListFilter<"Service">
     category?: StringFilter<"Service"> | string
@@ -17826,15 +17650,8 @@ export namespace Prisma {
     currency?: StringNullableFilter<"Service"> | string | null
     average_rating?: FloatNullableFilter<"Service"> | number | null
     total_reviews?: IntNullableFilter<"Service"> | number | null
-    pricingType?: EnumPricingTypeFilter<"Service"> | $Enums.PricingType
     discountPrice?: StringNullableFilter<"Service"> | string | null
     duration?: IntFilter<"Service"> | number
-    sessionType?: EnumSessionTypeFilter<"Service"> | $Enums.SessionType
-    maxParticipants?: IntNullableFilter<"Service"> | number | null
-    difficultyLevel?: EnumDiffcultyTypeFilter<"Service"> | $Enums.DiffcultyType
-    prerequisites?: StringNullableListFilter<"Service">
-    equipmentRequired?: StringNullableListFilter<"Service">
-    benefitsAndOutcomes?: StringNullableListFilter<"Service">
     instructorId?: StringNullableFilter<"Service"> | string | null
     instructorName?: StringNullableFilter<"Service"> | string | null
     instructorBio?: StringNullableFilter<"Service"> | string | null
@@ -17865,15 +17682,8 @@ export namespace Prisma {
     currency?: SortOrderInput | SortOrder
     average_rating?: SortOrderInput | SortOrder
     total_reviews?: SortOrderInput | SortOrder
-    pricingType?: SortOrder
     discountPrice?: SortOrderInput | SortOrder
     duration?: SortOrder
-    sessionType?: SortOrder
-    maxParticipants?: SortOrderInput | SortOrder
-    difficultyLevel?: SortOrder
-    prerequisites?: SortOrder
-    equipmentRequired?: SortOrder
-    benefitsAndOutcomes?: SortOrder
     instructorId?: SortOrderInput | SortOrder
     instructorName?: SortOrderInput | SortOrder
     instructorBio?: SortOrderInput | SortOrder
@@ -17898,7 +17708,7 @@ export namespace Prisma {
     OR?: ServiceWhereInput[]
     NOT?: ServiceWhereInput | ServiceWhereInput[]
     name?: StringFilter<"Service"> | string
-    description?: StringFilter<"Service"> | string
+    description?: StringNullableListFilter<"Service">
     shortDescription?: StringNullableFilter<"Service"> | string | null
     media?: StringNullableListFilter<"Service">
     category?: StringFilter<"Service"> | string
@@ -17907,15 +17717,8 @@ export namespace Prisma {
     currency?: StringNullableFilter<"Service"> | string | null
     average_rating?: FloatNullableFilter<"Service"> | number | null
     total_reviews?: IntNullableFilter<"Service"> | number | null
-    pricingType?: EnumPricingTypeFilter<"Service"> | $Enums.PricingType
     discountPrice?: StringNullableFilter<"Service"> | string | null
     duration?: IntFilter<"Service"> | number
-    sessionType?: EnumSessionTypeFilter<"Service"> | $Enums.SessionType
-    maxParticipants?: IntNullableFilter<"Service"> | number | null
-    difficultyLevel?: EnumDiffcultyTypeFilter<"Service"> | $Enums.DiffcultyType
-    prerequisites?: StringNullableListFilter<"Service">
-    equipmentRequired?: StringNullableListFilter<"Service">
-    benefitsAndOutcomes?: StringNullableListFilter<"Service">
     instructorId?: StringNullableFilter<"Service"> | string | null
     instructorName?: StringNullableFilter<"Service"> | string | null
     instructorBio?: StringNullableFilter<"Service"> | string | null
@@ -17946,15 +17749,8 @@ export namespace Prisma {
     currency?: SortOrderInput | SortOrder
     average_rating?: SortOrderInput | SortOrder
     total_reviews?: SortOrderInput | SortOrder
-    pricingType?: SortOrder
     discountPrice?: SortOrderInput | SortOrder
     duration?: SortOrder
-    sessionType?: SortOrder
-    maxParticipants?: SortOrderInput | SortOrder
-    difficultyLevel?: SortOrder
-    prerequisites?: SortOrder
-    equipmentRequired?: SortOrder
-    benefitsAndOutcomes?: SortOrder
     instructorId?: SortOrderInput | SortOrder
     instructorName?: SortOrderInput | SortOrder
     instructorBio?: SortOrderInput | SortOrder
@@ -17980,7 +17776,7 @@ export namespace Prisma {
     NOT?: ServiceScalarWhereWithAggregatesInput | ServiceScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Service"> | string
     name?: StringWithAggregatesFilter<"Service"> | string
-    description?: StringWithAggregatesFilter<"Service"> | string
+    description?: StringNullableListFilter<"Service">
     shortDescription?: StringNullableWithAggregatesFilter<"Service"> | string | null
     media?: StringNullableListFilter<"Service">
     category?: StringWithAggregatesFilter<"Service"> | string
@@ -17989,15 +17785,8 @@ export namespace Prisma {
     currency?: StringNullableWithAggregatesFilter<"Service"> | string | null
     average_rating?: FloatNullableWithAggregatesFilter<"Service"> | number | null
     total_reviews?: IntNullableWithAggregatesFilter<"Service"> | number | null
-    pricingType?: EnumPricingTypeWithAggregatesFilter<"Service"> | $Enums.PricingType
     discountPrice?: StringNullableWithAggregatesFilter<"Service"> | string | null
     duration?: IntWithAggregatesFilter<"Service"> | number
-    sessionType?: EnumSessionTypeWithAggregatesFilter<"Service"> | $Enums.SessionType
-    maxParticipants?: IntNullableWithAggregatesFilter<"Service"> | number | null
-    difficultyLevel?: EnumDiffcultyTypeWithAggregatesFilter<"Service"> | $Enums.DiffcultyType
-    prerequisites?: StringNullableListFilter<"Service">
-    equipmentRequired?: StringNullableListFilter<"Service">
-    benefitsAndOutcomes?: StringNullableListFilter<"Service">
     instructorId?: StringNullableWithAggregatesFilter<"Service"> | string | null
     instructorName?: StringNullableWithAggregatesFilter<"Service"> | string | null
     instructorBio?: StringNullableWithAggregatesFilter<"Service"> | string | null
@@ -18599,7 +18388,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -18620,7 +18409,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -18641,7 +18430,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -18662,7 +18451,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -18683,7 +18472,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -18697,7 +18486,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -18711,7 +18500,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -19016,7 +18805,7 @@ export namespace Prisma {
   export type ServiceCreateInput = {
     id?: string
     name: string
-    description: string
+    description?: ServiceCreatedescriptionInput | string[]
     shortDescription?: string | null
     media?: ServiceCreatemediaInput | string[]
     category: string
@@ -19025,15 +18814,8 @@ export namespace Prisma {
     currency?: string | null
     average_rating?: number | null
     total_reviews?: number | null
-    pricingType?: $Enums.PricingType
     discountPrice?: string | null
     duration: number
-    sessionType?: $Enums.SessionType
-    maxParticipants?: number | null
-    difficultyLevel?: $Enums.DiffcultyType
-    prerequisites?: ServiceCreateprerequisitesInput | string[]
-    equipmentRequired?: ServiceCreateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceCreatebenefitsAndOutcomesInput | string[]
     instructorId?: string | null
     instructorName?: string | null
     instructorBio?: string | null
@@ -19055,7 +18837,7 @@ export namespace Prisma {
   export type ServiceUncheckedCreateInput = {
     id?: string
     name: string
-    description: string
+    description?: ServiceCreatedescriptionInput | string[]
     shortDescription?: string | null
     media?: ServiceCreatemediaInput | string[]
     category: string
@@ -19064,15 +18846,8 @@ export namespace Prisma {
     currency?: string | null
     average_rating?: number | null
     total_reviews?: number | null
-    pricingType?: $Enums.PricingType
     discountPrice?: string | null
     duration: number
-    sessionType?: $Enums.SessionType
-    maxParticipants?: number | null
-    difficultyLevel?: $Enums.DiffcultyType
-    prerequisites?: ServiceCreateprerequisitesInput | string[]
-    equipmentRequired?: ServiceCreateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceCreatebenefitsAndOutcomesInput | string[]
     instructorId?: string | null
     instructorName?: string | null
     instructorBio?: string | null
@@ -19094,7 +18869,7 @@ export namespace Prisma {
   export type ServiceUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: ServiceUpdatedescriptionInput | string[]
     shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
     media?: ServiceUpdatemediaInput | string[]
     category?: StringFieldUpdateOperationsInput | string
@@ -19103,15 +18878,8 @@ export namespace Prisma {
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     average_rating?: NullableFloatFieldUpdateOperationsInput | number | null
     total_reviews?: NullableIntFieldUpdateOperationsInput | number | null
-    pricingType?: EnumPricingTypeFieldUpdateOperationsInput | $Enums.PricingType
     discountPrice?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
-    sessionType?: EnumSessionTypeFieldUpdateOperationsInput | $Enums.SessionType
-    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
-    difficultyLevel?: EnumDiffcultyTypeFieldUpdateOperationsInput | $Enums.DiffcultyType
-    prerequisites?: ServiceUpdateprerequisitesInput | string[]
-    equipmentRequired?: ServiceUpdateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceUpdatebenefitsAndOutcomesInput | string[]
     instructorId?: NullableStringFieldUpdateOperationsInput | string | null
     instructorName?: NullableStringFieldUpdateOperationsInput | string | null
     instructorBio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19133,7 +18901,7 @@ export namespace Prisma {
   export type ServiceUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: ServiceUpdatedescriptionInput | string[]
     shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
     media?: ServiceUpdatemediaInput | string[]
     category?: StringFieldUpdateOperationsInput | string
@@ -19142,15 +18910,8 @@ export namespace Prisma {
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     average_rating?: NullableFloatFieldUpdateOperationsInput | number | null
     total_reviews?: NullableIntFieldUpdateOperationsInput | number | null
-    pricingType?: EnumPricingTypeFieldUpdateOperationsInput | $Enums.PricingType
     discountPrice?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
-    sessionType?: EnumSessionTypeFieldUpdateOperationsInput | $Enums.SessionType
-    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
-    difficultyLevel?: EnumDiffcultyTypeFieldUpdateOperationsInput | $Enums.DiffcultyType
-    prerequisites?: ServiceUpdateprerequisitesInput | string[]
-    equipmentRequired?: ServiceUpdateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceUpdatebenefitsAndOutcomesInput | string[]
     instructorId?: NullableStringFieldUpdateOperationsInput | string | null
     instructorName?: NullableStringFieldUpdateOperationsInput | string | null
     instructorBio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19172,7 +18933,7 @@ export namespace Prisma {
   export type ServiceCreateManyInput = {
     id?: string
     name: string
-    description: string
+    description?: ServiceCreatedescriptionInput | string[]
     shortDescription?: string | null
     media?: ServiceCreatemediaInput | string[]
     category: string
@@ -19181,15 +18942,8 @@ export namespace Prisma {
     currency?: string | null
     average_rating?: number | null
     total_reviews?: number | null
-    pricingType?: $Enums.PricingType
     discountPrice?: string | null
     duration: number
-    sessionType?: $Enums.SessionType
-    maxParticipants?: number | null
-    difficultyLevel?: $Enums.DiffcultyType
-    prerequisites?: ServiceCreateprerequisitesInput | string[]
-    equipmentRequired?: ServiceCreateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceCreatebenefitsAndOutcomesInput | string[]
     instructorId?: string | null
     instructorName?: string | null
     instructorBio?: string | null
@@ -19207,7 +18961,7 @@ export namespace Prisma {
   export type ServiceUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: ServiceUpdatedescriptionInput | string[]
     shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
     media?: ServiceUpdatemediaInput | string[]
     category?: StringFieldUpdateOperationsInput | string
@@ -19216,15 +18970,8 @@ export namespace Prisma {
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     average_rating?: NullableFloatFieldUpdateOperationsInput | number | null
     total_reviews?: NullableIntFieldUpdateOperationsInput | number | null
-    pricingType?: EnumPricingTypeFieldUpdateOperationsInput | $Enums.PricingType
     discountPrice?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
-    sessionType?: EnumSessionTypeFieldUpdateOperationsInput | $Enums.SessionType
-    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
-    difficultyLevel?: EnumDiffcultyTypeFieldUpdateOperationsInput | $Enums.DiffcultyType
-    prerequisites?: ServiceUpdateprerequisitesInput | string[]
-    equipmentRequired?: ServiceUpdateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceUpdatebenefitsAndOutcomesInput | string[]
     instructorId?: NullableStringFieldUpdateOperationsInput | string | null
     instructorName?: NullableStringFieldUpdateOperationsInput | string | null
     instructorBio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19242,7 +18989,7 @@ export namespace Prisma {
   export type ServiceUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: ServiceUpdatedescriptionInput | string[]
     shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
     media?: ServiceUpdatemediaInput | string[]
     category?: StringFieldUpdateOperationsInput | string
@@ -19251,15 +18998,8 @@ export namespace Prisma {
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     average_rating?: NullableFloatFieldUpdateOperationsInput | number | null
     total_reviews?: NullableIntFieldUpdateOperationsInput | number | null
-    pricingType?: EnumPricingTypeFieldUpdateOperationsInput | $Enums.PricingType
     discountPrice?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
-    sessionType?: EnumSessionTypeFieldUpdateOperationsInput | $Enums.SessionType
-    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
-    difficultyLevel?: EnumDiffcultyTypeFieldUpdateOperationsInput | $Enums.DiffcultyType
-    prerequisites?: ServiceUpdateprerequisitesInput | string[]
-    equipmentRequired?: ServiceUpdateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceUpdatebenefitsAndOutcomesInput | string[]
     instructorId?: NullableStringFieldUpdateOperationsInput | string | null
     instructorName?: NullableStringFieldUpdateOperationsInput | string | null
     instructorBio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19941,15 +19681,15 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type EnumRoleFilter<$PrismaModel = never> = {
@@ -19962,6 +19702,17 @@ export namespace Prisma {
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type ReviewListRelationFilter = {
@@ -20107,18 +19858,18 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
@@ -20137,6 +19888,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type EnumBookingStatusFilter<$PrismaModel = never> = {
@@ -20430,13 +20195,6 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type EnumPricingTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.PricingType | EnumPricingTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PricingType[] | ListEnumPricingTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PricingType[] | ListEnumPricingTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumPricingTypeFilter<$PrismaModel> | $Enums.PricingType
-  }
-
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -20446,20 +20204,6 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
-  }
-
-  export type EnumSessionTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.SessionType | EnumSessionTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.SessionType[] | ListEnumSessionTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.SessionType[] | ListEnumSessionTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumSessionTypeFilter<$PrismaModel> | $Enums.SessionType
-  }
-
-  export type EnumDiffcultyTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.DiffcultyType | EnumDiffcultyTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.DiffcultyType[] | ListEnumDiffcultyTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DiffcultyType[] | ListEnumDiffcultyTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumDiffcultyTypeFilter<$PrismaModel> | $Enums.DiffcultyType
   }
 
   export type BoolNullableFilter<$PrismaModel = never> = {
@@ -20512,15 +20256,8 @@ export namespace Prisma {
     currency?: SortOrder
     average_rating?: SortOrder
     total_reviews?: SortOrder
-    pricingType?: SortOrder
     discountPrice?: SortOrder
     duration?: SortOrder
-    sessionType?: SortOrder
-    maxParticipants?: SortOrder
-    difficultyLevel?: SortOrder
-    prerequisites?: SortOrder
-    equipmentRequired?: SortOrder
-    benefitsAndOutcomes?: SortOrder
     instructorId?: SortOrder
     instructorName?: SortOrder
     instructorBio?: SortOrder
@@ -20540,25 +20277,19 @@ export namespace Prisma {
     average_rating?: SortOrder
     total_reviews?: SortOrder
     duration?: SortOrder
-    maxParticipants?: SortOrder
   }
 
   export type ServiceMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    description?: SortOrder
     shortDescription?: SortOrder
     category?: SortOrder
     price?: SortOrder
     currency?: SortOrder
     average_rating?: SortOrder
     total_reviews?: SortOrder
-    pricingType?: SortOrder
     discountPrice?: SortOrder
     duration?: SortOrder
-    sessionType?: SortOrder
-    maxParticipants?: SortOrder
-    difficultyLevel?: SortOrder
     instructorId?: SortOrder
     instructorName?: SortOrder
     instructorBio?: SortOrder
@@ -20574,19 +20305,14 @@ export namespace Prisma {
   export type ServiceMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
-    description?: SortOrder
     shortDescription?: SortOrder
     category?: SortOrder
     price?: SortOrder
     currency?: SortOrder
     average_rating?: SortOrder
     total_reviews?: SortOrder
-    pricingType?: SortOrder
     discountPrice?: SortOrder
     duration?: SortOrder
-    sessionType?: SortOrder
-    maxParticipants?: SortOrder
-    difficultyLevel?: SortOrder
     instructorId?: SortOrder
     instructorName?: SortOrder
     instructorBio?: SortOrder
@@ -20604,7 +20330,6 @@ export namespace Prisma {
     average_rating?: SortOrder
     total_reviews?: SortOrder
     duration?: SortOrder
-    maxParticipants?: SortOrder
   }
 
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -20639,16 +20364,6 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type EnumPricingTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PricingType | EnumPricingTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PricingType[] | ListEnumPricingTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PricingType[] | ListEnumPricingTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumPricingTypeWithAggregatesFilter<$PrismaModel> | $Enums.PricingType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPricingTypeFilter<$PrismaModel>
-    _max?: NestedEnumPricingTypeFilter<$PrismaModel>
-  }
-
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -20663,26 +20378,6 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type EnumSessionTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.SessionType | EnumSessionTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.SessionType[] | ListEnumSessionTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.SessionType[] | ListEnumSessionTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumSessionTypeWithAggregatesFilter<$PrismaModel> | $Enums.SessionType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumSessionTypeFilter<$PrismaModel>
-    _max?: NestedEnumSessionTypeFilter<$PrismaModel>
-  }
-
-  export type EnumDiffcultyTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.DiffcultyType | EnumDiffcultyTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.DiffcultyType[] | ListEnumDiffcultyTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DiffcultyType[] | ListEnumDiffcultyTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumDiffcultyTypeWithAggregatesFilter<$PrismaModel> | $Enums.DiffcultyType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumDiffcultyTypeFilter<$PrismaModel>
-    _max?: NestedEnumDiffcultyTypeFilter<$PrismaModel>
   }
 
   export type BoolNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -21151,17 +20846,6 @@ export namespace Prisma {
     isEmpty?: boolean
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type MembershipPlanScalarRelationFilter = {
     is?: MembershipPlanWhereInput
     isNot?: MembershipPlanWhereInput
@@ -21219,20 +20903,6 @@ export namespace Prisma {
 
   export type UserMembershipSumOrderByAggregateInput = {
     counter?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type ReviewCreateNestedManyWithoutUserInput = {
@@ -21341,8 +21011,8 @@ export namespace Prisma {
     set?: string | null
   }
 
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
   }
 
   export type EnumRoleFieldUpdateOperationsInput = {
@@ -21351,6 +21021,10 @@ export namespace Prisma {
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
   }
 
   export type ReviewUpdateManyWithoutUserNestedInput = {
@@ -21755,23 +21429,15 @@ export namespace Prisma {
     deleteMany?: TimeSlotScalarWhereInput | TimeSlotScalarWhereInput[]
   }
 
+  export type ServiceCreatedescriptionInput = {
+    set: string[]
+  }
+
   export type ServiceCreatemediaInput = {
     set: string[]
   }
 
   export type ServiceCreatetagsInput = {
-    set: string[]
-  }
-
-  export type ServiceCreateprerequisitesInput = {
-    set: string[]
-  }
-
-  export type ServiceCreateequipmentRequiredInput = {
-    set: string[]
-  }
-
-  export type ServiceCreatebenefitsAndOutcomesInput = {
     set: string[]
   }
 
@@ -21831,6 +21497,11 @@ export namespace Prisma {
     connect?: PaymentWhereUniqueInput | PaymentWhereUniqueInput[]
   }
 
+  export type ServiceUpdatedescriptionInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
   export type ServiceUpdatemediaInput = {
     set?: string[]
     push?: string | string[]
@@ -21857,39 +21528,12 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type EnumPricingTypeFieldUpdateOperationsInput = {
-    set?: $Enums.PricingType
-  }
-
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
     decrement?: number
     multiply?: number
     divide?: number
-  }
-
-  export type EnumSessionTypeFieldUpdateOperationsInput = {
-    set?: $Enums.SessionType
-  }
-
-  export type EnumDiffcultyTypeFieldUpdateOperationsInput = {
-    set?: $Enums.DiffcultyType
-  }
-
-  export type ServiceUpdateprerequisitesInput = {
-    set?: string[]
-    push?: string | string[]
-  }
-
-  export type ServiceUpdateequipmentRequiredInput = {
-    set?: string[]
-    push?: string | string[]
-  }
-
-  export type ServiceUpdatebenefitsAndOutcomesInput = {
-    set?: string[]
-    push?: string | string[]
   }
 
   export type NullableBoolFieldUpdateOperationsInput = {
@@ -22271,10 +21915,6 @@ export namespace Prisma {
     push?: InputJsonValue | InputJsonValue[]
   }
 
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
-  }
-
   export type UserUpdateOneRequiredWithoutMembershipsNestedInput = {
     create?: XOR<UserCreateWithoutMembershipsInput, UserUncheckedCreateWithoutMembershipsInput>
     connectOrCreate?: UserCreateOrConnectWithoutMembershipsInput
@@ -22385,15 +22025,15 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedEnumRoleFilter<$PrismaModel = never> = {
@@ -22406,6 +22046,17 @@ export namespace Prisma {
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -22464,18 +22115,18 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
@@ -22494,6 +22145,20 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedEnumBookingStatusFilter<$PrismaModel = never> = {
@@ -22585,27 +22250,6 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedEnumPricingTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.PricingType | EnumPricingTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PricingType[] | ListEnumPricingTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PricingType[] | ListEnumPricingTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumPricingTypeFilter<$PrismaModel> | $Enums.PricingType
-  }
-
-  export type NestedEnumSessionTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.SessionType | EnumSessionTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.SessionType[] | ListEnumSessionTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.SessionType[] | ListEnumSessionTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumSessionTypeFilter<$PrismaModel> | $Enums.SessionType
-  }
-
-  export type NestedEnumDiffcultyTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.DiffcultyType | EnumDiffcultyTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.DiffcultyType[] | ListEnumDiffcultyTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DiffcultyType[] | ListEnumDiffcultyTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumDiffcultyTypeFilter<$PrismaModel> | $Enums.DiffcultyType
-  }
-
   export type NestedBoolNullableFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel> | null
     not?: NestedBoolNullableFilter<$PrismaModel> | boolean | null
@@ -22643,16 +22287,6 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumPricingTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.PricingType | EnumPricingTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.PricingType[] | ListEnumPricingTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PricingType[] | ListEnumPricingTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumPricingTypeWithAggregatesFilter<$PrismaModel> | $Enums.PricingType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPricingTypeFilter<$PrismaModel>
-    _max?: NestedEnumPricingTypeFilter<$PrismaModel>
-  }
-
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -22678,26 +22312,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
-  export type NestedEnumSessionTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.SessionType | EnumSessionTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.SessionType[] | ListEnumSessionTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.SessionType[] | ListEnumSessionTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumSessionTypeWithAggregatesFilter<$PrismaModel> | $Enums.SessionType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumSessionTypeFilter<$PrismaModel>
-    _max?: NestedEnumSessionTypeFilter<$PrismaModel>
-  }
-
-  export type NestedEnumDiffcultyTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.DiffcultyType | EnumDiffcultyTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.DiffcultyType[] | ListEnumDiffcultyTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.DiffcultyType[] | ListEnumDiffcultyTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumDiffcultyTypeWithAggregatesFilter<$PrismaModel> | $Enums.DiffcultyType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumDiffcultyTypeFilter<$PrismaModel>
-    _max?: NestedEnumDiffcultyTypeFilter<$PrismaModel>
   }
 
   export type NestedBoolNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -22840,31 +22454,6 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type ReviewCreateWithoutUserInput = {
@@ -23348,7 +22937,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -23368,7 +22957,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -23390,7 +22979,7 @@ export namespace Prisma {
   export type ServiceCreateWithoutBookingsInput = {
     id?: string
     name: string
-    description: string
+    description?: ServiceCreatedescriptionInput | string[]
     shortDescription?: string | null
     media?: ServiceCreatemediaInput | string[]
     category: string
@@ -23399,15 +22988,8 @@ export namespace Prisma {
     currency?: string | null
     average_rating?: number | null
     total_reviews?: number | null
-    pricingType?: $Enums.PricingType
     discountPrice?: string | null
     duration: number
-    sessionType?: $Enums.SessionType
-    maxParticipants?: number | null
-    difficultyLevel?: $Enums.DiffcultyType
-    prerequisites?: ServiceCreateprerequisitesInput | string[]
-    equipmentRequired?: ServiceCreateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceCreatebenefitsAndOutcomesInput | string[]
     instructorId?: string | null
     instructorName?: string | null
     instructorBio?: string | null
@@ -23428,7 +23010,7 @@ export namespace Prisma {
   export type ServiceUncheckedCreateWithoutBookingsInput = {
     id?: string
     name: string
-    description: string
+    description?: ServiceCreatedescriptionInput | string[]
     shortDescription?: string | null
     media?: ServiceCreatemediaInput | string[]
     category: string
@@ -23437,15 +23019,8 @@ export namespace Prisma {
     currency?: string | null
     average_rating?: number | null
     total_reviews?: number | null
-    pricingType?: $Enums.PricingType
     discountPrice?: string | null
     duration: number
-    sessionType?: $Enums.SessionType
-    maxParticipants?: number | null
-    difficultyLevel?: $Enums.DiffcultyType
-    prerequisites?: ServiceCreateprerequisitesInput | string[]
-    equipmentRequired?: ServiceCreateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceCreatebenefitsAndOutcomesInput | string[]
     instructorId?: string | null
     instructorName?: string | null
     instructorBio?: string | null
@@ -23550,7 +23125,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -23570,7 +23145,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -23598,7 +23173,7 @@ export namespace Prisma {
   export type ServiceUpdateWithoutBookingsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: ServiceUpdatedescriptionInput | string[]
     shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
     media?: ServiceUpdatemediaInput | string[]
     category?: StringFieldUpdateOperationsInput | string
@@ -23607,15 +23182,8 @@ export namespace Prisma {
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     average_rating?: NullableFloatFieldUpdateOperationsInput | number | null
     total_reviews?: NullableIntFieldUpdateOperationsInput | number | null
-    pricingType?: EnumPricingTypeFieldUpdateOperationsInput | $Enums.PricingType
     discountPrice?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
-    sessionType?: EnumSessionTypeFieldUpdateOperationsInput | $Enums.SessionType
-    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
-    difficultyLevel?: EnumDiffcultyTypeFieldUpdateOperationsInput | $Enums.DiffcultyType
-    prerequisites?: ServiceUpdateprerequisitesInput | string[]
-    equipmentRequired?: ServiceUpdateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceUpdatebenefitsAndOutcomesInput | string[]
     instructorId?: NullableStringFieldUpdateOperationsInput | string | null
     instructorName?: NullableStringFieldUpdateOperationsInput | string | null
     instructorBio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -23636,7 +23204,7 @@ export namespace Prisma {
   export type ServiceUncheckedUpdateWithoutBookingsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: ServiceUpdatedescriptionInput | string[]
     shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
     media?: ServiceUpdatemediaInput | string[]
     category?: StringFieldUpdateOperationsInput | string
@@ -23645,15 +23213,8 @@ export namespace Prisma {
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     average_rating?: NullableFloatFieldUpdateOperationsInput | number | null
     total_reviews?: NullableIntFieldUpdateOperationsInput | number | null
-    pricingType?: EnumPricingTypeFieldUpdateOperationsInput | $Enums.PricingType
     discountPrice?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
-    sessionType?: EnumSessionTypeFieldUpdateOperationsInput | $Enums.SessionType
-    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
-    difficultyLevel?: EnumDiffcultyTypeFieldUpdateOperationsInput | $Enums.DiffcultyType
-    prerequisites?: ServiceUpdateprerequisitesInput | string[]
-    equipmentRequired?: ServiceUpdateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceUpdatebenefitsAndOutcomesInput | string[]
     instructorId?: NullableStringFieldUpdateOperationsInput | string | null
     instructorName?: NullableStringFieldUpdateOperationsInput | string | null
     instructorBio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -23845,7 +23406,7 @@ export namespace Prisma {
   export type ServiceCreateWithoutAvailabilityInput = {
     id?: string
     name: string
-    description: string
+    description?: ServiceCreatedescriptionInput | string[]
     shortDescription?: string | null
     media?: ServiceCreatemediaInput | string[]
     category: string
@@ -23854,15 +23415,8 @@ export namespace Prisma {
     currency?: string | null
     average_rating?: number | null
     total_reviews?: number | null
-    pricingType?: $Enums.PricingType
     discountPrice?: string | null
     duration: number
-    sessionType?: $Enums.SessionType
-    maxParticipants?: number | null
-    difficultyLevel?: $Enums.DiffcultyType
-    prerequisites?: ServiceCreateprerequisitesInput | string[]
-    equipmentRequired?: ServiceCreateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceCreatebenefitsAndOutcomesInput | string[]
     instructorId?: string | null
     instructorName?: string | null
     instructorBio?: string | null
@@ -23883,7 +23437,7 @@ export namespace Prisma {
   export type ServiceUncheckedCreateWithoutAvailabilityInput = {
     id?: string
     name: string
-    description: string
+    description?: ServiceCreatedescriptionInput | string[]
     shortDescription?: string | null
     media?: ServiceCreatemediaInput | string[]
     category: string
@@ -23892,15 +23446,8 @@ export namespace Prisma {
     currency?: string | null
     average_rating?: number | null
     total_reviews?: number | null
-    pricingType?: $Enums.PricingType
     discountPrice?: string | null
     duration: number
-    sessionType?: $Enums.SessionType
-    maxParticipants?: number | null
-    difficultyLevel?: $Enums.DiffcultyType
-    prerequisites?: ServiceCreateprerequisitesInput | string[]
-    equipmentRequired?: ServiceCreateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceCreatebenefitsAndOutcomesInput | string[]
     instructorId?: string | null
     instructorName?: string | null
     instructorBio?: string | null
@@ -23965,7 +23512,7 @@ export namespace Prisma {
   export type ServiceUpdateWithoutAvailabilityInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: ServiceUpdatedescriptionInput | string[]
     shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
     media?: ServiceUpdatemediaInput | string[]
     category?: StringFieldUpdateOperationsInput | string
@@ -23974,15 +23521,8 @@ export namespace Prisma {
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     average_rating?: NullableFloatFieldUpdateOperationsInput | number | null
     total_reviews?: NullableIntFieldUpdateOperationsInput | number | null
-    pricingType?: EnumPricingTypeFieldUpdateOperationsInput | $Enums.PricingType
     discountPrice?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
-    sessionType?: EnumSessionTypeFieldUpdateOperationsInput | $Enums.SessionType
-    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
-    difficultyLevel?: EnumDiffcultyTypeFieldUpdateOperationsInput | $Enums.DiffcultyType
-    prerequisites?: ServiceUpdateprerequisitesInput | string[]
-    equipmentRequired?: ServiceUpdateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceUpdatebenefitsAndOutcomesInput | string[]
     instructorId?: NullableStringFieldUpdateOperationsInput | string | null
     instructorName?: NullableStringFieldUpdateOperationsInput | string | null
     instructorBio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24003,7 +23543,7 @@ export namespace Prisma {
   export type ServiceUncheckedUpdateWithoutAvailabilityInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: ServiceUpdatedescriptionInput | string[]
     shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
     media?: ServiceUpdatemediaInput | string[]
     category?: StringFieldUpdateOperationsInput | string
@@ -24012,15 +23552,8 @@ export namespace Prisma {
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     average_rating?: NullableFloatFieldUpdateOperationsInput | number | null
     total_reviews?: NullableIntFieldUpdateOperationsInput | number | null
-    pricingType?: EnumPricingTypeFieldUpdateOperationsInput | $Enums.PricingType
     discountPrice?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
-    sessionType?: EnumSessionTypeFieldUpdateOperationsInput | $Enums.SessionType
-    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
-    difficultyLevel?: EnumDiffcultyTypeFieldUpdateOperationsInput | $Enums.DiffcultyType
-    prerequisites?: ServiceUpdateprerequisitesInput | string[]
-    equipmentRequired?: ServiceUpdateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceUpdatebenefitsAndOutcomesInput | string[]
     instructorId?: NullableStringFieldUpdateOperationsInput | string | null
     instructorName?: NullableStringFieldUpdateOperationsInput | string | null
     instructorBio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24297,7 +23830,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -24317,7 +23850,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -24339,7 +23872,7 @@ export namespace Prisma {
   export type ServiceCreateWithoutReviewsInput = {
     id?: string
     name: string
-    description: string
+    description?: ServiceCreatedescriptionInput | string[]
     shortDescription?: string | null
     media?: ServiceCreatemediaInput | string[]
     category: string
@@ -24348,15 +23881,8 @@ export namespace Prisma {
     currency?: string | null
     average_rating?: number | null
     total_reviews?: number | null
-    pricingType?: $Enums.PricingType
     discountPrice?: string | null
     duration: number
-    sessionType?: $Enums.SessionType
-    maxParticipants?: number | null
-    difficultyLevel?: $Enums.DiffcultyType
-    prerequisites?: ServiceCreateprerequisitesInput | string[]
-    equipmentRequired?: ServiceCreateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceCreatebenefitsAndOutcomesInput | string[]
     instructorId?: string | null
     instructorName?: string | null
     instructorBio?: string | null
@@ -24377,7 +23903,7 @@ export namespace Prisma {
   export type ServiceUncheckedCreateWithoutReviewsInput = {
     id?: string
     name: string
-    description: string
+    description?: ServiceCreatedescriptionInput | string[]
     shortDescription?: string | null
     media?: ServiceCreatemediaInput | string[]
     category: string
@@ -24386,15 +23912,8 @@ export namespace Prisma {
     currency?: string | null
     average_rating?: number | null
     total_reviews?: number | null
-    pricingType?: $Enums.PricingType
     discountPrice?: string | null
     duration: number
-    sessionType?: $Enums.SessionType
-    maxParticipants?: number | null
-    difficultyLevel?: $Enums.DiffcultyType
-    prerequisites?: ServiceCreateprerequisitesInput | string[]
-    equipmentRequired?: ServiceCreateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceCreatebenefitsAndOutcomesInput | string[]
     instructorId?: string | null
     instructorName?: string | null
     instructorBio?: string | null
@@ -24434,7 +23953,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -24454,7 +23973,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -24482,7 +24001,7 @@ export namespace Prisma {
   export type ServiceUpdateWithoutReviewsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: ServiceUpdatedescriptionInput | string[]
     shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
     media?: ServiceUpdatemediaInput | string[]
     category?: StringFieldUpdateOperationsInput | string
@@ -24491,15 +24010,8 @@ export namespace Prisma {
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     average_rating?: NullableFloatFieldUpdateOperationsInput | number | null
     total_reviews?: NullableIntFieldUpdateOperationsInput | number | null
-    pricingType?: EnumPricingTypeFieldUpdateOperationsInput | $Enums.PricingType
     discountPrice?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
-    sessionType?: EnumSessionTypeFieldUpdateOperationsInput | $Enums.SessionType
-    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
-    difficultyLevel?: EnumDiffcultyTypeFieldUpdateOperationsInput | $Enums.DiffcultyType
-    prerequisites?: ServiceUpdateprerequisitesInput | string[]
-    equipmentRequired?: ServiceUpdateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceUpdatebenefitsAndOutcomesInput | string[]
     instructorId?: NullableStringFieldUpdateOperationsInput | string | null
     instructorName?: NullableStringFieldUpdateOperationsInput | string | null
     instructorBio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24520,7 +24032,7 @@ export namespace Prisma {
   export type ServiceUncheckedUpdateWithoutReviewsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: ServiceUpdatedescriptionInput | string[]
     shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
     media?: ServiceUpdatemediaInput | string[]
     category?: StringFieldUpdateOperationsInput | string
@@ -24529,15 +24041,8 @@ export namespace Prisma {
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     average_rating?: NullableFloatFieldUpdateOperationsInput | number | null
     total_reviews?: NullableIntFieldUpdateOperationsInput | number | null
-    pricingType?: EnumPricingTypeFieldUpdateOperationsInput | $Enums.PricingType
     discountPrice?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
-    sessionType?: EnumSessionTypeFieldUpdateOperationsInput | $Enums.SessionType
-    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
-    difficultyLevel?: EnumDiffcultyTypeFieldUpdateOperationsInput | $Enums.DiffcultyType
-    prerequisites?: ServiceUpdateprerequisitesInput | string[]
-    equipmentRequired?: ServiceUpdateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceUpdatebenefitsAndOutcomesInput | string[]
     instructorId?: NullableStringFieldUpdateOperationsInput | string | null
     instructorName?: NullableStringFieldUpdateOperationsInput | string | null
     instructorBio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24561,7 +24066,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -24581,7 +24086,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -24617,7 +24122,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -24637,7 +24142,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -24657,7 +24162,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -24677,7 +24182,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -24702,7 +24207,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -24722,7 +24227,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -24758,7 +24263,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -24778,7 +24283,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -24809,7 +24314,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -24829,7 +24334,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -24849,7 +24354,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -24869,7 +24374,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -24891,7 +24396,7 @@ export namespace Prisma {
   export type ServiceCreateWithoutPaymentsInput = {
     id?: string
     name: string
-    description: string
+    description?: ServiceCreatedescriptionInput | string[]
     shortDescription?: string | null
     media?: ServiceCreatemediaInput | string[]
     category: string
@@ -24900,15 +24405,8 @@ export namespace Prisma {
     currency?: string | null
     average_rating?: number | null
     total_reviews?: number | null
-    pricingType?: $Enums.PricingType
     discountPrice?: string | null
     duration: number
-    sessionType?: $Enums.SessionType
-    maxParticipants?: number | null
-    difficultyLevel?: $Enums.DiffcultyType
-    prerequisites?: ServiceCreateprerequisitesInput | string[]
-    equipmentRequired?: ServiceCreateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceCreatebenefitsAndOutcomesInput | string[]
     instructorId?: string | null
     instructorName?: string | null
     instructorBio?: string | null
@@ -24929,7 +24427,7 @@ export namespace Prisma {
   export type ServiceUncheckedCreateWithoutPaymentsInput = {
     id?: string
     name: string
-    description: string
+    description?: ServiceCreatedescriptionInput | string[]
     shortDescription?: string | null
     media?: ServiceCreatemediaInput | string[]
     category: string
@@ -24938,15 +24436,8 @@ export namespace Prisma {
     currency?: string | null
     average_rating?: number | null
     total_reviews?: number | null
-    pricingType?: $Enums.PricingType
     discountPrice?: string | null
     duration: number
-    sessionType?: $Enums.SessionType
-    maxParticipants?: number | null
-    difficultyLevel?: $Enums.DiffcultyType
-    prerequisites?: ServiceCreateprerequisitesInput | string[]
-    equipmentRequired?: ServiceCreateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceCreatebenefitsAndOutcomesInput | string[]
     instructorId?: string | null
     instructorName?: string | null
     instructorBio?: string | null
@@ -25062,7 +24553,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -25082,7 +24573,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -25110,7 +24601,7 @@ export namespace Prisma {
   export type ServiceUpdateWithoutPaymentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: ServiceUpdatedescriptionInput | string[]
     shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
     media?: ServiceUpdatemediaInput | string[]
     category?: StringFieldUpdateOperationsInput | string
@@ -25119,15 +24610,8 @@ export namespace Prisma {
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     average_rating?: NullableFloatFieldUpdateOperationsInput | number | null
     total_reviews?: NullableIntFieldUpdateOperationsInput | number | null
-    pricingType?: EnumPricingTypeFieldUpdateOperationsInput | $Enums.PricingType
     discountPrice?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
-    sessionType?: EnumSessionTypeFieldUpdateOperationsInput | $Enums.SessionType
-    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
-    difficultyLevel?: EnumDiffcultyTypeFieldUpdateOperationsInput | $Enums.DiffcultyType
-    prerequisites?: ServiceUpdateprerequisitesInput | string[]
-    equipmentRequired?: ServiceUpdateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceUpdatebenefitsAndOutcomesInput | string[]
     instructorId?: NullableStringFieldUpdateOperationsInput | string | null
     instructorName?: NullableStringFieldUpdateOperationsInput | string | null
     instructorBio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25148,7 +24632,7 @@ export namespace Prisma {
   export type ServiceUncheckedUpdateWithoutPaymentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
+    description?: ServiceUpdatedescriptionInput | string[]
     shortDescription?: NullableStringFieldUpdateOperationsInput | string | null
     media?: ServiceUpdatemediaInput | string[]
     category?: StringFieldUpdateOperationsInput | string
@@ -25157,15 +24641,8 @@ export namespace Prisma {
     currency?: NullableStringFieldUpdateOperationsInput | string | null
     average_rating?: NullableFloatFieldUpdateOperationsInput | number | null
     total_reviews?: NullableIntFieldUpdateOperationsInput | number | null
-    pricingType?: EnumPricingTypeFieldUpdateOperationsInput | $Enums.PricingType
     discountPrice?: NullableStringFieldUpdateOperationsInput | string | null
     duration?: IntFieldUpdateOperationsInput | number
-    sessionType?: EnumSessionTypeFieldUpdateOperationsInput | $Enums.SessionType
-    maxParticipants?: NullableIntFieldUpdateOperationsInput | number | null
-    difficultyLevel?: EnumDiffcultyTypeFieldUpdateOperationsInput | $Enums.DiffcultyType
-    prerequisites?: ServiceUpdateprerequisitesInput | string[]
-    equipmentRequired?: ServiceUpdateequipmentRequiredInput | string[]
-    benefitsAndOutcomes?: ServiceUpdatebenefitsAndOutcomesInput | string[]
     instructorId?: NullableStringFieldUpdateOperationsInput | string | null
     instructorName?: NullableStringFieldUpdateOperationsInput | string | null
     instructorBio?: NullableStringFieldUpdateOperationsInput | string | null
@@ -25337,7 +24814,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -25357,7 +24834,7 @@ export namespace Prisma {
     avatar?: string | null
     name: string
     username?: string | null
-    date_of_birth: Date | string
+    date_of_birth?: Date | string | null
     role?: $Enums.Role
     is_verified?: boolean
     is_agreed_to_terms?: boolean
@@ -25571,7 +25048,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean
@@ -25591,7 +25068,7 @@ export namespace Prisma {
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     username?: NullableStringFieldUpdateOperationsInput | string | null
-    date_of_birth?: DateTimeFieldUpdateOperationsInput | Date | string
+    date_of_birth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     is_verified?: BoolFieldUpdateOperationsInput | boolean
     is_agreed_to_terms?: BoolFieldUpdateOperationsInput | boolean

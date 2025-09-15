@@ -87,7 +87,7 @@ that is water, earth, air, space, and fire."
             <div className='p-3 rounded-xl border border-solid border-gray-200'>
               <div className="relative h-[600px] rounded-xl overflow-hidden">
                 <Image 
-                  src="https://images.pexels.com/photos/8872793/pexels-photo-8872793.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
+                  src="/images/komal.jpg" 
                   alt="Dr. Komal Kashikar, Director" 
                   layout="fill" 
                   objectFit="cover" 
@@ -99,7 +99,7 @@ that is water, earth, air, space, and fire."
         </section>
 
         {/* Wellness Therapies Section */}
-        <section className="mb-20">
+        {/* <section className="mb-20">
           <h2 className="text-3xl font-bold text-gray-900 mb-10 text-center">Our Wellness Approaches</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {therapyServices.map((service) => (
@@ -126,7 +126,7 @@ that is water, earth, air, space, and fire."
               </div>
             ))}
           </div>
-        </section>
+        </section> */}
 
         {/* Core Values */}
         <section className="mb-20">

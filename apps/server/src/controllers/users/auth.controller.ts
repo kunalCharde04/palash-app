@@ -8,8 +8,8 @@ class AuthController {
     signUp = asyncHandler(async (req: Request, res: Response) => {
         const user: SignUpDTO = req.body;
 
-        if (!user.name || !user.username || !user.phoneOrEmail || !user.dob || !user.is_agreed_to_terms) {
-            throw new ValidationError('Name, username, email and date of birth are required');
+        if (!user.name || !user.phoneOrEmail || !user.is_agreed_to_terms) {
+            throw new ValidationError('Name, email and agreement to terms are required');
         }
 
 
@@ -78,8 +78,8 @@ class AuthController {
     createNewAdmin = asyncHandler(async (req: Request, res: Response) => {
         const user: SignUpDTO = req.body;
         
-        if (!user.name || !user.username || !user.phoneOrEmail || !user.dob) {
-            throw new ValidationError('Name, username, email and date of birth are required');
+        if (!user.name || !user.phoneOrEmail) {
+            throw new ValidationError('Name and email are required');
         }
         
         const result = await AuthServices.createNewAdmin(user);
