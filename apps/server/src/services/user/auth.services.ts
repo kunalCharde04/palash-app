@@ -25,7 +25,9 @@ class AuthServices {
         const tempUser = {
             otp,
             name,
+            username: phoneOrEmail, // Using phoneOrEmail as username for now
             phoneOrEmail,
+            dob: new Date().toISOString(), // Default date of birth
             is_agreed_to_terms: user.is_agreed_to_terms,
         }
 
@@ -243,7 +245,9 @@ class AuthServices {
         const tempUser = {
             otp,
             name,
+            username: phoneOrEmail, // Using phoneOrEmail as username for now
             phoneOrEmail,
+            dob: new Date().toISOString(), // Default date of birth
             role: 'ADMIN'
         }
 

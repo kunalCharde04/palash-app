@@ -218,20 +218,13 @@ class AdminServiceManagementController {
         featured,
         tags,
         duration,
-        sessionType,
-        maxParticipants,
-        difficultyLevel,
-        prerequisites,
-        equipmentRequired,
-        benefitsAndOutcomes,
         instructorName,
         instructorBio,
         cancellationPolicy,
         isActive,
         isOnline,
         location,
-        virtualMeetingDetails,
-        pricingType
+        virtualMeetingDetails
       }: RequestBody_Update = req.body;
 
       if (!serviceId) {
@@ -265,14 +258,7 @@ class AdminServiceManagementController {
           category,
           tags: typeof tags === 'string' ? JSON.parse(tags) : tags,
           price: price ? parseFloat(price).toFixed(4) : undefined,
-          pricingType: pricingType ? (pricingType.toUpperCase() as PricingType) : undefined,
           duration: Number(duration),
-          sessionType: sessionType ? (sessionType.toUpperCase() as SessionType) : undefined,
-          maxParticipants,
-          difficultyLevel: difficultyLevel ? (difficultyLevel.toUpperCase() as DiffcultyType) : undefined,
-          prerequisites,
-          equipmentRequired,
-          benefitsAndOutcomes,
           instructorName,
           instructorBio,
           cancellationPolicy,

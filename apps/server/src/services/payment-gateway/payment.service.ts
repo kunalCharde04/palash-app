@@ -71,7 +71,7 @@ class PaymentGateway {
         receipt: receiptId,
         notes: {
           title: service.name,
-          description: service.description.slice(0, 250),
+          description: Array.isArray(service.description) ? service.description.join(' ').slice(0, 250) : (service.description as string).slice(0, 250),
           access: "QUARTERLY",
           category: service.category,
           price: service.price.toString(),
