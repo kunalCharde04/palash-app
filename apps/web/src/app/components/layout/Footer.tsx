@@ -30,7 +30,7 @@ export default function Footer() {
       { label: "About Us", href: "/about" },
       { label: "Wellness Programs", href: "/services" },
       { label: "Pricing", href: "/pricing" },
-      { label: "Testimonials", href: "/testimonials" }
+      // { label: "Testimonials", href: "/testimonials" }
     ],
     support: [
       { label: "FAQ", href: "/faq" },
@@ -136,22 +136,20 @@ export default function Footer() {
             {/* Social Links - Simple text links */}
             <div className="flex items-center space-x-4 sm:space-x-6">
               <Link 
-                href="#" 
+                href="https://www.instagram.com/thepalashclub/" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-xs sm:text-sm text-gray-300 hover:text-[#FF7F50] transition-colors duration-200"
               >
                 Instagram
               </Link>
               <Link 
-                href="#" 
+                href="https://www.linkedin.com/in/the-palash-club-14b6aa362/" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-xs sm:text-sm text-gray-300 hover:text-[#FF7F50] transition-colors duration-200"
               >
-                Facebook
-              </Link>
-              <Link 
-                href="#" 
-                className="text-xs sm:text-sm text-gray-300 hover:text-[#FF7F50] transition-colors duration-200"
-              >
-                Twitter
+                LinkedIn
               </Link>
             </div>
           </div>

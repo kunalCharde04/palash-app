@@ -8,6 +8,7 @@ import { PaymentRouter } from "./payment-router/index.js";
 import { ReviewRouter } from "./review-router/index.js";
 import NotificationRouter from "./notifications-router/notification.routes.js"; 
 import { MembershipRouter } from "./membership-router/index.js";
+import { ContactRouter } from "./contact-router/index.js";
 
 const router = Router();
 
@@ -19,5 +20,6 @@ router.use('/users', UserRouter);
 router.use('/reviews', ReviewRouter);
 router.use('/notifications', authMiddleware, NotificationRouter);
 router.use('/memberships', MembershipRouter);
+router.use('/contact', ContactRouter);
 
 export default router;

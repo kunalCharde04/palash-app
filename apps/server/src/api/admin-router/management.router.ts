@@ -25,5 +25,11 @@ ManagementRouter.get('/users/rfid-access/:rfidCardId', userManagementControllerI
 ManagementRouter.post('/attendance/rfid-tap', userManagementControllerInstance.recordRFIDAttendance);
 ManagementRouter.get('/attendance/rfid-usage', userManagementControllerInstance.getRFIDUsage);
 ManagementRouter.get('/fetch-all-subscribed-memberships', userManagementControllerInstance.fetchAllUserMemberships)
+ManagementRouter.post('/users/admin-create-user', userManagementControllerInstance.adminCreateUser);
+ManagementRouter.post('/users/verify-admin-create-user-otp', userManagementControllerInstance.verifyAdminCreateUserOtp);
+ManagementRouter.post('/users/remove-membership', userManagementControllerInstance.removeMembershipFromUser);
+ManagementRouter.post('/users/deactivate-memberships', userManagementControllerInstance.deactivateUserMemberships);
+ManagementRouter.post('/users/cancel-booking', userManagementControllerInstance.cancelUserBooking);
+ManagementRouter.post('/users/update-payment-status', userManagementControllerInstance.updateMembershipPaymentStatus);
 
 export default ManagementRouter;

@@ -134,11 +134,31 @@ export default function Page() {
   const [selectedPeriod, setSelectedPeriod] = useState<string>('minute'); // Changed default to minute for better granularity
   const [selectedMembership, setSelectedMembership] = useState<RfidUsageMembership | null>(null);
   const [search, setSearch] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log('🔄 Loading RFID usage analytics...');
+    setLoading(true);
+    setError(null);
+    
     fetchRfidUsageAnalytics()
-      .then(setData)
-      .catch(console.error);
+      .then((data) => {
+        console.log('✅ RFID usage data loaded:', data);
+        console.log(`📊 Total memberships with RFID: ${data.length}`);
+        setData(data);
+        
+        if (data.length === 0) {
+          setError('No RFID cards have been assigned yet. Please assign RFID cards to users first.');
+        }
+      })
+      .catch((error) => {
+        console.error('❌ Error fetching RFID usage:', error);
+        setError(error?.response?.data?.message || 'Failed to load RFID usage data. Please try again.');
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   // Filter memberships by search
@@ -178,13 +198,65 @@ export default function Page() {
 
   const bestPeriod = suggestBestPeriod();
 
+  if (loading) {
+    return (
+      <div className="p-8 space-y-8">
+        <h1 className="text-3xl font-bold text-primary mb-2">RFID Usage Analytics</h1>
+        <Card className="p-6">
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading RFID usage data...</p>
+            </div>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-8 space-y-8">
+        <h1 className="text-3xl font-bold text-primary mb-2">RFID Usage Analytics</h1>
+        <Card className="p-6">
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center max-w-md">
+              <div className="text-red-600 text-5xl mb-4">⚠️</div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">No Data Available</h3>
+              <p className="text-gray-600 mb-4">{error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition"
+              >
+                Refresh Page
+              </button>
+            </div>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="p-8 space-y-8">
-      <h1 className="text-3xl font-bold text-primary mb-2">RFID Usage Analytics</h1>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-primary mb-2">RFID Usage Analytics</h1>
+          <p className="text-sm text-gray-600">
+            Viewing {data.length} membership{data.length !== 1 ? 's' : ''} with RFID cards assigned
+          </p>
+        </div>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm"
+        >
+          🔄 Refresh Data
+        </button>
+      </div>
       <Card className="p-6 space-y-6">
         <div className="flex flex-col md:flex-row md:items-end gap-4">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Search Memberships</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Search User</label>
             <Input
               placeholder="Search by user, email, or RFID"
               value={search}
@@ -218,17 +290,28 @@ export default function Page() {
         </div>
         <div className="flex flex-col md:flex-row gap-4">
           <div className="md:w-1/3">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Select Membership</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Select User</label>
             <div className="bg-gray-50 rounded-lg border border-solid border-gray-200 max-h-64 overflow-y-auto">
               {filteredMemberships.map(m => (
                 <div
                   key={m.membershipId}
-                  className={`p-3 cursor-pointer  transition   ${selectedMembership?.membershipId === m.membershipId ? 'bg-green-500/10 border-l-4 border-primary' : ''}`}
+                  className={`p-3 cursor-pointer transition hover:bg-gray-100 ${selectedMembership?.membershipId === m.membershipId ? 'bg-green-500/10 border-l-4 border-primary' : ''}`}
                   onClick={() => setSelectedMembership(m)}
                 >
-                  <div className="font-semibold text-primary">{m.user.name}</div>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="font-semibold text-primary">{m.user.name}</div>
+                    {m.isPrimary && (
+                      <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">Primary</span>
+                    )}
+                  </div>
                   <div className="text-xs text-gray-500">{m.user.email}</div>
-                  <div className="text-xs text-gray-400">RFID: {m.rfidCardId}</div>
+                  {m.plan && (
+                    <div className="text-xs text-gray-600 font-medium mt-1">{m.plan.name}</div>
+                  )}
+                  <div className="text-xs text-gray-400 mt-1">
+                    <span className="font-mono bg-gray-100 px-1.5 py-0.5 rounded">{m.membershipId}</span>
+                  </div>
+                  <div className="text-xs text-gray-400 mt-0.5">RFID: {m.rfidCardId}</div>
                   <div className="text-xs text-gray-400">
                     Scans: {m.counter}
                     {m.rfidScanHistory.length === 0 && (
@@ -243,24 +326,61 @@ export default function Page() {
             </div>
           </div>
           <div className="flex-1 flex flex-col">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-4">
               <div>
-                <div className="text-lg font-semibold text-primary">
-                  {selectedMembership?.user.name || 'Select a membership'}
+                <div className="flex items-center gap-2">
+                  <div className="text-lg font-semibold text-primary">
+                    {selectedMembership?.user.name || 'Select a membership'}
+                  </div>
+                  {selectedMembership?.isPrimary && (
+                    <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Primary Member</span>
+                  )}
                 </div>
-                <div className="text-xs text-gray-500">{selectedMembership?.user.email}</div>
-                <div className="text-xs text-gray-400">RFID: {selectedMembership?.rfidCardId}</div>
+                <div className="text-sm text-gray-500 mt-1">{selectedMembership?.user.email}</div>
+                {selectedMembership?.plan && (
+                  <div className="text-sm text-gray-700 font-medium mt-1">
+                    Plan: {selectedMembership.plan.name} (₹{selectedMembership.plan.cost})
+                  </div>
+                )}
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="text-xs">
+                    <span className="text-gray-500">Membership ID:</span>{' '}
+                    <span className="font-mono bg-gray-100 px-2 py-1 rounded font-semibold text-primary">
+                      {selectedMembership?.membershipId}
+                    </span>
+                  </div>
+                  <div className="text-xs">
+                    <span className="text-gray-500">RFID Card:</span>{' '}
+                    <span className="font-mono bg-blue-50 px-2 py-1 rounded font-semibold text-blue-700">
+                      {selectedMembership?.rfidCardId}
+                    </span>
+                  </div>
+                </div>
                 {selectedMembership && (
-                  <div className="text-xs text-gray-400">
-                    Total History Records: {selectedMembership.rfidScanHistory.length}
+                  <div className="flex items-center gap-4 mt-2">
+                    <div className="text-xs bg-gray-100 px-2 py-1 rounded">
+                      <span className="text-gray-600">Total Scans:</span>{' '}
+                      <span className="font-semibold text-primary">{selectedMembership.counter}</span>
+                    </div>
+                    <div className="text-xs bg-gray-100 px-2 py-1 rounded">
+                      <span className="text-gray-600">History Records:</span>{' '}
+                      <span className="font-semibold text-primary">{selectedMembership.rfidScanHistory.length}</span>
+                    </div>
                   </div>
                 )}
               </div>
-              <div className="text-xs text-gray-500">
-                Last Scan:{' '}
-                {selectedMembership?.lastScanTime
-                  ? format(new Date(selectedMembership.lastScanTime), 'yyyy-MM-dd HH:mm:ss')
-                  : 'N/A'}
+              <div className="text-right">
+                <div className="text-xs text-gray-500 mb-1">Last Scan</div>
+                <div className="text-sm font-medium text-gray-900">
+                  {selectedMembership?.lastScanTime
+                    ? format(new Date(selectedMembership.lastScanTime), 'MMM dd, yyyy')
+                    : 'Never'}
+                </div>
+                <div className="text-xs text-gray-500">
+                  {selectedMembership?.lastScanTime
+                    ? format(new Date(selectedMembership.lastScanTime), 'HH:mm:ss')
+                    : ''}
+                </div>
               </div>
             </div>
             <div className="bg-white rounded-lg shadow p-4 h-[500px] flex items-center justify-center">

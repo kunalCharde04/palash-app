@@ -230,3 +230,12 @@ export interface IWebhookEvent {
 export interface RefreshTokenDTO {
   refreshToken: string;
 }
+
+export interface AdminCreateUserDTO {
+  name: string;
+  phoneOrEmail: string;
+  planId?: string;
+  memberEmails?: string[]; // For backward compatibility
+  beneficiaries?: Array<{ name: string; email: string }>; // New format with names
+  paymentStatus?: 'PENDING' | 'PAID' | 'REFUNDED' | 'FAILED';
+}

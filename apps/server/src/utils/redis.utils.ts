@@ -11,6 +11,11 @@ export async function storeSignInOtp(data: {otp: string; phoneOrEmail: string;})
     await redisClient.setEx(key, 600, JSON.stringify(data));
 }
 
+export async function storeAdminCreateUserOtp(data: { otp: string; name: string; phoneOrEmail: string; planId: string | null; memberEmails: string[]; paymentStatus: string; }) {
+    const key: string = `otp:admin-create-user:${data.phoneOrEmail}`;
+    await redisClient.setEx(key, 600, JSON.stringify(data));
+}
+
 
 export async function getOtpData(phoneOrEmail: string, method: string) {
     const key: string = `otp:${method}:${phoneOrEmail}`;

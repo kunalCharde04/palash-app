@@ -173,6 +173,141 @@ class UserProfileManagement {
             return res.status(500).json({ success: false, message: err.message });
         }
     }
+
+    async adminCreateUser(req: Request, res: Response, next: NextFunction): Promise<any> {
+        try {
+            const { name, phoneOrEmail, planId, memberEmails, paymentStatus } = req.body;
+            const currentUser = req.user;
+
+            if (currentUser?.role !== "ADMIN") {
+                return res.status(403).json({ message: "You are not authorized to create users" });
+            }
+
+            if (!name || !phoneOrEmail) {
+                return res.status(400).json({ message: "Name and email are required" });
+            }
+
+            const result = await userManagementServiceInstance.adminCreateUser({
+                name,
+                phoneOrEmail,
+                planId,
+                memberEmails,
+                paymentStatus,
+            });
+
+            return res.json(result);
+        } catch (err: any) {
+            return res.status(500).json({ success: false, message: err.message });
+        }
+    }
+
+    async verifyAdminCreateUserOtp(req: Request, res: Response, next: NextFunction): Promise<any> {
+        try {
+            const { phoneOrEmail, otp } = req.body;
+            const currentUser = req.user;
+
+            if (currentUser?.role !== "ADMIN") {
+                return res.status(403).json({ message: "You are not authorized to verify users" });
+            }
+
+            if (!phoneOrEmail || !otp) {
+                return res.status(400).json({ message: "Email and OTP are required" });
+            }
+
+            const result = await userManagementServiceInstance.verifyAdminCreateUserOtp({
+                phoneOrEmail,
+                otp,
+            });
+
+            return res.json(result);
+        } catch (err: any) {
+            return res.status(500).json({ success: false, message: err.message });
+        }
+    }
+
+    async removeMembershipFromUser(req: Request, res: Response, next: NextFunction): Promise<any> {
+        try {
+            const { userId, membershipId } = req.body;
+            const currentUser = req.user;
+            
+            if (currentUser?.role !== "ADMIN") {
+                return res.status(403).json({ message: "You are not authorized to remove memberships" });
+            }
+            
+            if (!userId || !membershipId) {
+                return res.status(400).json({ message: "User ID and Membership ID are required" });
+            }
+            
+            const result = await userManagementServiceInstance.removeMembershipFromUser(userId, membershipId);
+            return res.json(result);
+        } catch (err: any) {
+            return res.status(500).json({ success: false, message: err.message });
+        }
+    }
+
+    async deactivateUserMemberships(req: Request, res: Response, next: NextFunction): Promise<any> {
+        try {
+            const { userId } = req.body;
+            const currentUser = req.user;
+            
+            if (currentUser?.role !== "ADMIN") {
+                return res.status(403).json({ message: "You are not authorized to deactivate memberships" });
+            }
+            
+            if (!userId) {
+                return res.status(400).json({ message: "User ID is required" });
+            }
+            
+            const result = await userManagementServiceInstance.deactivateUserMemberships(userId);
+            return res.json(result);
+        } catch (err: any) {
+            return res.status(500).json({ success: false, message: err.message });
+        }
+    }
+
+    async cancelUserBooking(req: Request, res: Response, next: NextFunction): Promise<any> {
+        try {
+            const { userId, bookingId } = req.body;
+            const currentUser = req.user;
+            
+            if (currentUser?.role !== "ADMIN") {
+                return res.status(403).json({ message: "You are not authorized to cancel bookings" });
+            }
+            
+            if (!userId || !bookingId) {
+                return res.status(400).json({ message: "User ID and Booking ID are required" });
+            }
+            
+            const result = await userManagementServiceInstance.cancelUserBooking(userId, bookingId);
+            return res.json(result);
+        } catch (err: any) {
+            return res.status(500).json({ success: false, message: err.message });
+        }
+    }
+
+    async updateMembershipPaymentStatus(req: Request, res: Response, next: NextFunction): Promise<any> {
+        try {
+            const { membershipId, paymentStatus } = req.body;
+            const currentUser = req.user;
+            
+            if (currentUser?.role !== "ADMIN") {
+                return res.status(403).json({ message: "You are not authorized to update payment status" });
+            }
+            
+            if (!membershipId || !paymentStatus) {
+                return res.status(400).json({ message: "Membership ID and Payment Status are required" });
+            }
+            
+            if (!['PENDING', 'PAID', 'REFUNDED', 'FAILED'].includes(paymentStatus)) {
+                return res.status(400).json({ message: "Invalid payment status" });
+            }
+            
+            const result = await userManagementServiceInstance.updateMembershipPaymentStatus(membershipId, paymentStatus);
+            return res.json(result);
+        } catch (err: any) {
+            return res.status(500).json({ success: false, message: err.message });
+        }
+    }
 }
 
 export default UserProfileManagement;

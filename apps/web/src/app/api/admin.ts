@@ -64,13 +64,18 @@ export interface RfidUsageMembership {
   membershipId: string;
   rfidCardId: string;
   rfidScanHistory: RfidScan[];
-  lastScanTime: string;
+  lastScanTime: string | null;
   counter: number;
+  isPrimary: boolean;
   user: {
     id: string;
     name: string;
     email: string;
   };
+  plan?: {
+    name: string;
+    cost: number;
+  } | null;
 }
 
 /**
@@ -111,6 +116,114 @@ export const fetchAllSubscribedMemberships = async (): Promise<SubscribedMembers
     return response.data;
   } catch (error) {
     console.error('Error fetching all subscribed memberships:', error);
+    throw error;
+  }
+};
+
+export interface AdminCreateUserDTO {
+  name: string;
+  phoneOrEmail: string;
+  planId?: string;
+  memberEmails?: string[]; // For backward compatibility
+  beneficiaries?: Array<{ name: string; email: string }>; // New format with names
+  paymentStatus?: 'PENDING' | 'PAID' | 'REFUNDED' | 'FAILED';
+}
+
+export interface AdminCreateUserResponse {
+  message: string;
+}
+
+export interface VerifyAdminCreateUserOtpDTO {
+  phoneOrEmail: string;
+  otp: string;
+}
+
+export interface AdminCreateUserVerifyResponse {
+  message: string;
+  user: {
+    id: string;
+    name: string;
+    phone_or_email: string;
+    is_verified: boolean;
+  };
+  membership?: {
+    primaryMembership: any;
+    totalMembers: number;
+    memberships: any[];
+  };
+}
+
+export const adminCreateUser = async (data: AdminCreateUserDTO): Promise<AdminCreateUserResponse> => {
+  try {
+    const response = await api.post('/admin/users/admin-create-user', data);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating user:', error);
+    throw error;
+  }
+};
+
+export const verifyAdminCreateUserOtp = async (data: VerifyAdminCreateUserOtpDTO): Promise<AdminCreateUserVerifyResponse> => {
+  try {
+    const response = await api.post('/admin/users/verify-admin-create-user-otp', data);
+    return response.data;
+  } catch (error) {
+    console.error('Error verifying OTP:', error);
+    throw error;
+  }
+};
+
+/**
+ * Remove a specific membership from a user
+ */
+export const removeMembershipFromUser = async (userId: string, membershipId: string) => {
+  try {
+    const response = await api.post('/admin/users/remove-membership', { userId, membershipId });
+    return response.data;
+  } catch (error) {
+    console.error('Error removing membership:', error);
+    throw error;
+  }
+};
+
+/**
+ * Deactivate all memberships for a user
+ */
+export const deactivateUserMemberships = async (userId: string) => {
+  try {
+    const response = await api.post('/admin/users/deactivate-memberships', { userId });
+    return response.data;
+  } catch (error) {
+    console.error('Error deactivating memberships:', error);
+    throw error;
+  }
+};
+
+/**
+ * Cancel a booking (service) for a user
+ */
+export const cancelUserBooking = async (userId: string, bookingId: string) => {
+  try {
+    const response = await api.post('/admin/users/cancel-booking', { userId, bookingId });
+    return response.data;
+  } catch (error) {
+    console.error('Error cancelling booking:', error);
+    throw error;
+  }
+};
+
+/**
+ * Update payment status for a membership
+ */
+export const updateMembershipPaymentStatus = async (
+  membershipId: string,
+  paymentStatus: 'PENDING' | 'PAID' | 'REFUNDED' | 'FAILED'
+) => {
+  try {
+    const response = await api.post('/admin/users/update-payment-status', { membershipId, paymentStatus });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating payment status:', error);
     throw error;
   }
 }; 

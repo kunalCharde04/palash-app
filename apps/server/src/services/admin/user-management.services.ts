@@ -1,12 +1,18 @@
 import { prisma } from "@palash/db-client";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from "date-fns";
+import { generateOtp } from "../../utils/generate-otp.js";
+import { storeAdminCreateUserOtp, getOtpData, deleteOtp } from "../../utils/redis.utils.js";
+import { sendMail } from "../../adapters/mailer.adapter.js";
+import { AdminCreateUserDTO, VerifyOtpDTO } from "../../@types/interfaces.js";
+import { ValidationError } from "../../utils/errors.js";
+import { generateMembershipId, generateOrderId, generatePaymentId } from "../../utils/membership-id-generator.js";
 
 class UserManagementServices {
     async deleteUser(userId: string) {
         console.log(userId);
         await Promise.all([
-            await prisma.booking.deleteMany({where: {user_id: userId}}),
-            await prisma.review.deleteMany({where: {user_id: userId}}),
+            await prisma.booking.deleteMany({ where: { user_id: userId } }),
+            await prisma.review.deleteMany({ where: { user_id: userId } }),
         ])
         await prisma.user.delete({
             where: {
@@ -14,8 +20,282 @@ class UserManagementServices {
             }
         })
     }
+
+    /**
+     * Remove a specific membership from a user
+     */
+    async removeMembershipFromUser(userId: string, membershipId: string) {
+        console.log(`🗑️ Removing membership ${membershipId} from user ${userId}`);
+
+        // First, check if the membership exists and belongs to the user
+        const membership = await prisma.userMembership.findFirst({
+            where: {
+                id: membershipId,
+                userId: userId,
+            },
+            include: {
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        phone_or_email: true,
+                    },
+                },
+                plan: {
+                    select: {
+                        name: true,
+                    },
+                },
+                memberMemberships: true, // Check if this is a primary membership with beneficiaries
+            },
+        });
+
+        if (!membership) {
+            throw new ValidationError('Membership not found or does not belong to this user.');
+        }
+
+        // Check if this is a primary membership with beneficiaries
+        if (membership.isPrimary && membership.memberMemberships.length > 0) {
+            throw new ValidationError(
+                `This is a primary membership with ${membership.memberMemberships.length} beneficiaries. Please remove beneficiary memberships first or delete the entire group.`
+            );
+        }
+
+        // Use a transaction to ensure data consistency
+        return await prisma.$transaction(async (tx) => {
+            // If membership has RFID assigned, we should unassign it first
+            if (membership.rfidCardId) {
+                console.log(`📍 Removing RFID ${membership.rfidCardId} from membership`);
+            }
+
+            // Delete associated payments
+            await tx.payment.deleteMany({
+                where: {
+                    membership_id: membershipId,
+                },
+            });
+
+            // Delete the membership
+            await tx.userMembership.delete({
+                where: {
+                    id: membershipId,
+                },
+            });
+
+            console.log(`✅ Successfully removed membership ${membershipId}`);
+
+            return {
+                success: true,
+                message: `Successfully removed ${membership.plan.name} membership from ${membership.user.name}`,
+                removedMembership: {
+                    id: membershipId,
+                    planName: membership.plan.name,
+                    userName: membership.user.name,
+                },
+            };
+        });
+    }
+
+    /**
+     * Remove all memberships from a user (deactivate instead of delete)
+     */
+    async deactivateUserMemberships(userId: string) {
+        console.log(`🔒 Deactivating all memberships for user ${userId}`);
+
+        const memberships = await prisma.userMembership.findMany({
+            where: {
+                userId: userId,
+                isActive: true,
+            },
+        });
+
+        if (memberships.length === 0) {
+            throw new ValidationError('No active memberships found for this user.');
+        }
+
+        // Deactivate all memberships instead of deleting
+        await prisma.userMembership.updateMany({
+            where: {
+                userId: userId,
+                isActive: true,
+            },
+            data: {
+                isActive: false,
+            },
+        });
+
+        console.log(`✅ Deactivated ${memberships.length} memberships`);
+
+        return {
+            success: true,
+            message: `Successfully deactivated ${memberships.length} membership(s)`,
+            deactivatedCount: memberships.length,
+        };
+    }
+
+    /**
+     * Update payment status for a membership
+     */
+    async updateMembershipPaymentStatus(membershipId: string, paymentStatus: 'PENDING' | 'PAID' | 'REFUNDED' | 'FAILED') {
+        console.log(`💳 Updating payment status for membership ${membershipId} to ${paymentStatus}`);
+
+        // Find the payment associated with this membership
+        const payment = await prisma.payment.findFirst({
+            where: {
+                membership_id: membershipId,
+            },
+            include: {
+                user: {
+                    select: {
+                        name: true,
+                        phone_or_email: true,
+                    },
+                },
+            },
+        });
+
+        if (!payment) {
+            throw new ValidationError('Payment record not found for this membership.');
+        }
+
+        // Update the payment status
+        const updatedPayment = await prisma.payment.update({
+            where: {
+                id: payment.id,
+            },
+            data: {
+                status: paymentStatus,
+            },
+        });
+
+        console.log(`✅ Successfully updated payment status to ${paymentStatus}`);
+
+        return {
+            success: true,
+            message: `Payment status updated to ${paymentStatus}`,
+            payment: {
+                id: updatedPayment.id,
+                status: updatedPayment.status,
+                amount: updatedPayment.amount,
+                userName: payment.user.name,
+            },
+        };
+    }
+
+    /**
+     * Cancel a booking (service) for a user
+     */
+    async cancelUserBooking(userId: string, bookingId: string) {
+        console.log(`❌ Cancelling booking ${bookingId} for user ${userId}`);
+
+        const booking = await prisma.booking.findFirst({
+            where: {
+                id: bookingId,
+                user_id: userId,
+            },
+            include: {
+                service: {
+                    select: {
+                        name: true,
+                    },
+                },
+                user: {
+                    select: {
+                        name: true,
+                        phone_or_email: true,
+                    },
+                },
+            },
+        });
+
+        if (!booking) {
+            throw new ValidationError('Booking not found or does not belong to this user.');
+        }
+
+        // Update booking status to cancelled
+        const updatedBooking = await prisma.booking.update({
+            where: {
+                id: bookingId,
+            },
+            data: {
+                status: 'CANCELLED',
+            },
+        });
+
+        console.log(`✅ Successfully cancelled booking ${bookingId}`);
+
+        return {
+            success: true,
+            message: `Successfully cancelled ${booking.service.name} booking for ${booking.user.name}`,
+            cancelledBooking: {
+                id: bookingId,
+                serviceName: booking.service.name,
+                userName: booking.user.name,
+                status: updatedBooking.status,
+            },
+        };
+    }
     async fetchUsers() {
-        const users = await prisma.user.findMany();
+        const users = await prisma.user.findMany({
+            include: {
+                memberships: {
+                    where: {
+                        isActive: true
+                    },
+                    select: {
+                        id: true,
+                        planId: true,
+                        isActive: true,
+                        isPrimary: true,
+                        parentMembershipId: true,
+                        plan: {
+                            select: {
+                                name: true
+                            }
+                        },
+                        // Include beneficiary memberships if this is a primary membership
+                        memberMemberships: {
+                            where: {
+                                isActive: true
+                            },
+                            select: {
+                                id: true,
+                                userId: true,
+                                user: {
+                                    select: {
+                                        id: true,
+                                        name: true,
+                                        phone_or_email: true
+                                    }
+                                }
+                            }
+                        },
+                        // Include payment information
+                        payments: {
+                            select: {
+                                id: true,
+                                status: true,
+                                amount: true
+                            },
+                            orderBy: {
+                                date: 'desc'
+                            },
+                            take: 1 // Get only the latest payment
+                        }
+                    }
+                },
+                bookings: {
+                    select: {
+                        id: true,
+                        service: {
+                            select: {
+                                name: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
         return users;
     }
     async assignRFIDToUser({ userId, email, rfidCardId }: { userId?: string, email?: string, rfidCardId: string }) {
@@ -29,7 +309,7 @@ class UserManagementServices {
             }
         });
         if (!user) throw new Error('User not found');
-        
+
         // Find the active membership for the user
         const membership = await prisma.userMembership.findFirst({
             where: {
@@ -38,7 +318,7 @@ class UserManagementServices {
             }
         });
         if (!membership) throw new Error('User does not have an active membership');
-        
+
         // Find the primary membership for this group
         let primaryMembership: any;
         if (membership.isPrimary) {
@@ -51,25 +331,25 @@ class UserManagementServices {
             // If this is a standalone membership (no group), treat it as primary
             primaryMembership = membership;
         }
-        
+
         if (!primaryMembership) {
             throw new Error('Primary membership not found');
         }
-        
+
         // First, clear any existing assignment of this RFID card
         await prisma.userMembership.updateMany({
             where: { rfidCardId },
             data: { rfidCardId: null }
         });
-        
+
         // Then assign RFID ONLY to the primary membership
         await prisma.userMembership.update({
             where: { id: primaryMembership.id },
             data: { rfidCardId }
         });
-        
-        return { 
-            success: true, 
+
+        return {
+            success: true,
             membershipId: primaryMembership.id,
             message: 'RFID assigned to primary membership. All group members can use this RFID card through the primary membership.'
         };
@@ -119,8 +399,8 @@ class UserManagementServices {
         return {
             hasAccess,
             accessType,
-            message: hasAccess 
-                ? `User has ${accessType} access to RFID card` 
+            message: hasAccess
+                ? `User has ${accessType} access to RFID card`
                 : 'User does not have access to this RFID card'
         };
     }
@@ -185,7 +465,7 @@ class UserManagementServices {
         }
 
         // Enforce 6-hour cooldown between taps for the same RFID card
-        const timeToAccessAgain = 6  * 60 * 60 * 1000;
+        const timeToAccessAgain = 6 * 60 * 60 * 1000;
         if (membership.lastScanTime) {
             const SIX_HOURS_MS = timeToAccessAgain;
             const now = new Date();
@@ -263,7 +543,7 @@ class UserManagementServices {
     //         }
     //     });
     //     if (!user) throw new Error('User not found');
-        
+
     //     const membership = await prisma.userMembership.findFirst({
     //         where: {
     //             userId: user.id,
@@ -271,7 +551,7 @@ class UserManagementServices {
     //         }
     //     });
     //     if (!membership) throw new Error('User does not have an active membership');
-        
+
     //     // Find the primary membership for this group
     //     let primaryMembership: any;
     //     if (membership.isPrimary) {
@@ -284,23 +564,23 @@ class UserManagementServices {
     //         // If this is a standalone membership (no group), treat it as primary
     //         primaryMembership = membership;
     //     }
-        
+
     //     if (!primaryMembership) {
     //         throw new Error('Primary membership not found');
     //     }
-        
+
     //     // First, clear any existing assignment of this RFID card
     //     await prisma.userMembership.updateMany({
     //         where: { rfidCardId },
     //         data: { rfidCardId: null }
     //     });
-        
+
     //     // Then assign RFID ONLY to the primary membership
     //     await prisma.userMembership.update({
     //         where: { id: primaryMembership.id },
     //         data: { rfidCardId }
     //     });
-        
+
     //     return { 
     //         success: true, 
     //         membershipId: primaryMembership.id,
@@ -319,7 +599,7 @@ class UserManagementServices {
         });
         console.log("USER: ", user);
         if (!user) throw new Error('User not found');
-        
+
         const membership = await prisma.userMembership.findFirst({
             where: {
                 userId: user.id,
@@ -327,7 +607,7 @@ class UserManagementServices {
             }
         });
         if (!membership) throw new Error('User does not have an active membership');
-        
+
         // Find the primary membership for this group
         let primaryMembership: any;
         if (membership.isPrimary) {
@@ -340,111 +620,467 @@ class UserManagementServices {
             // If this is a standalone membership (no group), treat it as primary
             primaryMembership = membership;
         }
-        
+
         if (!primaryMembership) {
             throw new Error('Primary membership not found');
         }
-        
+
         // Remove RFID from the primary membership
         await prisma.userMembership.update({
             where: { id: primaryMembership.id },
             data: { rfidCardId: null }
         });
-        
-        return { 
-            success: true, 
+
+        return {
+            success: true,
             membershipId: primaryMembership.id,
             message: 'RFID unassigned from primary membership.'
         };
     }
     async fetchAllMembershipGroupsWithRFID() {
-        // Find all primary memberships that have RFID cards assigned
-        const primaryMemberships = await prisma.userMembership.findMany({
-            where: { 
-                isPrimary: true,
-                isActive: true
-                // rfidCardId: { not: null } // Only get memberships with RFID cards
+        // Find ALL users with active memberships (not just primary members)
+        const allUsersWithMemberships = await prisma.user.findMany({
+            where: {
+                memberships: {
+                    some: {
+                        isActive: true
+                    }
+                }
             },
             include: {
-                user: true,
-                memberMemberships: { 
-                    include: { user: true },
-                    where: { isActive: true } // Only active beneficiaries
-                },
-            },
-        });
-        
-        // Structure the response
-        return primaryMemberships.map(primary => ({
-            primaryUser: {
-                id: primary.user.id,
-                name: primary.user.name,
-                isActive: primary.isActive,
-                email: primary.user.phone_or_email,
-            },
-            rfidCardId: primary.rfidCardId,
-            totalGroupMembers: 1 + primary.memberMemberships.length, // Primary + beneficiaries
-            beneficiaries: primary.memberMemberships.map(benef => ({
-                id: benef.user.id,
-                name: benef.user.name,
-                email: benef.user.phone_or_email,
-                isActive: benef.isActive,
-            })),
-        }));
-    }
-
-    async getRFIDUsage() {
-        // Fetch all memberships that have an RFID card assigned
-        const memberships = await prisma.userMembership.findMany({
-            where: { rfidCardId: { not: null }, isPrimary: true, isActive: true },
-            include: {
-                user: true
+                memberships: {
+                    where: {
+                        isActive: true
+                    },
+                    include: {
+                        plan: {
+                            select: {
+                                name: true,
+                                cost: true
+                            }
+                        }
+                    }
+                }
             }
         });
 
-        // Return only necessary fields
-        return memberships.map(m => ({
+        console.log("Found users with memberships:", allUsersWithMemberships.length);
+
+        // Now fetch beneficiaries for each user with primary memberships
+        const groupedData = await Promise.all(allUsersWithMemberships.map(async (user) => {
+            // Find the primary membership or the first active membership
+            const primaryMembership = user.memberships.find(m => m.isPrimary) || user.memberships[0];
+
+            // If this is a primary membership, fetch beneficiaries
+            let beneficiaries: any[] = [];
+            if (primaryMembership?.isPrimary) {
+                const beneficiaryMemberships = await prisma.userMembership.findMany({
+                    where: {
+                        parentMembershipId: primaryMembership.id,
+                        isActive: true,
+                    },
+                    include: {
+                        user: {
+                            select: {
+                                id: true,
+                                name: true,
+                                phone_or_email: true,
+                            },
+                        },
+                    },
+                });
+
+                beneficiaries = beneficiaryMemberships.map(bm => ({
+                    id: bm.user.id,
+                    name: bm.user.name,
+                    email: bm.user.phone_or_email,
+                    membershipId: bm.id,
+                    isActive: bm.isActive,
+                }));
+            }
+
+            return {
+                primaryUser: {
+                    id: user.id,
+                    name: user.name,
+                    isActive: primaryMembership?.isActive || false,
+                    email: user.phone_or_email,
+                },
+                rfidCardId: primaryMembership?.rfidCardId || null,
+                totalGroupMembers: 1 + beneficiaries.length,
+                beneficiaries: beneficiaries,
+                membership: {
+                    id: primaryMembership?.id,
+                    planName: primaryMembership?.plan?.name,
+                    cost: primaryMembership?.plan?.cost,
+                    isPrimary: primaryMembership?.isPrimary || false
+                }
+            };
+        }));
+
+        console.log(`📊 Returning ${groupedData.length} membership groups with beneficiaries`);
+        return groupedData;
+    }
+
+    async getRFIDUsage() {
+        console.log('📊 Fetching RFID usage data...');
+        
+        // Fetch all memberships that have an RFID card assigned (removed isPrimary filter)
+        const memberships = await prisma.userMembership.findMany({
+            where: { 
+                rfidCardId: { not: null }, 
+                isActive: true 
+            },
+            include: {
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        phone_or_email: true
+                    }
+                },
+                plan: {
+                    select: {
+                        name: true,
+                        cost: true
+                    }
+                }
+            },
+            orderBy: {
+                lastScanTime: 'desc' // Order by most recent scan
+            }
+        });
+
+        console.log(`✅ Found ${memberships.length} memberships with RFID cards`);
+
+        // Return only necessary fields with enhanced data
+        const result = memberships.map(m => ({
             membershipId: m.id,
             rfidCardId: m.rfidCardId,
-            rfidScanHistory: m.rfidScanHistory,
+            rfidScanHistory: m.rfidScanHistory || [],
             lastScanTime: m.lastScanTime,
             counter: m.counter,
+            isPrimary: m.isPrimary,
             user: {
                 id: m.user.id,
                 name: m.user.name,
                 email: m.user.phone_or_email
-            }
-        }));
-    }
-// ... existing code ...
-async fetchAllUserMemberships() {
-    return prisma.userMembership.findMany({
-        select: {
-            id: true,
-            userId: true,
-            planId: true,
-            startDate: true,
-            endDate: true,
-            isPrimary: true,
-            isActive: true,
-            parentMembershipId: true,
-            // Exclude rfidCardId and rfidScanHistory
-            lastScanTime: true, // Only keep this RFID-related field
-            counter: true,
-            createdAt: true,
-            // Include user details
-            user: {
-                select: {
-                    id: true,
-                    name: true,
-                    phone_or_email: true,
-                    // Add more user fields as needed
-                }
             },
-            // Optionally, include plan details or other relations if needed
+            plan: m.plan ? {
+                name: m.plan.name,
+                cost: m.plan.cost
+            } : null
+        }));
+
+        console.log(`📈 Returning ${result.length} RFID usage records`);
+        return result;
+    }
+    // ... existing code ...
+    async fetchAllUserMemberships() {
+        return prisma.userMembership.findMany({
+            select: {
+                id: true,
+                userId: true,
+                planId: true,
+                startDate: true,
+                endDate: true,
+                isPrimary: true,
+                isActive: true,
+                parentMembershipId: true,
+                // Exclude rfidCardId and rfidScanHistory
+                lastScanTime: true, // Only keep this RFID-related field
+                counter: true,
+                createdAt: true,
+                // Include user details
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        phone_or_email: true,
+                        // Add more user fields as needed
+                    }
+                },
+                // Optionally, include plan details or other relations if needed
+            }
+        });
+    }
+
+    // Admin creates user with OTP verification
+    async adminCreateUser(data: AdminCreateUserDTO) {
+        const { name, phoneOrEmail, planId, memberEmails, beneficiaries, paymentStatus } = data;
+
+        // Check if user already exists
+        const isUserExists = await prisma.user.findFirst({
+            where: { phone_or_email: phoneOrEmail },
+        });
+
+        if (isUserExists) {
+            throw new ValidationError('User with this email already exists.');
         }
-    });
-}
+
+        // Generate OTP
+        const otp: string = generateOtp();
+
+        // Convert beneficiaries to the format needed
+        // Support both old format (memberEmails) and new format (beneficiaries)
+        let finalBeneficiaries: Array<{ name: string; email: string }> = [];
+        
+        if (beneficiaries && beneficiaries.length > 0) {
+            finalBeneficiaries = beneficiaries;
+        } else if (memberEmails && memberEmails.length > 0) {
+            // Convert old format to new format (use email prefix as name)
+            finalBeneficiaries = memberEmails.map(email => ({
+                name: email.split('@')[0],
+                email: email
+            }));
+        }
+
+        // Store user data temporarily in Redis
+        const tempUserData = {
+            otp,
+            name,
+            phoneOrEmail,
+            planId: planId || null,
+            memberEmails: memberEmails || [], // Keep for backward compatibility
+            beneficiaries: finalBeneficiaries,
+            paymentStatus: paymentStatus || 'PENDING',
+        };
+
+        await storeAdminCreateUserOtp(tempUserData);
+
+        // Send OTP via email using the existing sendMail function
+        await sendMail({
+            phoneOrEmail: phoneOrEmail,
+            otp: otp,
+        });
+
+        return { message: "OTP sent to user's email for verification." };
+    }
+
+    // Verify OTP and create user with optional membership
+    async verifyAdminCreateUserOtp(data: VerifyOtpDTO) {
+        const { phoneOrEmail, otp } = data;
+
+        const savedData = await getOtpData(phoneOrEmail, "admin-create-user");
+        if (!savedData) throw new ValidationError("OTP expired. Please request a new OTP.");
+
+        if (savedData.otp !== otp) throw new ValidationError("Invalid OTP. Please try again.");
+
+        await deleteOtp(phoneOrEmail, "admin-create-user");
+
+        // Create user and optionally assign membership in a transaction
+        return await prisma.$transaction(async (tx) => {
+            // Create the user
+            const user = await tx.user.create({
+                data: {
+                    phone_or_email: phoneOrEmail,
+                    name: savedData.name,
+                    is_verified: true,
+                    is_agreed_to_terms: true,
+                },
+            });
+
+            let membershipData = null;
+
+            // If planId is provided, create membership
+            if (savedData.planId) {
+                const membershipPlan = await tx.membershipPlan.findUnique({
+                    where: { id: savedData.planId },
+                });
+
+                if (!membershipPlan) {
+                    throw new ValidationError('Invalid membership plan.');
+                }
+
+                const startDate = new Date();
+                const endDate = new Date();
+                endDate.setFullYear(startDate.getFullYear() + membershipPlan.renewalPeriodYears);
+
+                // Generate meaningful membership ID
+                const membershipId = await generateMembershipId();
+                console.log(`📝 Generated membership ID: ${membershipId}`);
+
+                // Create primary membership
+                const primaryMembership = await tx.userMembership.create({
+                    data: {
+                        id: membershipId,
+                        userId: user.id,
+                        planId: savedData.planId,
+                        startDate,
+                        endDate,
+                        isPrimary: true,
+                        isActive: true,
+                        parentMembershipId: null,
+                    },
+                    include: {
+                        user: {
+                            select: {
+                                id: true,
+                                name: true,
+                                phone_or_email: true,
+                            },
+                        },
+                        plan: {
+                            select: {
+                                name: true,
+                                cost: true,
+                            },
+                        },
+                    },
+                });
+
+                const memberships: typeof primaryMembership[] = [primaryMembership];
+
+                // Create memberships for beneficiaries if provided
+                if (savedData.beneficiaries && savedData.beneficiaries.length > 0) {
+                    for (const beneficiary of savedData.beneficiaries) {
+                        // Check if beneficiary user exists
+                        let memberUser = await tx.user.findFirst({
+                            where: { phone_or_email: beneficiary.email },
+                        });
+
+                        // If user doesn't exist, create them with provided name
+                        if (!memberUser) {
+                            memberUser = await tx.user.create({
+                                data: {
+                                    phone_or_email: beneficiary.email,
+                                    name: beneficiary.name, // Use provided name
+                                    is_verified: false,
+                                    is_agreed_to_terms: true,
+                                },
+                            });
+                        }
+
+                        // Generate meaningful membership ID for beneficiary
+                        const beneficiaryMembershipId = await generateMembershipId();
+                        console.log(`📝 Generated beneficiary membership ID: ${beneficiaryMembershipId}`);
+
+                        // Create beneficiary membership
+                        const beneficiaryMembership = await tx.userMembership.create({
+                            data: {
+                                id: beneficiaryMembershipId,
+                                userId: memberUser.id,
+                                planId: savedData.planId,
+                                startDate,
+                                endDate,
+                                isPrimary: false,
+                                isActive: true,
+                                parentMembershipId: primaryMembership.id,
+                            },
+                            include: {
+                                user: {
+                                    select: {
+                                        id: true,
+                                        name: true,
+                                        phone_or_email: true,
+                                    },
+                                },
+                                plan: {
+                                    select: {
+                                        name: true,
+                                        cost: true,
+                                    },
+                                },
+                            },
+                        });
+
+                        memberships.push(beneficiaryMembership as typeof primaryMembership);
+                    }
+                }
+                
+                // Also support old format for backward compatibility
+                else if (savedData.memberEmails && savedData.memberEmails.length > 0) {
+                    for (const memberEmail of savedData.memberEmails) {
+                        // Check if member user exists
+                        let memberUser = await tx.user.findFirst({
+                            where: { phone_or_email: memberEmail },
+                        });
+
+                        // If user doesn't exist, create them
+                        if (!memberUser) {
+                            memberUser = await tx.user.create({
+                                data: {
+                                    phone_or_email: memberEmail,
+                                    name: memberEmail.split('@')[0], // Use email prefix as name
+                                    is_verified: false,
+                                    is_agreed_to_terms: true,
+                                },
+                            });
+                        }
+
+                        // Generate meaningful membership ID for beneficiary
+                        const beneficiaryMembershipId = await generateMembershipId();
+                        console.log(`📝 Generated beneficiary membership ID: ${beneficiaryMembershipId}`);
+
+                        // Create beneficiary membership
+                        const beneficiaryMembership = await tx.userMembership.create({
+                            data: {
+                                id: beneficiaryMembershipId,
+                                userId: memberUser.id,
+                                planId: savedData.planId,
+                                startDate,
+                                endDate,
+                                isPrimary: false,
+                                isActive: true,
+                                parentMembershipId: primaryMembership.id,
+                            },
+                            include: {
+                                user: {
+                                    select: {
+                                        id: true,
+                                        name: true,
+                                        phone_or_email: true,
+                                    },
+                                },
+                                plan: {
+                                    select: {
+                                        name: true,
+                                        cost: true,
+                                    },
+                                },
+                            },
+                        });
+
+                        memberships.push(beneficiaryMembership as typeof primaryMembership);
+                    }
+                }
+
+                // Generate meaningful order and payment IDs
+                const orderId = await generateOrderId();
+                const paymentId = await generatePaymentId();
+                console.log(`💳 Generated order ID: ${orderId}, payment ID: ${paymentId}`);
+
+                // Create payment record if membership was created
+                await tx.payment.create({
+                    data: {
+                        user_id: user.id,
+                        email: phoneOrEmail,
+                        membership_id: primaryMembership.id,
+                        order_id: orderId,
+                        payment_id: paymentId,
+                        signature: 'ADMIN_CREATED',
+                        date: new Date(),
+                        amount: membershipPlan.cost,
+                        currency: 'INR',
+                        status: savedData.paymentStatus || 'PENDING',
+                        payment_type: 'MEMBERSHIP',
+                    },
+                });
+
+                membershipData = {
+                    primaryMembership,
+                    totalMembers: memberships.length,
+                    memberships,
+                };
+            }
+
+            return {
+                message: "User created successfully.",
+                user,
+                membership: membershipData,
+            };
+        });
+    }
 }
 
 export default UserManagementServices;
