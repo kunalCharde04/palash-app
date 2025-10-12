@@ -28,79 +28,71 @@ export default function PrivacyPolicy() {
         <div className="max-w-4xl mx-auto space-y-8">
           <section className="bg-white p-8 rounded-xl shadow-sm">
             <h2 className="text-2xl font-semibold mb-4 text-[#012b2b]">
-              Last Updated: 10 Sep 2025
+              Effective Date: October 12, 2025
             </h2>
             <p className="text-gray-700">
-              At Amrutwel Ayurveda, we respect your privacy and are committed to protecting your personal information.
+              At Palash Club, we respect your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, and protect your information when you visit our website or use our services.
             </p>
           </section>
 
           <section className="bg-white p-8 rounded-xl shadow-sm">
             <h2 className="text-2xl font-semibold mb-4 text-[#012b2b]">
-              Information We Collect
+              1. Information We Collect
             </h2>
             <ul className="list-disc pl-6 space-y-2 text-gray-700">
-              <li><strong>Personal details:</strong> name, email, phone number, address</li>
-              <li><strong>Health-related information</strong> (only if voluntarily provided for consultation/treatment)</li>
-              <li><strong>Payment and transaction details</strong></li>
-              <li><strong>Browsing data</strong> (cookies, device info, IP address)</li>
+              <li>Personal details (name, contact number, email address)</li>
+              <li>Health-related information (only if voluntarily provided for therapy purposes)</li>
+              <li>Usage data (IP address, browser type, device information, pages visited)</li>
             </ul>
           </section>
 
           <section className="bg-white p-8 rounded-xl shadow-sm">
             <h2 className="text-2xl font-semibold mb-4 text-[#012b2b]">
-              How We Use Your Data
+              2. How We Use Your Information
             </h2>
             <ul className="list-disc pl-6 space-y-2 text-gray-700">
-              <li>To process your orders and bookings</li>
-              <li>To provide consultations and treatments</li>
-              <li>To personalize your experience</li>
-              <li>For marketing & promotional communication (with your consent)</li>
-              <li>For legal and security purposes</li>
+              <li>To provide and manage our wellness services (appointments, consultations)</li>
+              <li>To improve our website and service offerings</li>
+              <li>To communicate important updates, offers, or service-related information</li>
+              <li>To respond to inquiries or support requests</li>
             </ul>
           </section>
 
           <section className="bg-white p-8 rounded-xl shadow-sm">
             <h2 className="text-2xl font-semibold mb-4 text-[#012b2b]">
-              Sharing of Data
-            </h2>
-            <ul className="list-disc pl-6 space-y-2 text-gray-700">
-              <li>With trusted service providers (payment gateways, delivery partners, IT support)</li>
-              <li>When required by law</li>
-            </ul>
-          </section>
-
-          <section className="bg-white p-8 rounded-xl shadow-sm">
-            <h2 className="text-2xl font-semibold mb-4 text-[#012b2b]">
-              Data Security
+              3. Data Sharing
             </h2>
             <p className="text-gray-700">
-              We use encryption, secure servers, and limited access protocols to safeguard your data.
+              We do not sell your personal data to third parties. We may share your data with trusted service providers strictly for business operations (e.g., payment processors, technical support).
             </p>
           </section>
 
           <section className="bg-white p-8 rounded-xl shadow-sm">
             <h2 className="text-2xl font-semibold mb-4 text-[#012b2b]">
-              Your Rights
+              4. Data Security
             </h2>
-            <ul className="list-disc pl-6 space-y-2 text-gray-700">
-              <li>Access, correct, or delete your data</li>
-              <li>Opt out of marketing emails/SMS at any time</li>
-            </ul>
+            <p className="text-gray-700">
+              We implement industry-standard security measures to protect your personal data from unauthorized access, alteration, or disclosure.
+            </p>
           </section>
 
           <section className="bg-white p-8 rounded-xl shadow-sm">
             <h2 className="text-2xl font-semibold mb-4 text-[#012b2b]">
-              Contact
+              5. Your Rights
             </h2>
+            <p className="text-gray-700 mb-4">
+              You can request access, correction, or deletion of your personal data at any time by contacting us at:
+            </p>
             <div className="text-gray-700 space-y-2">
-              <p>For privacy concerns, email: <a href="mailto:support@amrutwelayurveda.com" className="text-[#012b2b] hover:underline">support@amrutwelayurveda.com</a></p>
+              <p>📧 <a href="mailto:thepalashclub@gmail.com" className="text-[#012b2b] hover:underline">thepalashclub@gmail.com</a></p>
+              <p>📞 +91 9422115180</p>
+              <p>📍 Khasra No. 107, Village Sawangi (Amgaon Deoli), Taluka Hingna, District Nagpur</p>
             </div>
           </section>
 
           <div className="mt-12 pt-8 border-t border-gray-200">
             <p className="text-sm text-gray-500 text-center">
-              Last updated: 10 Sep 2025
+              Last updated: October 12, 2025
             </p>
             <p className="text-sm text-gray-500 text-center mt-2">
               &ldquo;Come in the side of Ayurveda, come close to healthy life.&rdquo; - Dr. Komal Kashikar

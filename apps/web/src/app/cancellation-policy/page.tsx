@@ -27,54 +27,29 @@ export default function CancellationPolicy() {
 
         <div className="max-w-4xl mx-auto space-y-8">
           <section className="bg-white p-8 rounded-xl shadow-sm">
-            <h2 className="text-2xl font-semibold mb-6 text-[#012b2b]">
-              Consultations
+            <h2 className="text-2xl font-semibold mb-4 text-[#012b2b]">
+              Effective Date: October 12, 2025
             </h2>
-            <div className="space-y-4">
-              <div className="bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg">
-                <p className="text-gray-700">
-                  <strong>Full Refund:</strong> Can be cancelled before 48 hours before appointment for a full refund.
-                </p>
-              </div>
-              <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
-                <p className="text-gray-700">
-                  <strong>Non-Refundable:</strong> Cancellations within 24-48 hours are non-refundable.
-                </p>
-              </div>
-            </div>
           </section>
 
           <section className="bg-white p-8 rounded-xl shadow-sm">
             <h2 className="text-2xl font-semibold mb-6 text-[#012b2b]">
-              Treatments/Retreats
+              Cancellation Policy
             </h2>
             <div className="space-y-4">
               <div className="bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg">
                 <p className="text-gray-700">
-                  <strong>Full Refund:</strong> Cancel before 15 days in advance for a refund.
+                  <strong>48 Hours Prior:</strong> Cancellations made 48 hours prior to the scheduled appointment will receive a full refund or rescheduling option.
                 </p>
               </div>
               <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
                 <p className="text-gray-700">
-                  <strong>50% Charges:</strong> Cancellations within 15-7 days will attract 50% charges.
+                  <strong>Within 48 Hours:</strong> Cancellations within 48 hours of the appointment time may be subject to a 50% cancellation fee.
                 </p>
               </div>
               <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
                 <p className="text-gray-700">
-                  <strong>Non-Refundable:</strong> Cancellations within 7 days will not be refundable.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <section className="bg-white p-8 rounded-xl shadow-sm">
-            <h2 className="text-2xl font-semibold mb-6 text-[#012b2b]">
-              Products
-            </h2>
-            <div className="space-y-4">
-              <div className="bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg">
-                <p className="text-gray-700">
-                  <strong>12-Hour Window:</strong> Orders can be cancelled within 12 hours of placing if not yet shipped.
+                  <strong>No-Shows / Less than 12 Hours:</strong> No-shows or cancellations less than 12 hours in advance are non-refundable.
                 </p>
               </div>
             </div>
@@ -82,30 +57,19 @@ export default function CancellationPolicy() {
 
           <section className="bg-white p-8 rounded-xl shadow-sm">
             <h2 className="text-2xl font-semibold mb-4 text-[#012b2b]">
-              Important Notes
-            </h2>
-            <div className="space-y-3 text-gray-700">
-              <p>• All cancellation requests must be made through our official channels</p>
-              <p>• Refunds will be processed within 5-7 business days</p>
-              <p>• For emergency cancellations, please contact us directly</p>
-              <p>• Special circumstances may be considered on a case-by-case basis</p>
-            </div>
-          </section>
-
-          <section className="bg-white p-8 rounded-xl shadow-sm">
-            <h2 className="text-2xl font-semibold mb-4 text-[#012b2b]">
-              Contact for Cancellations
+              How to Cancel an Appointment
             </h2>
             <div className="text-gray-700 space-y-2">
-              <p><strong>Phone:</strong> +91 9422115180</p>
-              <p><strong>Email:</strong> <a href="mailto:thepalashclub@gmail.com" className="text-[#012b2b] hover:underline">thepalashclub@gmail.com</a></p>
-              <p><strong>Support:</strong> <a href="mailto:support@amrutwelayurveda.com" className="text-[#012b2b] hover:underline">support@amrutwelayurveda.com</a></p>
+              <p>To cancel an appointment, please contact us:</p>
+              <p>📧 <a href="mailto:thepalashclub@gmail.com" className="text-[#012b2b] hover:underline">thepalashclub@gmail.com</a></p>
+              <p>📞 +91 9422115180</p>
+              <p>📍 Khasra No. 107, Village Sawangi (Amgaon Deoli), Taluka Hingna, District Nagpur</p>
             </div>
           </section>
 
           <div className="mt-12 pt-8 border-t border-gray-200">
             <p className="text-sm text-gray-500 text-center">
-              Last updated: {new Date().toLocaleDateString()}
+              Last updated: October 12, 2025
             </p>
             <p className="text-sm text-gray-500 text-center mt-2">
               &ldquo;Come in the side of Ayurveda, come close to healthy life.&rdquo; - Dr. Komal Kashikar

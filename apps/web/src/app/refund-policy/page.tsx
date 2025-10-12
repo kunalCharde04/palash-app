@@ -27,89 +27,32 @@ export default function RefundPolicy() {
 
         <div className="max-w-4xl mx-auto space-y-8">
           <section className="bg-white p-8 rounded-xl shadow-sm">
-            <h2 className="text-2xl font-semibold mb-6 text-[#012b2b]">
-              Products
+            <h2 className="text-2xl font-semibold mb-4 text-[#012b2b]">
+              Effective Date: October 12, 2025
             </h2>
-            <div className="space-y-4">
-              <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
-                <h3 className="font-semibold text-gray-800 mb-2">Eligible for Refund/Exchange:</h3>
-                <ul className="list-disc pl-6 space-y-1 text-gray-700">
-                  <li>Product is damaged</li>
-                  <li>Product is expired</li>
-                  <li>Wrong item delivered</li>
-                </ul>
-              </div>
-              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
-                <p className="text-gray-700">
-                  <strong>Important:</strong> Must raise a request within 7 days of delivery.
-                </p>
-              </div>
-            </div>
           </section>
 
           <section className="bg-white p-8 rounded-xl shadow-sm">
             <h2 className="text-2xl font-semibold mb-6 text-[#012b2b]">
-              Consultations/Treatments
+              Refund Policy
             </h2>
-            <div className="space-y-4">
+            <div className="space-y-4 text-gray-700">
+              <p>Refunds are applicable only if services are canceled according to our Cancellation Policy.</p>
+              <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg">
+                <p>
+                  <strong>Submission Timeline:</strong> Refund requests must be submitted in writing to <a href="mailto:thepalashclub@gmail.com" className="text-[#012b2b] hover:underline">thepalashclub@gmail.com</a> within 7 days of service cancellation.
+                </p>
+              </div>
               <div className="bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg">
-                <p className="text-gray-700">
-                  <strong>Refund Policy:</strong> Refund as per cancellation rules above.
+                <p>
+                  <strong>Processing Time:</strong> Refunds (if approved) will be processed within 10 business days to the original payment method.
                 </p>
               </div>
               <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg">
-                <p className="text-gray-700">
-                  <strong>No Refund:</strong> No refund once service is availed.
+                <p>
+                  <strong>Important:</strong> Palash Club reserves the right to reject refund requests if terms are violated or the service was delivered as agreed.
                 </p>
               </div>
-            </div>
-          </section>
-
-          <section className="bg-white p-8 rounded-xl shadow-sm">
-            <h2 className="text-2xl font-semibold mb-6 text-[#012b2b]">
-              Refund Processing
-            </h2>
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <p className="text-gray-700 text-lg">
-                <strong>Processing Time:</strong> Refunds will be processed within 7–10 business days to the original payment method.
-              </p>
-            </div>
-          </section>
-
-          <section className="bg-white p-8 rounded-xl shadow-sm">
-            <h2 className="text-2xl font-semibold mb-4 text-[#012b2b]">
-              How to Request a Refund
-            </h2>
-            <div className="space-y-3 text-gray-700">
-              <div className="flex items-start space-x-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-[#012b2b] text-white rounded-full flex items-center justify-center text-sm font-semibold">1</span>
-                <p>Contact our support team with your order details</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-[#012b2b] text-white rounded-full flex items-center justify-center text-sm font-semibold">2</span>
-                <p>Provide reason for refund (damage, expiry, wrong item)</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-[#012b2b] text-white rounded-full flex items-center justify-center text-sm font-semibold">3</span>
-                <p>Submit required documentation (photos, order number)</p>
-              </div>
-              <div className="flex items-start space-x-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-[#012b2b] text-white rounded-full flex items-center justify-center text-sm font-semibold">4</span>
-                <p>Wait for approval and processing (7-10 business days)</p>
-              </div>
-            </div>
-          </section>
-
-          <section className="bg-white p-8 rounded-xl shadow-sm">
-            <h2 className="text-2xl font-semibold mb-4 text-[#012b2b]">
-              Important Notes
-            </h2>
-            <div className="space-y-3 text-gray-700">
-              <p>• All refund requests are subject to verification and approval</p>
-              <p>• Original packaging and receipt may be required for product refunds</p>
-              <p>• Refunds are processed to the original payment method only</p>
-              <p>• Partial refunds may apply based on the condition of returned items</p>
-              <p>• For consultations and treatments, refer to our cancellation policy for specific timelines</p>
             </div>
           </section>
 
@@ -118,15 +61,15 @@ export default function RefundPolicy() {
               Contact for Refund Requests
             </h2>
             <div className="text-gray-700 space-y-2">
-              <p><strong>Phone:</strong> +91 9422115180</p>
-              <p><strong>Email:</strong> <a href="mailto:thepalashclub@gmail.com" className="text-[#012b2b] hover:underline">thepalashclub@gmail.com</a></p>
-              <p><strong>Support:</strong> <a href="mailto:support@amrutwelayurveda.com" className="text-[#012b2b] hover:underline">support@amrutwelayurveda.com</a></p>
+              <p>📧 <a href="mailto:thepalashclub@gmail.com" className="text-[#012b2b] hover:underline">thepalashclub@gmail.com</a></p>
+              <p>📞 +91 9422115180</p>
+              <p>📍 Khasra No. 107, Village Sawangi (Amgaon Deoli), Taluka Hingna, District Nagpur</p>
             </div>
           </section>
 
           <div className="mt-12 pt-8 border-t border-gray-200">
             <p className="text-sm text-gray-500 text-center">
-              Last updated: {new Date().toLocaleDateString()}
+              Last updated: October 12, 2025
             </p>
             <p className="text-sm text-gray-500 text-center mt-2">
               &ldquo;Come in the side of Ayurveda, come close to healthy life.&rdquo; - Dr. Komal Kashikar
