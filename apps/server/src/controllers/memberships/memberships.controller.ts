@@ -786,5 +786,97 @@ export default class MembershipController {
         }
     });
 
+    submitMembershipInterest = asyncHandler(async (req: Request, res: Response) => {
+        try {
+            const { name, email, phone, planName, planCost, message } = req.body;
+
+            if (!name || !email || !phone || !planName || !planCost) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Name, email, phone, plan name, and plan cost are required"
+                });
+            }
+
+            const interest = await prisma.membershipInterest.create({
+                data: {
+                    name,
+                    email,
+                    phone,
+                    planName,
+                    planCost,
+                    message: message || null,
+                    status: 'PENDING'
+                }
+            });
+
+            return res.status(201).json({
+                success: true,
+                message: "Thank you for your interest! Our team will contact you soon.",
+                interest
+            });
+        } catch (error) {
+            console.error("Error submitting membership interest:", error);
+            throw new ValidationError("Failed to submit membership interest");
+        }
+    });
+
+    getMembershipInterests = asyncHandler(async (req: Request, res: Response) => {
+        try {
+            const { status } = req.query;
+
+            const where = status ? { status: status as any } : {};
+
+            const interests = await prisma.membershipInterest.findMany({
+                where,
+                orderBy: {
+                    createdAt: 'desc'
+                }
+            });
+
+            const stats = await prisma.membershipInterest.groupBy({
+                by: ['status'],
+                _count: true
+            });
+
+            return res.status(200).json({
+                success: true,
+                message: "Membership interests fetched successfully",
+                interests,
+                stats
+            });
+        } catch (error) {
+            console.error("Error fetching membership interests:", error);
+            throw new ValidationError("Failed to fetch membership interests");
+        }
+    });
+
+    updateInterestStatus = asyncHandler(async (req: Request, res: Response) => {
+        try {
+            const { id } = req.params;
+            const { status } = req.body;
+
+            if (!status || !['PENDING', 'CONTACTED', 'CONVERTED', 'REJECTED'].includes(status)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Valid status is required (PENDING, CONTACTED, CONVERTED, REJECTED)"
+                });
+            }
+
+            const interest = await prisma.membershipInterest.update({
+                where: { id },
+                data: { status }
+            });
+
+            return res.status(200).json({
+                success: true,
+                message: "Interest status updated successfully",
+                interest
+            });
+        } catch (error) {
+            console.error("Error updating interest status:", error);
+            throw new ValidationError("Failed to update interest status");
+        }
+    });
+
   
 }

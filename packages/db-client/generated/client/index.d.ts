@@ -73,6 +73,11 @@ export type MembershipPlan = $Result.DefaultSelection<Prisma.$MembershipPlanPayl
  * 
  */
 export type UserMembership = $Result.DefaultSelection<Prisma.$UserMembershipPayload>
+/**
+ * Model MembershipInterest
+ * 
+ */
+export type MembershipInterest = $Result.DefaultSelection<Prisma.$MembershipInterestPayload>
 
 /**
  * Enums
@@ -146,6 +151,16 @@ export const NotificationStatus: {
 
 export type NotificationStatus = (typeof NotificationStatus)[keyof typeof NotificationStatus]
 
+
+export const MembershipInterestStatus: {
+  PENDING: 'PENDING',
+  CONTACTED: 'CONTACTED',
+  CONVERTED: 'CONVERTED',
+  REJECTED: 'REJECTED'
+};
+
+export type MembershipInterestStatus = (typeof MembershipInterestStatus)[keyof typeof MembershipInterestStatus]
+
 }
 
 export type BookingStatus = $Enums.BookingStatus
@@ -175,6 +190,10 @@ export const NotificationType: typeof $Enums.NotificationType
 export type NotificationStatus = $Enums.NotificationStatus
 
 export const NotificationStatus: typeof $Enums.NotificationStatus
+
+export type MembershipInterestStatus = $Enums.MembershipInterestStatus
+
+export const MembershipInterestStatus: typeof $Enums.MembershipInterestStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -420,6 +439,16 @@ export class PrismaClient<
     * ```
     */
   get userMembership(): Prisma.UserMembershipDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.membershipInterest`: Exposes CRUD operations for the **MembershipInterest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MembershipInterests
+    * const membershipInterests = await prisma.membershipInterest.findMany()
+    * ```
+    */
+  get membershipInterest(): Prisma.MembershipInterestDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -871,7 +900,8 @@ export namespace Prisma {
     Notification: 'Notification',
     Payment: 'Payment',
     MembershipPlan: 'MembershipPlan',
-    UserMembership: 'UserMembership'
+    UserMembership: 'UserMembership',
+    MembershipInterest: 'MembershipInterest'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -890,7 +920,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "booking" | "invoice" | "timeSlot" | "availability" | "service" | "review" | "refreshToken" | "notification" | "payment" | "membershipPlan" | "userMembership"
+      modelProps: "user" | "booking" | "invoice" | "timeSlot" | "availability" | "service" | "review" | "refreshToken" | "notification" | "payment" | "membershipPlan" | "userMembership" | "membershipInterest"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1782,6 +1812,80 @@ export namespace Prisma {
           }
         }
       }
+      MembershipInterest: {
+        payload: Prisma.$MembershipInterestPayload<ExtArgs>
+        fields: Prisma.MembershipInterestFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MembershipInterestFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipInterestPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MembershipInterestFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipInterestPayload>
+          }
+          findFirst: {
+            args: Prisma.MembershipInterestFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipInterestPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MembershipInterestFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipInterestPayload>
+          }
+          findMany: {
+            args: Prisma.MembershipInterestFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipInterestPayload>[]
+          }
+          create: {
+            args: Prisma.MembershipInterestCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipInterestPayload>
+          }
+          createMany: {
+            args: Prisma.MembershipInterestCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MembershipInterestCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipInterestPayload>[]
+          }
+          delete: {
+            args: Prisma.MembershipInterestDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipInterestPayload>
+          }
+          update: {
+            args: Prisma.MembershipInterestUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipInterestPayload>
+          }
+          deleteMany: {
+            args: Prisma.MembershipInterestDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MembershipInterestUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MembershipInterestUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipInterestPayload>[]
+          }
+          upsert: {
+            args: Prisma.MembershipInterestUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MembershipInterestPayload>
+          }
+          aggregate: {
+            args: Prisma.MembershipInterestAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMembershipInterest>
+          }
+          groupBy: {
+            args: Prisma.MembershipInterestGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MembershipInterestGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MembershipInterestCountArgs<ExtArgs>
+            result: $Utils.Optional<MembershipInterestCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1878,6 +1982,7 @@ export namespace Prisma {
     payment?: PaymentOmit
     membershipPlan?: MembershipPlanOmit
     userMembership?: UserMembershipOmit
+    membershipInterest?: MembershipInterestOmit
   }
 
   /* Types for Logging */
@@ -16782,6 +16887,1100 @@ export namespace Prisma {
 
 
   /**
+   * Model MembershipInterest
+   */
+
+  export type AggregateMembershipInterest = {
+    _count: MembershipInterestCountAggregateOutputType | null
+    _avg: MembershipInterestAvgAggregateOutputType | null
+    _sum: MembershipInterestSumAggregateOutputType | null
+    _min: MembershipInterestMinAggregateOutputType | null
+    _max: MembershipInterestMaxAggregateOutputType | null
+  }
+
+  export type MembershipInterestAvgAggregateOutputType = {
+    planCost: number | null
+  }
+
+  export type MembershipInterestSumAggregateOutputType = {
+    planCost: number | null
+  }
+
+  export type MembershipInterestMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    email: string | null
+    phone: string | null
+    planName: string | null
+    planCost: number | null
+    message: string | null
+    status: $Enums.MembershipInterestStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MembershipInterestMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    email: string | null
+    phone: string | null
+    planName: string | null
+    planCost: number | null
+    message: string | null
+    status: $Enums.MembershipInterestStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MembershipInterestCountAggregateOutputType = {
+    id: number
+    name: number
+    email: number
+    phone: number
+    planName: number
+    planCost: number
+    message: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MembershipInterestAvgAggregateInputType = {
+    planCost?: true
+  }
+
+  export type MembershipInterestSumAggregateInputType = {
+    planCost?: true
+  }
+
+  export type MembershipInterestMinAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    phone?: true
+    planName?: true
+    planCost?: true
+    message?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MembershipInterestMaxAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    phone?: true
+    planName?: true
+    planCost?: true
+    message?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MembershipInterestCountAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    phone?: true
+    planName?: true
+    planCost?: true
+    message?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MembershipInterestAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MembershipInterest to aggregate.
+     */
+    where?: MembershipInterestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MembershipInterests to fetch.
+     */
+    orderBy?: MembershipInterestOrderByWithRelationInput | MembershipInterestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MembershipInterestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MembershipInterests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MembershipInterests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MembershipInterests
+    **/
+    _count?: true | MembershipInterestCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MembershipInterestAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MembershipInterestSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MembershipInterestMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MembershipInterestMaxAggregateInputType
+  }
+
+  export type GetMembershipInterestAggregateType<T extends MembershipInterestAggregateArgs> = {
+        [P in keyof T & keyof AggregateMembershipInterest]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMembershipInterest[P]>
+      : GetScalarType<T[P], AggregateMembershipInterest[P]>
+  }
+
+
+
+
+  export type MembershipInterestGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MembershipInterestWhereInput
+    orderBy?: MembershipInterestOrderByWithAggregationInput | MembershipInterestOrderByWithAggregationInput[]
+    by: MembershipInterestScalarFieldEnum[] | MembershipInterestScalarFieldEnum
+    having?: MembershipInterestScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MembershipInterestCountAggregateInputType | true
+    _avg?: MembershipInterestAvgAggregateInputType
+    _sum?: MembershipInterestSumAggregateInputType
+    _min?: MembershipInterestMinAggregateInputType
+    _max?: MembershipInterestMaxAggregateInputType
+  }
+
+  export type MembershipInterestGroupByOutputType = {
+    id: string
+    name: string
+    email: string
+    phone: string
+    planName: string
+    planCost: number
+    message: string | null
+    status: $Enums.MembershipInterestStatus
+    createdAt: Date
+    updatedAt: Date
+    _count: MembershipInterestCountAggregateOutputType | null
+    _avg: MembershipInterestAvgAggregateOutputType | null
+    _sum: MembershipInterestSumAggregateOutputType | null
+    _min: MembershipInterestMinAggregateOutputType | null
+    _max: MembershipInterestMaxAggregateOutputType | null
+  }
+
+  type GetMembershipInterestGroupByPayload<T extends MembershipInterestGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MembershipInterestGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MembershipInterestGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MembershipInterestGroupByOutputType[P]>
+            : GetScalarType<T[P], MembershipInterestGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MembershipInterestSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    planName?: boolean
+    planCost?: boolean
+    message?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["membershipInterest"]>
+
+  export type MembershipInterestSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    planName?: boolean
+    planCost?: boolean
+    message?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["membershipInterest"]>
+
+  export type MembershipInterestSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    planName?: boolean
+    planCost?: boolean
+    message?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["membershipInterest"]>
+
+  export type MembershipInterestSelectScalar = {
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    planName?: boolean
+    planCost?: boolean
+    message?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MembershipInterestOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "planName" | "planCost" | "message" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["membershipInterest"]>
+
+  export type $MembershipInterestPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MembershipInterest"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      email: string
+      phone: string
+      planName: string
+      planCost: number
+      message: string | null
+      status: $Enums.MembershipInterestStatus
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["membershipInterest"]>
+    composites: {}
+  }
+
+  type MembershipInterestGetPayload<S extends boolean | null | undefined | MembershipInterestDefaultArgs> = $Result.GetResult<Prisma.$MembershipInterestPayload, S>
+
+  type MembershipInterestCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MembershipInterestFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MembershipInterestCountAggregateInputType | true
+    }
+
+  export interface MembershipInterestDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MembershipInterest'], meta: { name: 'MembershipInterest' } }
+    /**
+     * Find zero or one MembershipInterest that matches the filter.
+     * @param {MembershipInterestFindUniqueArgs} args - Arguments to find a MembershipInterest
+     * @example
+     * // Get one MembershipInterest
+     * const membershipInterest = await prisma.membershipInterest.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MembershipInterestFindUniqueArgs>(args: SelectSubset<T, MembershipInterestFindUniqueArgs<ExtArgs>>): Prisma__MembershipInterestClient<$Result.GetResult<Prisma.$MembershipInterestPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MembershipInterest that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MembershipInterestFindUniqueOrThrowArgs} args - Arguments to find a MembershipInterest
+     * @example
+     * // Get one MembershipInterest
+     * const membershipInterest = await prisma.membershipInterest.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MembershipInterestFindUniqueOrThrowArgs>(args: SelectSubset<T, MembershipInterestFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MembershipInterestClient<$Result.GetResult<Prisma.$MembershipInterestPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MembershipInterest that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipInterestFindFirstArgs} args - Arguments to find a MembershipInterest
+     * @example
+     * // Get one MembershipInterest
+     * const membershipInterest = await prisma.membershipInterest.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MembershipInterestFindFirstArgs>(args?: SelectSubset<T, MembershipInterestFindFirstArgs<ExtArgs>>): Prisma__MembershipInterestClient<$Result.GetResult<Prisma.$MembershipInterestPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MembershipInterest that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipInterestFindFirstOrThrowArgs} args - Arguments to find a MembershipInterest
+     * @example
+     * // Get one MembershipInterest
+     * const membershipInterest = await prisma.membershipInterest.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MembershipInterestFindFirstOrThrowArgs>(args?: SelectSubset<T, MembershipInterestFindFirstOrThrowArgs<ExtArgs>>): Prisma__MembershipInterestClient<$Result.GetResult<Prisma.$MembershipInterestPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MembershipInterests that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipInterestFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MembershipInterests
+     * const membershipInterests = await prisma.membershipInterest.findMany()
+     * 
+     * // Get first 10 MembershipInterests
+     * const membershipInterests = await prisma.membershipInterest.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const membershipInterestWithIdOnly = await prisma.membershipInterest.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MembershipInterestFindManyArgs>(args?: SelectSubset<T, MembershipInterestFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MembershipInterestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MembershipInterest.
+     * @param {MembershipInterestCreateArgs} args - Arguments to create a MembershipInterest.
+     * @example
+     * // Create one MembershipInterest
+     * const MembershipInterest = await prisma.membershipInterest.create({
+     *   data: {
+     *     // ... data to create a MembershipInterest
+     *   }
+     * })
+     * 
+     */
+    create<T extends MembershipInterestCreateArgs>(args: SelectSubset<T, MembershipInterestCreateArgs<ExtArgs>>): Prisma__MembershipInterestClient<$Result.GetResult<Prisma.$MembershipInterestPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MembershipInterests.
+     * @param {MembershipInterestCreateManyArgs} args - Arguments to create many MembershipInterests.
+     * @example
+     * // Create many MembershipInterests
+     * const membershipInterest = await prisma.membershipInterest.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MembershipInterestCreateManyArgs>(args?: SelectSubset<T, MembershipInterestCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MembershipInterests and returns the data saved in the database.
+     * @param {MembershipInterestCreateManyAndReturnArgs} args - Arguments to create many MembershipInterests.
+     * @example
+     * // Create many MembershipInterests
+     * const membershipInterest = await prisma.membershipInterest.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MembershipInterests and only return the `id`
+     * const membershipInterestWithIdOnly = await prisma.membershipInterest.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MembershipInterestCreateManyAndReturnArgs>(args?: SelectSubset<T, MembershipInterestCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MembershipInterestPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MembershipInterest.
+     * @param {MembershipInterestDeleteArgs} args - Arguments to delete one MembershipInterest.
+     * @example
+     * // Delete one MembershipInterest
+     * const MembershipInterest = await prisma.membershipInterest.delete({
+     *   where: {
+     *     // ... filter to delete one MembershipInterest
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MembershipInterestDeleteArgs>(args: SelectSubset<T, MembershipInterestDeleteArgs<ExtArgs>>): Prisma__MembershipInterestClient<$Result.GetResult<Prisma.$MembershipInterestPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MembershipInterest.
+     * @param {MembershipInterestUpdateArgs} args - Arguments to update one MembershipInterest.
+     * @example
+     * // Update one MembershipInterest
+     * const membershipInterest = await prisma.membershipInterest.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MembershipInterestUpdateArgs>(args: SelectSubset<T, MembershipInterestUpdateArgs<ExtArgs>>): Prisma__MembershipInterestClient<$Result.GetResult<Prisma.$MembershipInterestPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MembershipInterests.
+     * @param {MembershipInterestDeleteManyArgs} args - Arguments to filter MembershipInterests to delete.
+     * @example
+     * // Delete a few MembershipInterests
+     * const { count } = await prisma.membershipInterest.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MembershipInterestDeleteManyArgs>(args?: SelectSubset<T, MembershipInterestDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MembershipInterests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipInterestUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MembershipInterests
+     * const membershipInterest = await prisma.membershipInterest.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MembershipInterestUpdateManyArgs>(args: SelectSubset<T, MembershipInterestUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MembershipInterests and returns the data updated in the database.
+     * @param {MembershipInterestUpdateManyAndReturnArgs} args - Arguments to update many MembershipInterests.
+     * @example
+     * // Update many MembershipInterests
+     * const membershipInterest = await prisma.membershipInterest.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MembershipInterests and only return the `id`
+     * const membershipInterestWithIdOnly = await prisma.membershipInterest.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MembershipInterestUpdateManyAndReturnArgs>(args: SelectSubset<T, MembershipInterestUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MembershipInterestPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MembershipInterest.
+     * @param {MembershipInterestUpsertArgs} args - Arguments to update or create a MembershipInterest.
+     * @example
+     * // Update or create a MembershipInterest
+     * const membershipInterest = await prisma.membershipInterest.upsert({
+     *   create: {
+     *     // ... data to create a MembershipInterest
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MembershipInterest we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MembershipInterestUpsertArgs>(args: SelectSubset<T, MembershipInterestUpsertArgs<ExtArgs>>): Prisma__MembershipInterestClient<$Result.GetResult<Prisma.$MembershipInterestPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MembershipInterests.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipInterestCountArgs} args - Arguments to filter MembershipInterests to count.
+     * @example
+     * // Count the number of MembershipInterests
+     * const count = await prisma.membershipInterest.count({
+     *   where: {
+     *     // ... the filter for the MembershipInterests we want to count
+     *   }
+     * })
+    **/
+    count<T extends MembershipInterestCountArgs>(
+      args?: Subset<T, MembershipInterestCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MembershipInterestCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MembershipInterest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipInterestAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MembershipInterestAggregateArgs>(args: Subset<T, MembershipInterestAggregateArgs>): Prisma.PrismaPromise<GetMembershipInterestAggregateType<T>>
+
+    /**
+     * Group by MembershipInterest.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MembershipInterestGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MembershipInterestGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MembershipInterestGroupByArgs['orderBy'] }
+        : { orderBy?: MembershipInterestGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MembershipInterestGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMembershipInterestGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MembershipInterest model
+   */
+  readonly fields: MembershipInterestFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MembershipInterest.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MembershipInterestClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MembershipInterest model
+   */
+  interface MembershipInterestFieldRefs {
+    readonly id: FieldRef<"MembershipInterest", 'String'>
+    readonly name: FieldRef<"MembershipInterest", 'String'>
+    readonly email: FieldRef<"MembershipInterest", 'String'>
+    readonly phone: FieldRef<"MembershipInterest", 'String'>
+    readonly planName: FieldRef<"MembershipInterest", 'String'>
+    readonly planCost: FieldRef<"MembershipInterest", 'Int'>
+    readonly message: FieldRef<"MembershipInterest", 'String'>
+    readonly status: FieldRef<"MembershipInterest", 'MembershipInterestStatus'>
+    readonly createdAt: FieldRef<"MembershipInterest", 'DateTime'>
+    readonly updatedAt: FieldRef<"MembershipInterest", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MembershipInterest findUnique
+   */
+  export type MembershipInterestFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipInterest
+     */
+    select?: MembershipInterestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipInterest
+     */
+    omit?: MembershipInterestOmit<ExtArgs> | null
+    /**
+     * Filter, which MembershipInterest to fetch.
+     */
+    where: MembershipInterestWhereUniqueInput
+  }
+
+  /**
+   * MembershipInterest findUniqueOrThrow
+   */
+  export type MembershipInterestFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipInterest
+     */
+    select?: MembershipInterestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipInterest
+     */
+    omit?: MembershipInterestOmit<ExtArgs> | null
+    /**
+     * Filter, which MembershipInterest to fetch.
+     */
+    where: MembershipInterestWhereUniqueInput
+  }
+
+  /**
+   * MembershipInterest findFirst
+   */
+  export type MembershipInterestFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipInterest
+     */
+    select?: MembershipInterestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipInterest
+     */
+    omit?: MembershipInterestOmit<ExtArgs> | null
+    /**
+     * Filter, which MembershipInterest to fetch.
+     */
+    where?: MembershipInterestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MembershipInterests to fetch.
+     */
+    orderBy?: MembershipInterestOrderByWithRelationInput | MembershipInterestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MembershipInterests.
+     */
+    cursor?: MembershipInterestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MembershipInterests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MembershipInterests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MembershipInterests.
+     */
+    distinct?: MembershipInterestScalarFieldEnum | MembershipInterestScalarFieldEnum[]
+  }
+
+  /**
+   * MembershipInterest findFirstOrThrow
+   */
+  export type MembershipInterestFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipInterest
+     */
+    select?: MembershipInterestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipInterest
+     */
+    omit?: MembershipInterestOmit<ExtArgs> | null
+    /**
+     * Filter, which MembershipInterest to fetch.
+     */
+    where?: MembershipInterestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MembershipInterests to fetch.
+     */
+    orderBy?: MembershipInterestOrderByWithRelationInput | MembershipInterestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MembershipInterests.
+     */
+    cursor?: MembershipInterestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MembershipInterests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MembershipInterests.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MembershipInterests.
+     */
+    distinct?: MembershipInterestScalarFieldEnum | MembershipInterestScalarFieldEnum[]
+  }
+
+  /**
+   * MembershipInterest findMany
+   */
+  export type MembershipInterestFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipInterest
+     */
+    select?: MembershipInterestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipInterest
+     */
+    omit?: MembershipInterestOmit<ExtArgs> | null
+    /**
+     * Filter, which MembershipInterests to fetch.
+     */
+    where?: MembershipInterestWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MembershipInterests to fetch.
+     */
+    orderBy?: MembershipInterestOrderByWithRelationInput | MembershipInterestOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MembershipInterests.
+     */
+    cursor?: MembershipInterestWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MembershipInterests from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MembershipInterests.
+     */
+    skip?: number
+    distinct?: MembershipInterestScalarFieldEnum | MembershipInterestScalarFieldEnum[]
+  }
+
+  /**
+   * MembershipInterest create
+   */
+  export type MembershipInterestCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipInterest
+     */
+    select?: MembershipInterestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipInterest
+     */
+    omit?: MembershipInterestOmit<ExtArgs> | null
+    /**
+     * The data needed to create a MembershipInterest.
+     */
+    data: XOR<MembershipInterestCreateInput, MembershipInterestUncheckedCreateInput>
+  }
+
+  /**
+   * MembershipInterest createMany
+   */
+  export type MembershipInterestCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MembershipInterests.
+     */
+    data: MembershipInterestCreateManyInput | MembershipInterestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MembershipInterest createManyAndReturn
+   */
+  export type MembershipInterestCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipInterest
+     */
+    select?: MembershipInterestSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipInterest
+     */
+    omit?: MembershipInterestOmit<ExtArgs> | null
+    /**
+     * The data used to create many MembershipInterests.
+     */
+    data: MembershipInterestCreateManyInput | MembershipInterestCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MembershipInterest update
+   */
+  export type MembershipInterestUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipInterest
+     */
+    select?: MembershipInterestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipInterest
+     */
+    omit?: MembershipInterestOmit<ExtArgs> | null
+    /**
+     * The data needed to update a MembershipInterest.
+     */
+    data: XOR<MembershipInterestUpdateInput, MembershipInterestUncheckedUpdateInput>
+    /**
+     * Choose, which MembershipInterest to update.
+     */
+    where: MembershipInterestWhereUniqueInput
+  }
+
+  /**
+   * MembershipInterest updateMany
+   */
+  export type MembershipInterestUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MembershipInterests.
+     */
+    data: XOR<MembershipInterestUpdateManyMutationInput, MembershipInterestUncheckedUpdateManyInput>
+    /**
+     * Filter which MembershipInterests to update
+     */
+    where?: MembershipInterestWhereInput
+    /**
+     * Limit how many MembershipInterests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MembershipInterest updateManyAndReturn
+   */
+  export type MembershipInterestUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipInterest
+     */
+    select?: MembershipInterestSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipInterest
+     */
+    omit?: MembershipInterestOmit<ExtArgs> | null
+    /**
+     * The data used to update MembershipInterests.
+     */
+    data: XOR<MembershipInterestUpdateManyMutationInput, MembershipInterestUncheckedUpdateManyInput>
+    /**
+     * Filter which MembershipInterests to update
+     */
+    where?: MembershipInterestWhereInput
+    /**
+     * Limit how many MembershipInterests to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MembershipInterest upsert
+   */
+  export type MembershipInterestUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipInterest
+     */
+    select?: MembershipInterestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipInterest
+     */
+    omit?: MembershipInterestOmit<ExtArgs> | null
+    /**
+     * The filter to search for the MembershipInterest to update in case it exists.
+     */
+    where: MembershipInterestWhereUniqueInput
+    /**
+     * In case the MembershipInterest found by the `where` argument doesn't exist, create a new MembershipInterest with this data.
+     */
+    create: XOR<MembershipInterestCreateInput, MembershipInterestUncheckedCreateInput>
+    /**
+     * In case the MembershipInterest was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MembershipInterestUpdateInput, MembershipInterestUncheckedUpdateInput>
+  }
+
+  /**
+   * MembershipInterest delete
+   */
+  export type MembershipInterestDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipInterest
+     */
+    select?: MembershipInterestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipInterest
+     */
+    omit?: MembershipInterestOmit<ExtArgs> | null
+    /**
+     * Filter which MembershipInterest to delete.
+     */
+    where: MembershipInterestWhereUniqueInput
+  }
+
+  /**
+   * MembershipInterest deleteMany
+   */
+  export type MembershipInterestDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MembershipInterests to delete
+     */
+    where?: MembershipInterestWhereInput
+    /**
+     * Limit how many MembershipInterests to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MembershipInterest without action
+   */
+  export type MembershipInterestDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MembershipInterest
+     */
+    select?: MembershipInterestSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MembershipInterest
+     */
+    omit?: MembershipInterestOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -17003,6 +18202,22 @@ export namespace Prisma {
   };
 
   export type UserMembershipScalarFieldEnum = (typeof UserMembershipScalarFieldEnum)[keyof typeof UserMembershipScalarFieldEnum]
+
+
+  export const MembershipInterestScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    email: 'email',
+    phone: 'phone',
+    planName: 'planName',
+    planCost: 'planCost',
+    message: 'message',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MembershipInterestScalarFieldEnum = (typeof MembershipInterestScalarFieldEnum)[keyof typeof MembershipInterestScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -17244,6 +18459,20 @@ export namespace Prisma {
    * Reference to a field of type 'Json[]'
    */
   export type ListJsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'MembershipInterestStatus'
+   */
+  export type EnumMembershipInterestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MembershipInterestStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'MembershipInterestStatus[]'
+   */
+  export type ListEnumMembershipInterestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MembershipInterestStatus[]'>
     
   /**
    * Deep Input Types
@@ -18380,6 +19609,85 @@ export namespace Prisma {
     lastScanTime?: DateTimeNullableWithAggregatesFilter<"UserMembership"> | Date | string | null
     counter?: IntWithAggregatesFilter<"UserMembership"> | number
     createdAt?: DateTimeWithAggregatesFilter<"UserMembership"> | Date | string
+  }
+
+  export type MembershipInterestWhereInput = {
+    AND?: MembershipInterestWhereInput | MembershipInterestWhereInput[]
+    OR?: MembershipInterestWhereInput[]
+    NOT?: MembershipInterestWhereInput | MembershipInterestWhereInput[]
+    id?: StringFilter<"MembershipInterest"> | string
+    name?: StringFilter<"MembershipInterest"> | string
+    email?: StringFilter<"MembershipInterest"> | string
+    phone?: StringFilter<"MembershipInterest"> | string
+    planName?: StringFilter<"MembershipInterest"> | string
+    planCost?: IntFilter<"MembershipInterest"> | number
+    message?: StringNullableFilter<"MembershipInterest"> | string | null
+    status?: EnumMembershipInterestStatusFilter<"MembershipInterest"> | $Enums.MembershipInterestStatus
+    createdAt?: DateTimeFilter<"MembershipInterest"> | Date | string
+    updatedAt?: DateTimeFilter<"MembershipInterest"> | Date | string
+  }
+
+  export type MembershipInterestOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    planName?: SortOrder
+    planCost?: SortOrder
+    message?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MembershipInterestWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: MembershipInterestWhereInput | MembershipInterestWhereInput[]
+    OR?: MembershipInterestWhereInput[]
+    NOT?: MembershipInterestWhereInput | MembershipInterestWhereInput[]
+    name?: StringFilter<"MembershipInterest"> | string
+    email?: StringFilter<"MembershipInterest"> | string
+    phone?: StringFilter<"MembershipInterest"> | string
+    planName?: StringFilter<"MembershipInterest"> | string
+    planCost?: IntFilter<"MembershipInterest"> | number
+    message?: StringNullableFilter<"MembershipInterest"> | string | null
+    status?: EnumMembershipInterestStatusFilter<"MembershipInterest"> | $Enums.MembershipInterestStatus
+    createdAt?: DateTimeFilter<"MembershipInterest"> | Date | string
+    updatedAt?: DateTimeFilter<"MembershipInterest"> | Date | string
+  }, "id">
+
+  export type MembershipInterestOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    planName?: SortOrder
+    planCost?: SortOrder
+    message?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MembershipInterestCountOrderByAggregateInput
+    _avg?: MembershipInterestAvgOrderByAggregateInput
+    _max?: MembershipInterestMaxOrderByAggregateInput
+    _min?: MembershipInterestMinOrderByAggregateInput
+    _sum?: MembershipInterestSumOrderByAggregateInput
+  }
+
+  export type MembershipInterestScalarWhereWithAggregatesInput = {
+    AND?: MembershipInterestScalarWhereWithAggregatesInput | MembershipInterestScalarWhereWithAggregatesInput[]
+    OR?: MembershipInterestScalarWhereWithAggregatesInput[]
+    NOT?: MembershipInterestScalarWhereWithAggregatesInput | MembershipInterestScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MembershipInterest"> | string
+    name?: StringWithAggregatesFilter<"MembershipInterest"> | string
+    email?: StringWithAggregatesFilter<"MembershipInterest"> | string
+    phone?: StringWithAggregatesFilter<"MembershipInterest"> | string
+    planName?: StringWithAggregatesFilter<"MembershipInterest"> | string
+    planCost?: IntWithAggregatesFilter<"MembershipInterest"> | number
+    message?: StringNullableWithAggregatesFilter<"MembershipInterest"> | string | null
+    status?: EnumMembershipInterestStatusWithAggregatesFilter<"MembershipInterest"> | $Enums.MembershipInterestStatus
+    createdAt?: DateTimeWithAggregatesFilter<"MembershipInterest"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MembershipInterest"> | Date | string
   }
 
   export type UserCreateInput = {
@@ -19651,6 +20959,97 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type MembershipInterestCreateInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    planName: string
+    planCost: number
+    message?: string | null
+    status?: $Enums.MembershipInterestStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MembershipInterestUncheckedCreateInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    planName: string
+    planCost: number
+    message?: string | null
+    status?: $Enums.MembershipInterestStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MembershipInterestUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    planName?: StringFieldUpdateOperationsInput | string
+    planCost?: IntFieldUpdateOperationsInput | number
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumMembershipInterestStatusFieldUpdateOperationsInput | $Enums.MembershipInterestStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MembershipInterestUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    planName?: StringFieldUpdateOperationsInput | string
+    planCost?: IntFieldUpdateOperationsInput | number
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumMembershipInterestStatusFieldUpdateOperationsInput | $Enums.MembershipInterestStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MembershipInterestCreateManyInput = {
+    id?: string
+    name: string
+    email: string
+    phone: string
+    planName: string
+    planCost: number
+    message?: string | null
+    status?: $Enums.MembershipInterestStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MembershipInterestUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    planName?: StringFieldUpdateOperationsInput | string
+    planCost?: IntFieldUpdateOperationsInput | number
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumMembershipInterestStatusFieldUpdateOperationsInput | $Enums.MembershipInterestStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MembershipInterestUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    planName?: StringFieldUpdateOperationsInput | string
+    planCost?: IntFieldUpdateOperationsInput | number
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumMembershipInterestStatusFieldUpdateOperationsInput | $Enums.MembershipInterestStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -20905,6 +22304,70 @@ export namespace Prisma {
     counter?: SortOrder
   }
 
+  export type EnumMembershipInterestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MembershipInterestStatus | EnumMembershipInterestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MembershipInterestStatus[] | ListEnumMembershipInterestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MembershipInterestStatus[] | ListEnumMembershipInterestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMembershipInterestStatusFilter<$PrismaModel> | $Enums.MembershipInterestStatus
+  }
+
+  export type MembershipInterestCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    planName?: SortOrder
+    planCost?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MembershipInterestAvgOrderByAggregateInput = {
+    planCost?: SortOrder
+  }
+
+  export type MembershipInterestMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    planName?: SortOrder
+    planCost?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MembershipInterestMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    planName?: SortOrder
+    planCost?: SortOrder
+    message?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MembershipInterestSumOrderByAggregateInput = {
+    planCost?: SortOrder
+  }
+
+  export type EnumMembershipInterestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MembershipInterestStatus | EnumMembershipInterestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MembershipInterestStatus[] | ListEnumMembershipInterestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MembershipInterestStatus[] | ListEnumMembershipInterestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMembershipInterestStatusWithAggregatesFilter<$PrismaModel> | $Enums.MembershipInterestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMembershipInterestStatusFilter<$PrismaModel>
+    _max?: NestedEnumMembershipInterestStatusFilter<$PrismaModel>
+  }
+
   export type ReviewCreateNestedManyWithoutUserInput = {
     create?: XOR<ReviewCreateWithoutUserInput, ReviewUncheckedCreateWithoutUserInput> | ReviewCreateWithoutUserInput[] | ReviewUncheckedCreateWithoutUserInput[]
     connectOrCreate?: ReviewCreateOrConnectWithoutUserInput | ReviewCreateOrConnectWithoutUserInput[]
@@ -21997,6 +23460,10 @@ export namespace Prisma {
     deleteMany?: PaymentScalarWhereInput | PaymentScalarWhereInput[]
   }
 
+  export type EnumMembershipInterestStatusFieldUpdateOperationsInput = {
+    set?: $Enums.MembershipInterestStatus
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -22454,6 +23921,23 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMembershipInterestStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.MembershipInterestStatus | EnumMembershipInterestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MembershipInterestStatus[] | ListEnumMembershipInterestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MembershipInterestStatus[] | ListEnumMembershipInterestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMembershipInterestStatusFilter<$PrismaModel> | $Enums.MembershipInterestStatus
+  }
+
+  export type NestedEnumMembershipInterestStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MembershipInterestStatus | EnumMembershipInterestStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.MembershipInterestStatus[] | ListEnumMembershipInterestStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MembershipInterestStatus[] | ListEnumMembershipInterestStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumMembershipInterestStatusWithAggregatesFilter<$PrismaModel> | $Enums.MembershipInterestStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMembershipInterestStatusFilter<$PrismaModel>
+    _max?: NestedEnumMembershipInterestStatusFilter<$PrismaModel>
   }
 
   export type ReviewCreateWithoutUserInput = {

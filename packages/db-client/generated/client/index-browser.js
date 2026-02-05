@@ -294,6 +294,19 @@ exports.Prisma.UserMembershipScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.MembershipInterestScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  planName: 'planName',
+  planCost: 'planCost',
+  message: 'message',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -367,6 +380,13 @@ exports.PaymentType = exports.$Enums.PaymentType = {
   MEMBERSHIP: 'MEMBERSHIP'
 };
 
+exports.MembershipInterestStatus = exports.$Enums.MembershipInterestStatus = {
+  PENDING: 'PENDING',
+  CONTACTED: 'CONTACTED',
+  CONVERTED: 'CONVERTED',
+  REJECTED: 'REJECTED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Booking: 'Booking',
@@ -379,7 +399,8 @@ exports.Prisma.ModelName = {
   Notification: 'Notification',
   Payment: 'Payment',
   MembershipPlan: 'MembershipPlan',
-  UserMembership: 'UserMembership'
+  UserMembership: 'UserMembership',
+  MembershipInterest: 'MembershipInterest'
 };
 
 /**

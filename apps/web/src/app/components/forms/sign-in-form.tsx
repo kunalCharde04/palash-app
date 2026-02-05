@@ -90,11 +90,11 @@ export function SignInForm() {
       </div> */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="phoneOrEmail">Enter your phone or email</Label>
+            <Label htmlFor="phoneOrEmail">Enter your email</Label>
             <Input
               id="phoneOrEmail"
               type="text"
-              placeholder="eg. johndoe@gmail.com or (+91)"
+              placeholder="eg. johndoe@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

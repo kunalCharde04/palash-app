@@ -113,12 +113,12 @@ export function SignUpForm() {
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="emailOrPhone">Enter your email or phone</Label>
+          <Label htmlFor="emailOrPhone">Enter your email for verification</Label>
           <Input 
             id="emailOrPhone" 
             name="emailOrPhone" 
             type="text" 
-            placeholder="eg. johndoe@gmail.com or (+91)" 
+            placeholder="eg. johndoe@gmail.com" 
             required 
             onChange={handleChange}
             value={formData.emailOrPhone}
