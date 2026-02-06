@@ -26,8 +26,24 @@ class PaymentGatewayController {
     verifyPayment = asyncHandler(async (req: Request, res: Response) => {
         const params: IVerifyPaymentParams = req.body;
         
+        // Log incoming request for debugging
+        console.log('💳 Payment verification request:', {
+            orderId: params.orderId,
+            paymentId: params.paymentId,
+            signature: params.signature ? '***' : undefined,
+            userId: params.userId,
+            serviceId: params.serviceId,
+            date: params.date,
+            timeSlot: params.timeSlot,
+            email: params.email,
+            amount: params.amount,
+            currency: params.currency,
+            status: params.status,
+        });
+        
         // Basic validation for required fields
         if (!params.orderId || !params.paymentId || !params.signature) {
+            console.error('❌ Missing required payment fields');
             throw new ValidationError('Order ID, payment ID and signature are required');
         }
 
@@ -35,9 +51,11 @@ class PaymentGatewayController {
         const verifiedPayment = await this.paymentGatewayInstance.verifyPaymentSignature(params);
         
         if (!verifiedPayment) {
+            console.error('❌ Payment signature verification failed');
             throw new UnauthorizedError('Payment verification failed');
         }
 
+        console.log('✅ Payment verified successfully:', params.paymentId);
         return res.json({ 
             message: "Verified transaction",
             verified: true 

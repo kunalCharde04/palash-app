@@ -83,7 +83,14 @@ class PaymentGateway {
 
   }
   async verifyPaymentSignature(params: IVerifyPaymentParams): Promise<boolean> {
-    console.log("params", params);
+    console.log("💳 Verifying payment params:", {
+      orderId: params.orderId,
+      paymentId: params.paymentId,
+      date: params.date,
+      amount: params.amount,
+      status: params.status
+    });
+    
     return await prisma.$transaction(async (tx) => {
       const generatedSig = createHmac('sha256', this.keySecret)
         .update(`${params.orderId}|${params.paymentId}`)
@@ -98,7 +105,7 @@ class PaymentGateway {
           signature: params.signature,
           user_id: params.userId,
           service_id: params.serviceId,
-          date: params.date,
+          date: new Date(params.date), // Convert string to Date
           time_slot: params.timeSlot,
           email: params.email,
           amount: params.amount,
@@ -108,9 +115,9 @@ class PaymentGateway {
       })
 
       if (isValid) {
-        console.info(`Payment verified successfully: ${params.paymentId}`);
+        console.info(`✅ Payment verified successfully: ${params.paymentId}`);
       } else {
-        console.warn(`Invalid payment signature: ${params.paymentId}`);
+        console.warn(`❌ Invalid payment signature: ${params.paymentId}`);
       }
       return isValid;
 

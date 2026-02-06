@@ -189,7 +189,7 @@ export interface IVerifyPaymentParams {
     signature: string;
     userId: string;
     serviceId: string;
-    date: Date;
+    date: string; // Changed from Date to string
     timeSlot: string;  
     email: string;
     amount: string;
