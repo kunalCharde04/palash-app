@@ -17,8 +17,8 @@ const PrimaryButton = React.forwardRef<HTMLButtonElement, PrimaryButtonProps>(
       <Button
         ref={ref}
         className={cn(
-          "rounded-full bg-[#012b2b] hover:bg-[#012b2b]/90 text-white transition-colors",
-          "disabled:bg-[#012b2b]/50",
+          "rounded-sm bg-[#2D3E2D] hover:bg-[#4A5F4A] text-white transition-all duration-300",
+          "disabled:bg-[#2D3E2D]/50",
           "inline-flex items-center justify-center gap-2",
           className,
         )}

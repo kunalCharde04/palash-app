@@ -25,14 +25,14 @@ function HowItsWork() {
     ];
 
     return (
-        <div className="min-h-screen mt-4 sm:mt-6 lg:mt-8 p-3 sm:p-4 lg:p-6 flex items-center justify-center">
+        <div className="min-h-screen mt-4 sm:mt-6 lg:mt-8 p-3 sm:p-4 lg:p-6 flex items-center justify-center bg-[#E8F0E8]">
             <div className="w-full max-w-7xl mx-auto">
                 {/* Section Header */}
                 <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-[#2D3E2D] mb-4">
                         How It Works
                     </h2>
-                    <p className="text-base sm:text-lg text-white/60 max-w-3xl mx-auto">
+                    <p className="text-base sm:text-lg text-[#4A5F4A] max-w-3xl mx-auto">
                         Your journey to wellness in three simple steps. We guide you through every stage of your mental health transformation.
                     </p>
                 </div>
@@ -54,14 +54,14 @@ function HowItsWork() {
                         <div className="space-y-6 sm:space-y-8">
                             {steps.map((step, index) => (
                                 <div key={step.number} className="flex gap-4 sm:gap-6">
-                                    <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#E5C9BC] flex items-center justify-center text-[#1B4B44] font-medium text-sm sm:text-base">
+                                    <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#D4E4D4] border border-[#C8D8C8] flex items-center justify-center text-[#2D3E2D] font-medium text-sm sm:text-base">
                                         {step.number}
                                     </div>
                                     <div className="flex-1">
-                                        <h3 className="text-lg sm:text-xl text-[#E5C9BC] mb-2 font-semibold">
+                                        <h3 className="text-lg sm:text-xl text-[#2D3E2D] mb-2 font-normal">
                                             {step.title}
                                         </h3>
-                                        <p className="text-sm sm:text-base text-[#9DB5B2] leading-relaxed">
+                                        <p className="text-sm sm:text-base text-[#4A5F4A] leading-relaxed">
                                             {step.description}
                                         </p>
                                     </div>
@@ -87,14 +87,14 @@ function HowItsWork() {
                             <div className="space-y-6 xl:space-y-8">
                                 {steps.map((step, index) => (
                                     <div key={step.number} className="flex gap-6">
-                                        <div className={`flex-shrink-0 w-12 h-12 xl:w-14 xl:h-14 -ml-6 xl:-ml-7 ${step.marginTop} rounded-full bg-[#E5C9BC] flex items-center justify-center text-[#1B4B44] font-medium`}>
+                                        <div className={`flex-shrink-0 w-12 h-12 xl:w-14 xl:h-14 -ml-6 xl:-ml-7 ${step.marginTop} rounded-full bg-[#D4E4D4] border border-[#C8D8C8] flex items-center justify-center text-[#2D3E2D] font-medium`}>
                                             {step.number}
                                         </div>
                                         <div>
-                                            <h3 className="text-xl xl:text-2xl text-[#E5C9BC] mb-2 font-semibold">
+                                            <h3 className="text-xl xl:text-2xl text-[#2D3E2D] mb-2 font-normal">
                                                 {step.title}
                                             </h3>
-                                            <p className="text-base xl:text-lg text-[#9DB5B2] leading-relaxed">
+                                            <p className="text-base xl:text-lg text-[#4A5F4A] leading-relaxed">
                                                 {step.description}
                                             </p>
                                         </div>
@@ -122,14 +122,14 @@ function HowItsWork() {
                                 <div className="space-y-6">
                                     {steps.map((step, index) => (
                                         <div key={step.number} className="flex gap-6">
-                                            <div className="flex-shrink-0 w-14 h-14 rounded-full bg-[#E5C9BC] flex items-center justify-center text-[#1B4B44] font-medium">
+                                            <div className="flex-shrink-0 w-14 h-14 rounded-full bg-[#D4E4D4] border border-[#C8D8C8] flex items-center justify-center text-[#2D3E2D] font-medium">
                                                 {step.number}
                                             </div>
                                             <div className="flex-1">
-                                                <h3 className="text-xl text-[#E5C9BC] mb-2 font-semibold">
+                                                <h3 className="text-xl text-[#2D3E2D] mb-2 font-normal">
                                                     {step.title}
                                                 </h3>
-                                                <p className="text-base text-[#9DB5B2] leading-relaxed">
+                                                <p className="text-base text-[#4A5F4A] leading-relaxed">
                                                     {step.description}
                                                 </p>
                                             </div>
@@ -143,11 +143,11 @@ function HowItsWork() {
 
                 {/* Call to Action */}
                 <div className="text-center mt-8 sm:mt-12 lg:mt-16">
-                    <div className="inline-flex items-center justify-center space-x-2 bg-[#E5C9BC]/20 px-4 sm:px-6 py-2 sm:py-3 rounded-full">
-                        <span className="text-[#E5C9BC] text-sm sm:text-base font-medium">
+                    <div className="inline-flex items-center justify-center space-x-2 bg-white border border-[#C8D8C8] px-4 sm:px-6 py-2 sm:py-3 rounded-full">
+                        <span className="text-[#2D3E2D] text-sm sm:text-base font-light">
                             Ready to start your wellness journey?
                         </span>
-                        <span className="text-[#E5C9BC] text-lg">→</span>
+                        <span className="text-[#7A9B7A] text-lg">→</span>
                     </div>
                 </div>
             </div>

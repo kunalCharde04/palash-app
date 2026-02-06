@@ -127,13 +127,13 @@ const wellnessTips: WellnessTip[] = [
 ];
 
 const categoryColors = {
-  mental: 'bg-blue-100 text-blue-800 border-blue-200',
-  physical: 'bg-green-100 text-green-800 border-green-200',
-  nutrition: 'bg-orange-100 text-orange-800 border-orange-200',
-  sleep: 'bg-purple-100 text-purple-800 border-purple-200',
-  mindfulness: 'bg-teal-100 text-teal-800 border-teal-200',
-  social: 'bg-pink-100 text-pink-800 border-pink-200',
-  spiritual: 'bg-indigo-100 text-indigo-800 border-indigo-200'
+  mental: 'bg-[#F5F7F5] text-[#2D3E2D] border-[#C8D8C8]',
+  physical: 'bg-[#F5F7F5] text-[#2D3E2D] border-[#C8D8C8]',
+  nutrition: 'bg-[#F5F7F5] text-[#2D3E2D] border-[#C8D8C8]',
+  sleep: 'bg-[#F5F7F5] text-[#2D3E2D] border-[#C8D8C8]',
+  mindfulness: 'bg-[#F5F7F5] text-[#2D3E2D] border-[#C8D8C8]',
+  social: 'bg-[#F5F7F5] text-[#2D3E2D] border-[#C8D8C8]',
+  spiritual: 'bg-[#F5F7F5] text-[#2D3E2D] border-[#C8D8C8]'
 };
 
 const categoryIcons = {
@@ -196,18 +196,18 @@ export default function DailyWellnessTips() {
   };
 
   return (
-    <section className="w-full py-12 sm:py-16 lg:py-20 bg-transparent">
+    <section className="w-full py-12 sm:py-16 lg:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-8 sm:mb-12 lg:mb-16">
           <div className="flex items-center justify-center mb-4">
-            <Sparkles className="w-6 h-6 sm:w-8 sm:h-8 text-teal-600 mr-2" />
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
+            <Sparkles className="w-6 h-6 sm:w-8 sm:h-8 text-[#7A9B7A] mr-2" />
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-light text-[#2D3E2D]">
               Daily Wellness Tips
             </h2>
-            <Sparkles className="w-6 h-6 sm:w-8 sm:h-8 text-teal-600 ml-2" />
+            <Sparkles className="w-6 h-6 sm:w-8 sm:h-8 text-[#7A9B7A] ml-2" />
           </div>
-          <p className="text-base sm:text-lg text-white/60 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg text-[#4A5F4A] max-w-3xl mx-auto">
             Discover 100 evidence-based wellness tips to transform your daily routine. 
             Small changes lead to big improvements in your mental, physical, and spiritual well-being.
           </p>
@@ -223,8 +223,8 @@ export default function DailyWellnessTips() {
                 onClick={() => handleCategoryChange(category.key)}
                 className={`flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 ${
                   selectedCategory === category.key
-                    ? 'bg-teal-600 text-white shadow-lg transform scale-105'
-                    : 'bg-white text-gray-600 hover:bg-teal-50 hover:text-teal-700 shadow-sm'
+                    ? 'bg-[#2D3E2D] text-white shadow-lg transform scale-105'
+                    : 'bg-white border border-[#C8D8C8] text-[#4A5F4A] hover:bg-[#F5F7F5] hover:text-[#2D3E2D] shadow-sm'
                 }`}
               >
                 <IconComponent className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -240,7 +240,7 @@ export default function DailyWellnessTips() {
           {/* Navigation Arrows */}
           <button
             onClick={prevTip}
-            className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-600 hover:text-teal-600 p-2 sm:p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110"
+            className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-[#4A5F4A] hover:text-[#2D3E2D] p-2 sm:p-3 rounded-full border border-[#C8D8C8] shadow-lg transition-all duration-200 hover:scale-110"
             aria-label="Previous tip"
           >
             <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -248,20 +248,20 @@ export default function DailyWellnessTips() {
 
           <button
             onClick={nextTip}
-            className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-600 hover:text-teal-600 p-2 sm:p-3 rounded-full shadow-lg transition-all duration-200 hover:scale-110"
+            className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-[#4A5F4A] hover:text-[#2D3E2D] p-2 sm:p-3 rounded-full border border-[#C8D8C8] shadow-lg transition-all duration-200 hover:scale-110"
             aria-label="Next tip"
           >
             <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
 
           {/* Tip Card */}
-          <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-6 sm:p-8 lg:p-12 mx-4 sm:mx-8 lg:mx-12">
+          <div className="bg-[#F5F7F5] border border-[#C8D8C8] rounded-2xl sm:rounded-3xl shadow-xl p-6 sm:p-8 lg:p-12 mx-4 sm:mx-8 lg:mx-12">
             <div className="text-center">
               {/* Tip Number and Category */}
               <div className="flex items-center justify-center space-x-3 mb-4 sm:mb-6">
                 <span className="text-4xl sm:text-5xl lg:text-6xl">{getCurrentTip().icon}</span>
                 <div className="text-left">
-                  <div className="text-xs sm:text-sm text-gray-500 font-medium">
+                  <div className="text-xs sm:text-sm text-[#4A5F4A] font-medium">
                     Tip #{getCurrentTip().id} of 100
                   </div>
                   <span className={`inline-block px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium border ${
@@ -273,12 +273,12 @@ export default function DailyWellnessTips() {
               </div>
 
               {/* Tip Title */}
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-normal text-[#2D3E2D] mb-4 sm:mb-6">
                 {getCurrentTip().title}
               </h3>
 
               {/* Tip Description */}
-              <p className="text-base sm:text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto mb-6 sm:mb-8">
+              <p className="text-base sm:text-lg text-[#4A5F4A] leading-relaxed max-w-2xl mx-auto mb-6 sm:mb-8">
                 {getCurrentTip().description}
               </p>
 
@@ -295,8 +295,8 @@ export default function DailyWellnessTips() {
                       }}
                       className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-200 ${
                         realIndex === currentTip
-                          ? 'bg-teal-600 w-6 sm:w-8'
-                          : 'bg-gray-300 hover:bg-gray-400'
+                          ? 'bg-[#2D3E2D] w-6 sm:w-8'
+                          : 'bg-[#C8D8C8] hover:bg-[#9DB99D]'
                       }`}
                     />
                   );
@@ -308,8 +308,8 @@ export default function DailyWellnessTips() {
                 onClick={() => setIsAutoPlaying(!isAutoPlaying)}
                 className={`text-xs sm:text-sm font-medium px-3 sm:px-4 py-1 sm:py-2 rounded-full transition-all duration-200 ${
                   isAutoPlaying
-                    ? 'bg-teal-100 text-teal-700 hover:bg-teal-200'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-[#D4E4D4] text-[#2D3E2D] hover:bg-[#9DB99D]'
+                    : 'bg-[#F5F7F5] border border-[#C8D8C8] text-[#4A5F4A] hover:bg-[#E8F0E8]'
                 }`}
               >
                 {isAutoPlaying ? '⏸️ Pause' : '▶️ Auto-play'}

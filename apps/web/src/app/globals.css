@@ -4,39 +4,42 @@
 
 @layer base {
   :root {
-        --background-end: 180, 34%, 65%;  /* Red HSL */
-    --background-start: 180 96% 8%;  /* Blue HSL */
+    /* Green wellness color palette */
+    --background-primary: #F5F7F5;  /* Very light mint */
+    --background-secondary: #E8F0E8;  /* Soft sage */
+    --background-tertiary: #D4E4D4;  /* Light sage */
 
-    --foreground: 222.2 84% 4.9%;
+    --foreground: #2D3E2D;  /* Dark forest green */
+    --foreground-secondary: #4A5F4A;  /* Medium forest green */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: #FFFFFF;
+    --card-foreground: #2D3E2D;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: #FFFFFF;
+    --popover-foreground: #2D3E2D;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: #2D3E2D;
+    --primary-foreground: #F5F7F5;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: #7A9B7A;  /* Muted sage/moss */
+    --secondary-foreground: #F5F7F5;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: #D4E4D4;
+    --muted-foreground: #4A5F4A;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: #9DB99D;  /* Soft green */
+    --accent-foreground: #2D3E2D;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: #8B4513;
+    --destructive-foreground: #F5F7F5;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: #C8D8C8;  /* Light sage border */
+    --input: #C8D8C8;
+    --ring: #7A9B7A;
 
-    --primary_button: #012b2b;
-    --primary_button_hover: #014040;
-    --secondary_button: #517d64;
+    --primary_button: #2D3E2D;
+    --primary_button_hover: #4A5F4A;
+    --secondary_button: #7A9B7A;
 
     --radius: 0.5rem;
   }
@@ -99,5 +102,5 @@ table {
 
 
    .parent_home {
-    background: linear-gradient(to top, hsl(var(--background-start)), hsl(var(--background-end)));
+    background: var(--background-primary);
   }

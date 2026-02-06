@@ -1,77 +1,80 @@
 import Image from "next/image"
-// import { Button } from "@/components/ui/button"
-import { Play, Lock, Heart, Users } from "lucide-react"
+import { Lock, Heart, Users } from "lucide-react"
 import Ornament from "@/app/assets/Ornament.png";
-import { PrimaryButton, SecondaryButton } from "../ui/buttons";
+import { PrimaryButton } from "../ui/buttons";
 import Link from "next/link";
 
 export default function WellnessHero() {
-  // useEffect(() => {
-  //   throw new Error("Test error");
-  // }, []);
   return (
-    <div className="min-h-screen  p-6 mt-28 md:p-12">
-      <div className="mx-auto max-w-7xl grid gap-8 lg:grid-cols-2 items-center">
-        {/* Left Column - Image Section */}
-        <div className="relative rounded-3xl bg-transparent overflow-hidden">
-          <div className="absolute top-4 left-4 z-10">
-            <div className="bg-white/80 backdrop-blur-sm rounded-full px-4 py-2">Therapy Session</div>
-          </div>
-          <div className="absolute top-4 right-4 z-10">
-            <button  className="rounded-full bg-white w-12 h-12 flex items-center justify-center">
-              <Play className="w-6 h-6 text-black ml-1" fill="currentColor" />
-            </button>
-          </div>
-          <Image
-            src={Ornament}
-            alt="Wellness therapy session"
-            width={600}
-            height={800}
-            className="w-full object-cover aspect-[4/5]"
-          />
-          <div className="absolute bottom-0 left-0 py-6 px-4 flex gap-4 w-full bg-white/30">
-          <Link href="/services" className="w-full">
-            <PrimaryButton className="w-[40%] mx-auto block">Book now</PrimaryButton>
-          </Link>
-            {/* <SecondaryButton className="w-[60%]">Check Availability</SecondaryButton> */}
-          </div>
-        </div>
-
-        {/* Right Column - Content Section */}
-        <div className="text-white space-y-8">
-          <h1 className="text-5xl md:text-6xl font-semibold leading-tight">You Deserve to be Healthy</h1>
-          <p className="text-white/90 text-lg leading-relaxed">
-            Ayurveda not only focus on disease. But also, Ayurveda maintains that all life must be supported by energy
-            in balance. When there is minimal stress and the flow of energy within a person is balanced.
-          </p>
-          {/* <PrimaryButton className="bg-white text-black px-8 hover:bg-white hover:opacity-80">
-            View All Bookings <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
-          </PrimaryButton> */}
-
-          {/* Feature Cards */}
-          <div className="grid md:grid-cols-3 gap-6 pt-8">
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 space-y-4">
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                <Lock className="w-5 h-5 text-white" />
+    <div className="w-full bg-white py-16 sm:py-20 lg:py-24 px-6 sm:px-8 lg:px-12">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+          {/* Left Column - Image Section */}
+          <div className="relative rounded-sm overflow-hidden bg-[#E8F0E8] group">
+            <div className="absolute top-6 left-6 z-10">
+              <div className="bg-white px-5 py-2.5 text-sm text-[#2D3E2D] font-light tracking-wide">
+                Therapy Session
               </div>
-              <h3 className="font-semibold text-xl">Confidentiality</h3>
-              <p className="text-white/80 text-sm">
-                Your privacy is sacred; we maintain the highest level of confidentiality.
+            </div>
+            <Image
+              src={Ornament}
+              alt="Wellness therapy session"
+              width={600}
+              height={800}
+              className="w-full object-cover aspect-[4/5] transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute bottom-0 left-0 right-0 py-6 px-6 bg-white/90 backdrop-blur-sm">
+              <Link href="/services" className="block">
+                <PrimaryButton className="w-full sm:w-auto px-8">
+                  Book Session
+                </PrimaryButton>
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Column - Content Section */}
+          <div className="space-y-8 lg:space-y-10">
+            <div className="space-y-6">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light leading-tight text-[#2D3E2D]">
+                You Deserve to be Healthy
+              </h2>
+              <p className="text-[#4A5F4A] text-base sm:text-lg leading-relaxed">
+                Ayurveda not only focus on disease. But also, Ayurveda maintains that all life must be supported by energy
+                in balance. When there is minimal stress and the flow of energy within a person is balanced.
               </p>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 space-y-4">
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                <Heart className="w-5 h-5 text-white" />
+
+            {/* Feature Cards */}
+            <div className="grid sm:grid-cols-3 gap-6">
+              <div className="bg-[#F5F7F5] p-6 space-y-4 border border-[#C8D8C8] transition-all duration-300 hover:shadow-md">
+                <div className="w-12 h-12 flex items-center justify-center bg-[#D4E4D4]">
+                  <Lock className="w-5 h-5 text-[#2D3E2D]" strokeWidth={1.5} />
+                </div>
+                <h3 className="font-normal text-lg text-[#2D3E2D]">Confidentiality</h3>
+                <p className="text-[#4A5F4A] text-sm leading-relaxed">
+                  Your privacy is sacred; we maintain the highest level of confidentiality.
+                </p>
               </div>
-              <h3 className="font-semibold text-xl">Accessibility</h3>
-              <p className="text-white/80 text-sm">Accessible health support to all background and areas.</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 space-y-4">
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
-                <Users className="w-5 h-5 text-white" />
+
+              <div className="bg-[#F5F7F5] p-6 space-y-4 border border-[#C8D8C8] transition-all duration-300 hover:shadow-md">
+                <div className="w-12 h-12 flex items-center justify-center bg-[#D4E4D4]">
+                  <Heart className="w-5 h-5 text-[#2D3E2D]" strokeWidth={1.5} />
+                </div>
+                <h3 className="font-normal text-lg text-[#2D3E2D]">Accessibility</h3>
+                <p className="text-[#4A5F4A] text-sm leading-relaxed">
+                  Accessible health support to all background and areas.
+                </p>
               </div>
-              <h3 className="font-semibold text-xl">Community</h3>
-              <p className="text-white/80 text-sm">We foster a supportive community where you can connect and share.</p>
+
+              <div className="bg-[#F5F7F5] p-6 space-y-4 border border-[#C8D8C8] transition-all duration-300 hover:shadow-md">
+                <div className="w-12 h-12 flex items-center justify-center bg-[#D4E4D4]">
+                  <Users className="w-5 h-5 text-[#2D3E2D]" strokeWidth={1.5} />
+                </div>
+                <h3 className="font-normal text-lg text-[#2D3E2D]">Community</h3>
+                <p className="text-[#4A5F4A] text-sm leading-relaxed">
+                  We foster a supportive community where you can connect and share.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -79,4 +82,3 @@ export default function WellnessHero() {
     </div>
   )
 }
-

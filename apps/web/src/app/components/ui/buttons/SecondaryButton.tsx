@@ -8,9 +8,9 @@ const SecondaryButton = React.forwardRef<HTMLButtonElement, ButtonProps>(({ clas
       ref={ref}
       variant="outline"
       className={cn(
-        "rounded-full border-2 border-[#012b2b] bg-transparent text-[#012b2b]",
-        "hover:bg-[#012b2b]/10 hover:text-[#012b2b]",
-        "disabled:border-[#012b2b]/50 disabled:text-[#012b2b]/50",
+        "rounded-sm border-2 border-[#2D3E2D] bg-transparent text-[#2D3E2D]",
+        "hover:bg-[#F5F7F5] hover:text-[#2D3E2D] transition-all duration-300",
+        "disabled:border-[#2D3E2D]/50 disabled:text-[#2D3E2D]/50",
         className,
       )}
       {...props}
