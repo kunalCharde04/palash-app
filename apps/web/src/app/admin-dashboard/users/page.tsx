@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import { Loader2, Trash2, Search, SlidersHorizontal, Plus, X, Edit, User } from "lucide-react";
 import { useToast } from "@/app/components/ui/toast/use-toast";
 import { ToastProvider } from "@/app/components/ui/toast/toast";    
-import { deleteUser, fetchUsers } from "@/app/api/user";
+import { deleteUser, fetchUsers, updateUser } from "@/app/api/user";
 import { Badge } from "@/app/components/badge/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/app/components/ui/dropdown/dropdown-menu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/app/components/ui/dialog/Dialog";
@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/app/components/ui/table/table";
-import { adminCreateUser, verifyAdminCreateUserOtp, removeMembershipFromUser, deactivateUserMemberships, cancelUserBooking, updateMembershipPaymentStatus } from "@/app/api/admin";
+import { adminCreateUser, verifyAdminCreateUserOtp, removeMembershipFromUser, deactivateUserMemberships, cancelUserBooking, updateMembershipPaymentStatus, assignMembershipToUser, sendBeneficiaryOtp, verifyBeneficiaryOtp } from "@/app/api/admin";
 import { fetchMembershipPlans } from "@/app/api/memberships";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select/select";
 import { Label } from "@/app/components/ui/label";
@@ -94,11 +94,23 @@ export default function UserPage() {
   const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
   const [isCreatingUser, setIsCreatingUser] = useState(false);
   const [membershipPlans, setMembershipPlans] = useState<MembershipPlan[]>([]);
+  const [isBeneficiaryOtpModalOpen, setIsBeneficiaryOtpModalOpen] = useState(false);
+  const [currentBeneficiaryIndex, setCurrentBeneficiaryIndex] = useState<number | null>(null);
+  const [beneficiaryOtpInput, setBeneficiaryOtpInput] = useState("");
+  const [primaryMembershipId, setPrimaryMembershipId] = useState<string>("");
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [isVerifyingBeneficiary, setIsVerifyingBeneficiary] = useState(false);
   
   // Edit user states
   const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [isEditingUser, setIsEditingUser] = useState(false);
+  const [editUserName, setEditUserName] = useState("");
+  const [editUserEmail, setEditUserEmail] = useState("");
+  const [editUserRole, setEditUserRole] = useState("");
+  const [editIsVerified, setEditIsVerified] = useState(false);
+  const [editIsAgreedToTerms, setEditIsAgreedToTerms] = useState(false);
+  const [editSelectedPlanId, setEditSelectedPlanId] = useState<string>("keep-current");
   
   // Form states
   const [newUserName, setNewUserName] = useState("");
@@ -177,6 +189,9 @@ export default function UserPage() {
   const handleCloseOtpModal = () => {
     setIsOtpModalOpen(false);
     setPrimaryUserOtp("");
+    setPrimaryMembershipId("");
+    setBeneficiaryOtpInput("");
+    setCurrentBeneficiaryIndex(null);
     // Clear all form data when OTP modal is closed
     setNewUserName("");
     setNewUserEmail("");
@@ -195,6 +210,17 @@ export default function UserPage() {
       return;
     }
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newUserEmail)) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please enter a valid email address",
+      });
+      return;
+    }
+
     // Validate beneficiaries
     const validBeneficiaries = beneficiaries.filter(b => b.name.trim() && b.email.trim());
     if (beneficiaries.some(b => (b.name.trim() && !b.email.trim()) || (!b.name.trim() && b.email.trim()))) {
@@ -204,6 +230,18 @@ export default function UserPage() {
         description: "Please provide both name and email for all beneficiaries",
       });
       return;
+    }
+
+    // Validate beneficiary email formats
+    for (const beneficiary of validBeneficiaries) {
+      if (!emailRegex.test(beneficiary.email)) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: `Invalid email format for beneficiary: ${beneficiary.name}`,
+        });
+        return;
+      }
     }
 
     try {
@@ -256,11 +294,25 @@ export default function UserPage() {
 
       toast({
         title: "Success",
-        description: "User created successfully",
+        description: "Primary user created successfully",
       });
 
-      handleCloseOtpModal();
-      getUsers(); // Refresh user list
+      // Store primary membership ID for beneficiary verification
+      if (response.membership && response.membership.primaryMembershipId) {
+        setPrimaryMembershipId(response.membership.primaryMembershipId);
+      }
+
+      // If there are beneficiaries, keep the modal open to verify them
+      if (beneficiaries.length > 0 && response.beneficiariesPendingVerification) {
+        toast({
+          title: "Next Step",
+          description: "Please send OTP to each beneficiary to complete their verification",
+        });
+        // Don't close the OTP modal yet - we'll show beneficiary verification
+      } else {
+        handleCloseOtpModal();
+        getUsers(); // Refresh user list
+      }
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -269,6 +321,112 @@ export default function UserPage() {
       });
     } finally {
       setIsCreatingUser(false);
+    }
+  };
+
+  const handleSendBeneficiaryOtp = async (index: number) => {
+    const beneficiary = beneficiaries[index];
+    
+    if (!beneficiary.name || !beneficiary.email) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Beneficiary name and email are required",
+      });
+      return;
+    }
+
+    try {
+      setIsSendingOtp(true);
+      await sendBeneficiaryOtp({
+        beneficiaryEmail: beneficiary.email,
+        beneficiaryName: beneficiary.name,
+        primaryUserEmail: newUserEmail,
+      });
+
+      toast({
+        title: "Success",
+        description: `OTP sent to ${beneficiary.name}`,
+      });
+
+      // Open the OTP modal for this beneficiary
+      setCurrentBeneficiaryIndex(index);
+      setIsBeneficiaryOtpModalOpen(true);
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error?.response?.data?.message || "Failed to send OTP",
+      });
+    } finally {
+      setIsSendingOtp(false);
+    }
+  };
+
+  const handleVerifyBeneficiaryOtp = async () => {
+    if (currentBeneficiaryIndex === null) return;
+
+    const beneficiary = beneficiaries[currentBeneficiaryIndex];
+
+    if (!beneficiaryOtpInput) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "OTP is required",
+      });
+      return;
+    }
+
+    if (!primaryMembershipId) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Primary membership not found. Please create the primary user first.",
+      });
+      return;
+    }
+
+    try {
+      setIsVerifyingBeneficiary(true);
+      await verifyBeneficiaryOtp({
+        beneficiaryEmail: beneficiary.email,
+        otp: beneficiaryOtpInput,
+        primaryMembershipId: primaryMembershipId,
+      });
+
+      toast({
+        title: "Success",
+        description: `${beneficiary.name} verified successfully`,
+      });
+
+      // Mark beneficiary as verified
+      const updatedBeneficiaries = [...beneficiaries];
+      updatedBeneficiaries[currentBeneficiaryIndex].verified = true;
+      setBeneficiaries(updatedBeneficiaries);
+
+      // Close beneficiary OTP modal
+      setIsBeneficiaryOtpModalOpen(false);
+      setBeneficiaryOtpInput("");
+      setCurrentBeneficiaryIndex(null);
+
+      // Check if all beneficiaries are verified
+      const allVerified = updatedBeneficiaries.every(b => b.verified === true);
+      if (allVerified) {
+        toast({
+          title: "Complete",
+          description: "All beneficiaries have been verified!",
+        });
+        handleCloseOtpModal();
+        getUsers(); // Refresh user list
+      }
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error?.response?.data?.message || "Failed to verify beneficiary OTP",
+      });
+    } finally {
+      setIsVerifyingBeneficiary(false);
     }
   };
 
@@ -294,6 +452,12 @@ export default function UserPage() {
 
   const handleOpenEditUserModal = (user: User) => {
     setEditingUser(user);
+    setEditUserName(user.name);
+    setEditUserEmail(user.phone_or_email);
+    setEditUserRole(user.role);
+    setEditIsVerified(user.is_verified || false);
+    setEditIsAgreedToTerms(user.is_agreed_to_terms || false);
+    setEditSelectedPlanId("keep-current");
     setIsEditUserModalOpen(true);
     loadMembershipPlans();
   };
@@ -308,12 +472,38 @@ export default function UserPage() {
 
     try {
       setIsEditingUser(true);
-      // Here you would call an API to update the user
-      // For now, we'll just close the modal and refresh the users list
-      toast({
-        title: "Success",
-        description: "User updated successfully",
+
+      // Call API to update user basic info
+      await updateUser(editingUser.id, {
+        name: editUserName,
+        email: editUserEmail,
+        role: editUserRole,
+        isVerified: editIsVerified,
+        isAgreedToTerms: editIsAgreedToTerms
       });
+
+      // If a new plan was selected, assign it
+      if (editSelectedPlanId && editSelectedPlanId !== "keep-current") {
+        try {
+          await assignMembershipToUser(editingUser.id, editSelectedPlanId, 'PENDING');
+          toast({
+            title: "Success",
+            description: "User and membership updated successfully",
+          });
+        } catch (membershipError: any) {
+          // User was updated but membership assignment failed
+          toast({
+            title: "Partial Success",
+            description: `User updated, but membership assignment failed: ${membershipError?.response?.data?.message || 'Unknown error'}`,
+            variant: "destructive",
+          });
+        }
+      } else {
+        toast({
+          title: "Success",
+          description: "User updated successfully",
+        });
+      }
       
       handleCloseEditUserModal();
       getUsers(); // Refresh user list
@@ -764,38 +954,139 @@ export default function UserPage() {
 
       {/* OTP Verification Modal */}
       <Dialog open={isOtpModalOpen} onOpenChange={(open) => !open && handleCloseOtpModal()}>
-        <DialogContent>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Verify OTP</DialogTitle>
             <DialogDescription>
               An OTP has been sent to {newUserEmail}. Enter the OTP to verify the primary user.
-              {beneficiaries.length > 0 && ` ${beneficiaries.length} beneficiary account(s) will be created automatically.`}
+              {beneficiaries.length > 0 && ` After verification, you'll need to verify ${beneficiaries.length} beneficiary account(s).`}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            {/* Primary User OTP */}
+            {!primaryMembershipId && (
+              <div className="space-y-2">
+                <Label htmlFor="otp">Primary User OTP</Label>
+                <Input
+                  id="otp"
+                  placeholder="Enter 4-digit OTP"
+                  value={primaryUserOtp}
+                  onChange={(e) => setPrimaryUserOtp(e.target.value)}
+                  maxLength={4}
+                />
+              </div>
+            )}
+
+            {/* Show beneficiaries list after primary user is verified */}
+            {primaryMembershipId && beneficiaries.length > 0 && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label>Verify Beneficiaries</Label>
+                  <Badge variant="secondary">
+                    {beneficiaries.filter(b => b.verified).length} / {beneficiaries.length} Verified
+                  </Badge>
+                </div>
+                {beneficiaries.map((beneficiary, index) => (
+                  <div key={index} className="p-3 border rounded-lg bg-gray-50">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium">{beneficiary.name}</p>
+                        <p className="text-sm text-gray-500">{beneficiary.email}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {beneficiary.verified ? (
+                          <Badge variant="default" className="bg-green-600">
+                            Verified
+                          </Badge>
+                        ) : (
+                          <Button
+                            onClick={() => handleSendBeneficiaryOtp(index)}
+                            disabled={isSendingOtp}
+                            size="sm"
+                          >
+                            {isSendingOtp ? (
+                              <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Sending...
+                              </>
+                            ) : (
+                              'Send OTP'
+                            )}
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <DialogFooter>
+            <SecondaryButton onClick={handleCloseOtpModal}>
+              {primaryMembershipId && beneficiaries.every(b => b.verified) ? 'Close' : 'Cancel'}
+            </SecondaryButton>
+            {!primaryMembershipId && (
+              <Button onClick={handleVerifyOtp} disabled={isCreatingUser}>
+                {isCreatingUser ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Verifying...
+                  </>
+                ) : (
+                  'Verify & Create User'
+                )}
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Beneficiary OTP Verification Modal */}
+      <Dialog open={isBeneficiaryOtpModalOpen} onOpenChange={setIsBeneficiaryOtpModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Verify Beneficiary OTP</DialogTitle>
+            <DialogDescription>
+              {currentBeneficiaryIndex !== null && beneficiaries[currentBeneficiaryIndex] && (
+                <>
+                  An OTP has been sent to {beneficiaries[currentBeneficiaryIndex].email}.
+                  Please ask {beneficiaries[currentBeneficiaryIndex].name} to provide their OTP.
+                </>
+              )}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="otp">OTP</Label>
+              <Label htmlFor="beneficiary-otp">OTP</Label>
               <Input
-                id="otp"
-                placeholder="Enter 6-digit OTP"
-                value={primaryUserOtp}
-                onChange={(e) => setPrimaryUserOtp(e.target.value)}
-                maxLength={6}
+                id="beneficiary-otp"
+                placeholder="Enter 4-digit OTP"
+                value={beneficiaryOtpInput}
+                onChange={(e) => setBeneficiaryOtpInput(e.target.value)}
+                maxLength={4}
               />
             </div>
           </div>
 
           <DialogFooter>
-            <SecondaryButton onClick={handleCloseOtpModal}>Cancel</SecondaryButton>
-            <Button onClick={handleVerifyOtp} disabled={isCreatingUser}>
-              {isCreatingUser ? (
+            <SecondaryButton onClick={() => {
+              setIsBeneficiaryOtpModalOpen(false);
+              setBeneficiaryOtpInput("");
+              setCurrentBeneficiaryIndex(null);
+            }}>
+              Cancel
+            </SecondaryButton>
+            <Button onClick={handleVerifyBeneficiaryOtp} disabled={isVerifyingBeneficiary}>
+              {isVerifyingBeneficiary ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Verifying...
                 </>
               ) : (
-                'Verify & Create User'
+                'Verify Beneficiary'
               )}
             </Button>
           </DialogFooter>
@@ -820,7 +1111,8 @@ export default function UserPage() {
                 <Input
                   id="edit-name"
                   placeholder="Enter user's full name"
-                  defaultValue={editingUser.name}
+                  value={editUserName}
+                  onChange={(e) => setEditUserName(e.target.value)}
                 />
               </div>
 
@@ -830,7 +1122,8 @@ export default function UserPage() {
                   id="edit-email"
                   type="email"
                   placeholder="Enter user's email"
-                  defaultValue={editingUser.phone_or_email || ''}
+                  value={editUserEmail}
+                  onChange={(e) => setEditUserEmail(e.target.value)}
                 />
               </div>
 
@@ -863,7 +1156,7 @@ export default function UserPage() {
               {/* Membership Plan Update */}
               <div className="space-y-2">
                 <Label htmlFor="edit-plan">Update Membership Plan</Label>
-                <Select defaultValue="keep-current">
+                <Select value={editSelectedPlanId} onValueChange={setEditSelectedPlanId}>
                   <SelectTrigger>
                     <SelectValue placeholder="Keep current or select new plan" />
                   </SelectTrigger>
@@ -876,12 +1169,17 @@ export default function UserPage() {
                     ))}
                   </SelectContent>
                 </Select>
+                {editSelectedPlanId !== "keep-current" && (
+                  <p className="text-xs text-amber-600">
+                    Note: This will add a new membership to the user. Remove existing memberships first if needed.
+                  </p>
+                )}
               </div>
 
               {/* User Role */}
               <div className="space-y-2">
                 <Label htmlFor="edit-role">Role</Label>
-                <Select defaultValue={editingUser.role}>
+                <Select value={editUserRole} onValueChange={setEditUserRole}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select role" />
                   </SelectTrigger>
@@ -900,7 +1198,8 @@ export default function UserPage() {
                     <input 
                       type="checkbox" 
                       id="is-verified" 
-                      defaultChecked={editingUser.is_verified}
+                      checked={editIsVerified}
+                      onChange={(e) => setEditIsVerified(e.target.checked)}
                       className="rounded"
                     />
                     <Label htmlFor="is-verified" className="text-sm">Verified</Label>
@@ -909,7 +1208,8 @@ export default function UserPage() {
                     <input 
                       type="checkbox" 
                       id="agreed-terms" 
-                      defaultChecked={editingUser.is_agreed_to_terms}
+                      checked={editIsAgreedToTerms}
+                      onChange={(e) => setEditIsAgreedToTerms(e.target.checked)}
                       className="rounded"
                     />
                     <Label htmlFor="agreed-terms" className="text-sm">Agreed to Terms</Label>

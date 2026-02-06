@@ -117,6 +117,22 @@ export async function sendMail(mailObj: {phoneOrEmail: string; otp: string;}) {
 
     const {phoneOrEmail, otp} = mailObj;
 
+    // Validate email before sending
+    if (!phoneOrEmail || phoneOrEmail.trim() === '') {
+        console.error('❌ Email validation failed: phoneOrEmail is empty or undefined');
+        throw new Error('No recipients defined. Email address is required.');
+    }
+
+    // Basic email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(phoneOrEmail)) {
+        console.error(`❌ Email validation failed: Invalid email format - ${phoneOrEmail}`);
+        throw new Error(`Invalid email format: ${phoneOrEmail}`);
+    }
+
+    console.log(`📧 Preparing to send OTP email to: ${phoneOrEmail}`);
+    console.log(`🔑 OTP for ${phoneOrEmail}: ${otp}`);
+
     const emailTemplate = `
         <div style="font-family: Arial, sans-serif; max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">
             <h2 style="color: #4CAF50; text-align: center;">Palash Wellness App</h2>
@@ -132,10 +148,17 @@ export async function sendMail(mailObj: {phoneOrEmail: string; otp: string;}) {
         </div>
     `;
 
-    const info = await transporter.sendMail({
-        from: `"Palash Wellness App" <priyanshu-kun101@outlook.com>`,
-        to: phoneOrEmail,
-        subject: "Your OTP Code",
-        html: emailTemplate,
-    });
+    try {
+        const info = await transporter.sendMail({
+            from: `"Palash Wellness App" <priyanshu-kun101@outlook.com>`,
+            to: phoneOrEmail,
+            subject: "Your OTP Code",
+            html: emailTemplate,
+        });
+        console.log(`✅ OTP email sent successfully to: ${phoneOrEmail}`);
+        return info;
+    } catch (error: any) {
+        console.error(`❌ Failed to send OTP email to ${phoneOrEmail}:`, error);
+        throw new Error(`Failed to send email: ${error.message || 'Unknown error'}`);
+    }
 }

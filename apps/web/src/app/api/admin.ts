@@ -173,6 +173,38 @@ export const verifyAdminCreateUserOtp = async (data: VerifyAdminCreateUserOtpDTO
   }
 };
 
+export interface SendBeneficiaryOtpDTO {
+  beneficiaryEmail: string;
+  beneficiaryName: string;
+  primaryUserEmail: string;
+}
+
+export interface VerifyBeneficiaryOtpDTO {
+  beneficiaryEmail: string;
+  otp: string;
+  primaryMembershipId: string;
+}
+
+export const sendBeneficiaryOtp = async (data: SendBeneficiaryOtpDTO) => {
+  try {
+    const response = await api.post('/admin/users/send-beneficiary-otp', data);
+    return response.data;
+  } catch (error) {
+    console.error('Error sending beneficiary OTP:', error);
+    throw error;
+  }
+};
+
+export const verifyBeneficiaryOtp = async (data: VerifyBeneficiaryOtpDTO) => {
+  try {
+    const response = await api.post('/admin/users/verify-beneficiary-otp', data);
+    return response.data;
+  } catch (error) {
+    console.error('Error verifying beneficiary OTP:', error);
+    throw error;
+  }
+};
+
 /**
  * Remove a specific membership from a user
  */
@@ -224,6 +256,23 @@ export const updateMembershipPaymentStatus = async (
     return response.data;
   } catch (error) {
     console.error('Error updating payment status:', error);
+    throw error;
+  }
+};
+
+/**
+ * Assign a membership plan to a user
+ */
+export const assignMembershipToUser = async (
+  userId: string,
+  planId: string,
+  paymentStatus?: 'PENDING' | 'PAID' | 'REFUNDED' | 'FAILED'
+) => {
+  try {
+    const response = await api.post('/admin/users/assign-membership', { userId, planId, paymentStatus });
+    return response.data;
+  } catch (error) {
+    console.error('Error assigning membership:', error);
     throw error;
   }
 }; 

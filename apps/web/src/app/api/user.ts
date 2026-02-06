@@ -68,3 +68,13 @@ export const deleteUser = async (id: string): Promise<any> => {
   return response.data;
 };
 
+export const updateUser = async (userId: string, data: {
+  name?: string;
+  email?: string;
+  role?: string;
+  isVerified?: boolean;
+  isAgreedToTerms?: boolean;
+}): Promise<any> => {
+  const response = await api.put(`/admin/users/update-user/${userId}`, data);
+  return response.data;
+};

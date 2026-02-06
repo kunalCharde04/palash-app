@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { BarChart3, BookOpen, ChevronLeft, CreditCard, Layout, Settings, Users, Plus } from "lucide-react"
+import { BarChart3, BookOpen, ChevronLeft, CreditCard, Layout, Settings, Users, Plus, Crown } from "lucide-react"
 
 import { cn } from "@/app/lib/utils"
 
@@ -22,6 +22,11 @@ const routes = [
     label: "Services",
     icon: CreditCard,
     href: "/admin-dashboard/services",
+  },
+  {
+    label: "Membership Requests",
+    icon: Crown,
+    href: "/admin-dashboard/membership-requests",
   },
   {
     label: "RFID Card Usage",

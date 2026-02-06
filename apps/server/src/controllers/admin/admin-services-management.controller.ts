@@ -249,39 +249,54 @@ class AdminServiceManagementController {
         serviceFolder = newFolderPath;
       }
 
+      // Build update data object with only provided fields
+      const updateData: any = {};
+
+      if (name !== undefined) updateData.name = name;
+      if (description !== undefined) updateData.description = description;
+      if (shortDescription !== undefined) updateData.shortDescription = shortDescription;
+      if (category !== undefined) updateData.category = category;
+      if (tags !== undefined) {
+        updateData.tags = typeof tags === 'string' ? JSON.parse(tags) : tags;
+      }
+      if (price !== undefined) {
+        updateData.price = parseFloat(price).toFixed(4);
+      }
+      if (duration !== undefined) {
+        updateData.duration = Number(duration);
+      }
+      if (instructorName !== undefined) updateData.instructorName = instructorName;
+      if (instructorBio !== undefined) updateData.instructorBio = instructorBio;
+      if (cancellationPolicy !== undefined) updateData.cancellationPolicy = cancellationPolicy;
+      if (featured !== undefined) updateData.featured = Boolean(featured);
+      if (isActive !== undefined) updateData.isActive = Boolean(isActive);
+      if (isOnline !== undefined) updateData.isOnline = Boolean(isOnline);
+      
+      if (location !== undefined) {
+        updateData.location = typeof location === 'string' ? (() => {
+          try {
+            return JSON.parse(location);
+          } catch (e) {
+            console.log('Invalid location JSON:', location);
+            return null;
+          }
+        })() : location;
+      }
+      
+      if (virtualMeetingDetails !== undefined) {
+        updateData.virtualMeetingDetails = typeof virtualMeetingDetails === 'string' ? (() => {
+          try {
+            return JSON.parse(virtualMeetingDetails);
+          } catch (e) {
+            console.log('Invalid virtualMeetingDetails JSON:', virtualMeetingDetails);
+            return null;
+          }
+        })() : virtualMeetingDetails;
+      }
+
       const updatedService = await prisma.service.update({
         where: { id: serviceId },
-        data: {
-          name,
-          description,
-          shortDescription,
-          category,
-          tags: typeof tags === 'string' ? JSON.parse(tags) : tags,
-          price: price ? parseFloat(price).toFixed(4) : undefined,
-          duration: Number(duration),
-          instructorName,
-          instructorBio,
-          cancellationPolicy,
-          featured: Boolean(featured),
-          isActive: Boolean(isActive),
-          isOnline: Boolean(isOnline),
-          location: typeof location === 'string' ? (() => {
-            try {
-              return JSON.parse(location);
-            } catch (e) {
-              console.log('Invalid location JSON:', location);
-              return null;
-            }
-          })() : location,
-          virtualMeetingDetails: typeof virtualMeetingDetails === 'string' ? (() => {
-            try {
-              return JSON.parse(virtualMeetingDetails);
-            } catch (e) {
-              console.log('Invalid virtualMeetingDetails JSON:', virtualMeetingDetails);
-              return null;
-            }
-          })() : virtualMeetingDetails
-        },
+        data: updateData,
       });
 
       await NotificationService.getInstance().createNotification({

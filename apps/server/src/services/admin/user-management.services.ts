@@ -1,7 +1,7 @@
 import { prisma } from "@palash/db-client";
 import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from "date-fns";
 import { generateOtp } from "../../utils/generate-otp.js";
-import { storeAdminCreateUserOtp, getOtpData, deleteOtp } from "../../utils/redis.utils.js";
+import { storeAdminCreateUserOtp, getOtpData, deleteOtp, storeBeneficiaryOtp } from "../../utils/redis.utils.js";
 import { sendMail } from "../../adapters/mailer.adapter.js";
 import { AdminCreateUserDTO, VerifyOtpDTO } from "../../@types/interfaces.js";
 import { ValidationError } from "../../utils/errors.js";
@@ -638,19 +638,21 @@ class UserManagementServices {
         };
     }
     async fetchAllMembershipGroupsWithRFID() {
-        // Find ALL users with active memberships (not just primary members)
+        // Find ONLY users with PRIMARY memberships (exclude beneficiaries)
         const allUsersWithMemberships = await prisma.user.findMany({
             where: {
                 memberships: {
                     some: {
-                        isActive: true
+                        isActive: true,
+                        isPrimary: true  // Only include primary members
                     }
                 }
             },
             include: {
                 memberships: {
                     where: {
-                        isActive: true
+                        isActive: true,
+                        isPrimary: true  // Only include primary memberships
                     },
                     include: {
                         plan: {
@@ -664,16 +666,16 @@ class UserManagementServices {
             }
         });
 
-        console.log("Found users with memberships:", allUsersWithMemberships.length);
+        console.log("Found primary users with memberships:", allUsersWithMemberships.length);
 
-        // Now fetch beneficiaries for each user with primary memberships
+        // Now fetch beneficiaries for each primary user
         const groupedData = await Promise.all(allUsersWithMemberships.map(async (user) => {
-            // Find the primary membership or the first active membership
-            const primaryMembership = user.memberships.find(m => m.isPrimary) || user.memberships[0];
+            // Get the primary membership
+            const primaryMembership = user.memberships[0]; // Since we filtered for isPrimary: true
 
-            // If this is a primary membership, fetch beneficiaries
+            // Fetch beneficiaries for this primary membership
             let beneficiaries: any[] = [];
-            if (primaryMembership?.isPrimary) {
+            if (primaryMembership) {
                 const beneficiaryMemberships = await prisma.userMembership.findMany({
                     where: {
                         parentMembershipId: primaryMembership.id,
@@ -713,12 +715,12 @@ class UserManagementServices {
                     id: primaryMembership?.id,
                     planName: primaryMembership?.plan?.name,
                     cost: primaryMembership?.plan?.cost,
-                    isPrimary: primaryMembership?.isPrimary || false
+                    isPrimary: true  // Always true now since we only fetch primary users
                 }
             };
         }));
 
-        console.log(`📊 Returning ${groupedData.length} membership groups with beneficiaries`);
+        console.log(`📊 Returning ${groupedData.length} primary membership groups with beneficiaries`);
         return groupedData;
     }
 
@@ -809,6 +811,17 @@ class UserManagementServices {
     async adminCreateUser(data: AdminCreateUserDTO) {
         const { name, phoneOrEmail, planId, memberEmails, beneficiaries, paymentStatus } = data;
 
+        // Validate phoneOrEmail
+        if (!phoneOrEmail || phoneOrEmail.trim() === '') {
+            throw new ValidationError('Email is required.');
+        }
+
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(phoneOrEmail)) {
+            throw new ValidationError('Invalid email format.');
+        }
+
         // Check if user already exists
         const isUserExists = await prisma.user.findFirst({
             where: { phone_or_email: phoneOrEmail },
@@ -848,6 +861,9 @@ class UserManagementServices {
 
         await storeAdminCreateUserOtp(tempUserData);
 
+        console.log(`📧 Sending OTP to: ${phoneOrEmail}`);
+        console.log(`🔑 PRIMARY USER OTP: ${otp}`);
+
         // Send OTP via email using the existing sendMail function
         await sendMail({
             phoneOrEmail: phoneOrEmail,
@@ -857,7 +873,7 @@ class UserManagementServices {
         return { message: "OTP sent to user's email for verification." };
     }
 
-    // Verify OTP and create user with optional membership
+    // Verify OTP and create primary user (beneficiaries will be created after their OTP verification)
     async verifyAdminCreateUserOtp(data: VerifyOtpDTO) {
         const { phoneOrEmail, otp } = data;
 
@@ -870,7 +886,7 @@ class UserManagementServices {
 
         // Create user and optionally assign membership in a transaction
         return await prisma.$transaction(async (tx) => {
-            // Create the user
+            // Create the primary user
             const user = await tx.user.create({
                 data: {
                     phone_or_email: phoneOrEmail,
@@ -881,6 +897,7 @@ class UserManagementServices {
             });
 
             let membershipData = null;
+            let beneficiariesPendingVerification: Array<{ name: string; email: string }> = [];
 
             // If planId is provided, create membership
             if (savedData.planId) {
@@ -929,122 +946,6 @@ class UserManagementServices {
                     },
                 });
 
-                const memberships: typeof primaryMembership[] = [primaryMembership];
-
-                // Create memberships for beneficiaries if provided
-                if (savedData.beneficiaries && savedData.beneficiaries.length > 0) {
-                    for (const beneficiary of savedData.beneficiaries) {
-                        // Check if beneficiary user exists
-                        let memberUser = await tx.user.findFirst({
-                            where: { phone_or_email: beneficiary.email },
-                        });
-
-                        // If user doesn't exist, create them with provided name
-                        if (!memberUser) {
-                            memberUser = await tx.user.create({
-                                data: {
-                                    phone_or_email: beneficiary.email,
-                                    name: beneficiary.name, // Use provided name
-                                    is_verified: false,
-                                    is_agreed_to_terms: true,
-                                },
-                            });
-                        }
-
-                        // Generate meaningful membership ID for beneficiary
-                        const beneficiaryMembershipId = await generateMembershipId();
-                        console.log(`📝 Generated beneficiary membership ID: ${beneficiaryMembershipId}`);
-
-                        // Create beneficiary membership
-                        const beneficiaryMembership = await tx.userMembership.create({
-                            data: {
-                                id: beneficiaryMembershipId,
-                                userId: memberUser.id,
-                                planId: savedData.planId,
-                                startDate,
-                                endDate,
-                                isPrimary: false,
-                                isActive: true,
-                                parentMembershipId: primaryMembership.id,
-                            },
-                            include: {
-                                user: {
-                                    select: {
-                                        id: true,
-                                        name: true,
-                                        phone_or_email: true,
-                                    },
-                                },
-                                plan: {
-                                    select: {
-                                        name: true,
-                                        cost: true,
-                                    },
-                                },
-                            },
-                        });
-
-                        memberships.push(beneficiaryMembership as typeof primaryMembership);
-                    }
-                }
-                
-                // Also support old format for backward compatibility
-                else if (savedData.memberEmails && savedData.memberEmails.length > 0) {
-                    for (const memberEmail of savedData.memberEmails) {
-                        // Check if member user exists
-                        let memberUser = await tx.user.findFirst({
-                            where: { phone_or_email: memberEmail },
-                        });
-
-                        // If user doesn't exist, create them
-                        if (!memberUser) {
-                            memberUser = await tx.user.create({
-                                data: {
-                                    phone_or_email: memberEmail,
-                                    name: memberEmail.split('@')[0], // Use email prefix as name
-                                    is_verified: false,
-                                    is_agreed_to_terms: true,
-                                },
-                            });
-                        }
-
-                        // Generate meaningful membership ID for beneficiary
-                        const beneficiaryMembershipId = await generateMembershipId();
-                        console.log(`📝 Generated beneficiary membership ID: ${beneficiaryMembershipId}`);
-
-                        // Create beneficiary membership
-                        const beneficiaryMembership = await tx.userMembership.create({
-                            data: {
-                                id: beneficiaryMembershipId,
-                                userId: memberUser.id,
-                                planId: savedData.planId,
-                                startDate,
-                                endDate,
-                                isPrimary: false,
-                                isActive: true,
-                                parentMembershipId: primaryMembership.id,
-                            },
-                            include: {
-                                user: {
-                                    select: {
-                                        id: true,
-                                        name: true,
-                                        phone_or_email: true,
-                                    },
-                                },
-                                plan: {
-                                    select: {
-                                        name: true,
-                                        cost: true,
-                                    },
-                                },
-                            },
-                        });
-
-                        memberships.push(beneficiaryMembership as typeof primaryMembership);
-                    }
-                }
-
                 // Generate meaningful order and payment IDs
                 const orderId = await generateOrderId();
                 const paymentId = await generatePaymentId();
@@ -1069,15 +970,280 @@ class UserManagementServices {
 
                 membershipData = {
                     primaryMembership,
-                    totalMembers: memberships.length,
-                    memberships,
+                    primaryMembershipId: primaryMembership.id,
+                    planId: savedData.planId,
+                    startDate,
+                    endDate,
                 };
+
+                // Store beneficiaries for later verification
+                if (savedData.beneficiaries && savedData.beneficiaries.length > 0) {
+                    beneficiariesPendingVerification = savedData.beneficiaries;
+                }
             }
 
             return {
-                message: "User created successfully.",
+                message: "Primary user created successfully. Please verify beneficiaries.",
                 user,
                 membership: membershipData,
+                beneficiariesPendingVerification,
+            };
+        });
+    }
+
+    // Send OTP to a beneficiary
+    async sendBeneficiaryOtp(data: { beneficiaryEmail: string; beneficiaryName: string; primaryUserEmail: string }) {
+        const { beneficiaryEmail, beneficiaryName, primaryUserEmail } = data;
+
+        // Validate email
+        if (!beneficiaryEmail || beneficiaryEmail.trim() === '') {
+            throw new ValidationError('Beneficiary email is required.');
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(beneficiaryEmail)) {
+            throw new ValidationError('Invalid beneficiary email format.');
+        }
+
+        // Generate OTP
+        const otp: string = generateOtp();
+
+        // Store OTP in Redis
+        await storeBeneficiaryOtp({
+            otp,
+            beneficiaryEmail,
+            primaryUserEmail,
+            beneficiaryName,
+        });
+
+        console.log(`📧 Sending OTP to beneficiary: ${beneficiaryEmail}`);
+        console.log(`🔑 BENEFICIARY OTP for ${beneficiaryName} (${beneficiaryEmail}): ${otp}`);
+
+        // Send OTP via email
+        await sendMail({
+            phoneOrEmail: beneficiaryEmail,
+            otp: otp,
+        });
+
+        return { message: "OTP sent to beneficiary's email for verification." };
+    }
+
+    // Verify beneficiary OTP and create beneficiary membership
+    async verifyBeneficiaryOtp(data: { beneficiaryEmail: string; otp: string; primaryMembershipId: string }) {
+        const { beneficiaryEmail, otp, primaryMembershipId } = data;
+
+        const savedData = await getOtpData(beneficiaryEmail, "beneficiary-verify");
+        if (!savedData) throw new ValidationError("OTP expired. Please request a new OTP.");
+
+        if (savedData.otp !== otp) throw new ValidationError("Invalid OTP. Please try again.");
+
+        await deleteOtp(beneficiaryEmail, "beneficiary-verify");
+
+        // Get primary membership to get plan details
+        const primaryMembership = await prisma.userMembership.findUnique({
+            where: { id: primaryMembershipId },
+            include: {
+                plan: true,
+            },
+        });
+
+        if (!primaryMembership) {
+            throw new ValidationError('Primary membership not found.');
+        }
+
+        return await prisma.$transaction(async (tx) => {
+            // Check if beneficiary user exists
+            let beneficiaryUser = await tx.user.findFirst({
+                where: { phone_or_email: beneficiaryEmail },
+            });
+
+            // If user doesn't exist, create them
+            if (!beneficiaryUser) {
+                beneficiaryUser = await tx.user.create({
+                    data: {
+                        phone_or_email: beneficiaryEmail,
+                        name: savedData.beneficiaryName,
+                        is_verified: true,
+                        is_agreed_to_terms: true,
+                    },
+                });
+            } else {
+                // Update user to verified if already exists
+                beneficiaryUser = await tx.user.update({
+                    where: { id: beneficiaryUser.id },
+                    data: { is_verified: true },
+                });
+            }
+
+            // Generate meaningful membership ID for beneficiary
+            const beneficiaryMembershipId = await generateMembershipId();
+            console.log(`📝 Generated beneficiary membership ID: ${beneficiaryMembershipId}`);
+
+            // Create beneficiary membership
+            const beneficiaryMembership = await tx.userMembership.create({
+                data: {
+                    id: beneficiaryMembershipId,
+                    userId: beneficiaryUser.id,
+                    planId: primaryMembership.planId,
+                    startDate: primaryMembership.startDate,
+                    endDate: primaryMembership.endDate,
+                    isPrimary: false,
+                    isActive: true,
+                    parentMembershipId: primaryMembership.id,
+                },
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            phone_or_email: true,
+                        },
+                    },
+                    plan: {
+                        select: {
+                            name: true,
+                            cost: true,
+                        },
+                    },
+                },
+            });
+
+            return {
+                message: "Beneficiary verified and added to membership successfully.",
+                beneficiary: beneficiaryUser,
+                membership: beneficiaryMembership,
+            };
+        });
+    }
+
+    async updateUser(userId: string, data: { name?: string; email?: string; role?: string; isVerified?: boolean; isAgreedToTerms?: boolean }) {
+        const { name, email, role, isVerified, isAgreedToTerms } = data;
+
+        // Build update data object with only provided fields
+        const updateData: any = {};
+
+        if (name !== undefined) updateData.name = name;
+        if (email !== undefined) updateData.phone_or_email = email;
+        if (role !== undefined) updateData.role = role;
+        if (isVerified !== undefined) updateData.is_verified = isVerified;
+        if (isAgreedToTerms !== undefined) updateData.is_agreed_to_terms = isAgreedToTerms;
+
+        // Update the user
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: updateData,
+        });
+
+        return {
+            success: true,
+            message: 'User updated successfully',
+            user: updatedUser,
+        };
+    }
+
+    async assignMembershipToUser(userId: string, planId: string, paymentStatus: 'PENDING' | 'PAID' | 'REFUNDED' | 'FAILED' = 'PENDING') {
+        console.log(`📝 Assigning membership plan ${planId} to user ${userId}`);
+
+        // Check if user exists
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            include: {
+                memberships: {
+                    where: { isActive: true }
+                }
+            }
+        });
+
+        if (!user) {
+            throw new ValidationError('User not found');
+        }
+
+        // Check if plan exists
+        const membershipPlan = await prisma.membershipPlan.findUnique({
+            where: { id: planId },
+        });
+
+        if (!membershipPlan) {
+            throw new ValidationError('Invalid membership plan');
+        }
+
+        // Check if user already has an active membership
+        if (user.memberships && user.memberships.length > 0) {
+            throw new ValidationError('User already has an active membership. Please remove or deactivate existing memberships first.');
+        }
+
+        return await prisma.$transaction(async (tx) => {
+            const startDate = new Date();
+            const endDate = new Date();
+            endDate.setFullYear(startDate.getFullYear() + membershipPlan.renewalPeriodYears);
+
+            // Generate meaningful membership ID
+            const membershipId = await generateMembershipId();
+            console.log(`📝 Generated membership ID: ${membershipId}`);
+
+            // Create primary membership
+            const membership = await tx.userMembership.create({
+                data: {
+                    id: membershipId,
+                    userId: user.id,
+                    planId: planId,
+                    startDate,
+                    endDate,
+                    isPrimary: true,
+                    isActive: true,
+                    parentMembershipId: null,
+                },
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            phone_or_email: true,
+                        },
+                    },
+                    plan: {
+                        select: {
+                            name: true,
+                            cost: true,
+                        },
+                    },
+                },
+            });
+
+            // Generate meaningful order and payment IDs
+            const orderId = await generateOrderId();
+            const paymentId = await generatePaymentId();
+            console.log(`💳 Generated order ID: ${orderId}, payment ID: ${paymentId}`);
+
+            // Create payment record
+            await tx.payment.create({
+                data: {
+                    user_id: user.id,
+                    email: user.phone_or_email,
+                    membership_id: membership.id,
+                    order_id: orderId,
+                    payment_id: paymentId,
+                    signature: 'ADMIN_ASSIGNED',
+                    date: new Date(),
+                    amount: membershipPlan.cost,
+                    currency: 'INR',
+                    status: paymentStatus,
+                    payment_type: 'MEMBERSHIP',
+                },
+            });
+
+            console.log(`✅ Successfully assigned membership ${membershipId} to user ${userId}`);
+
+            return {
+                success: true,
+                message: `Successfully assigned ${membership.plan.name} membership to ${membership.user.name}`,
+                membership: {
+                    id: membership.id,
+                    planName: membership.plan.name,
+                    userName: membership.user.name,
+                    startDate: membership.startDate,
+                    endDate: membership.endDate,
+                },
             };
         });
     }
