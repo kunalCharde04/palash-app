@@ -1219,7 +1219,7 @@ class UserManagementServices {
             await tx.payment.create({
                 data: {
                     user_id: user.id,
-                    email: user.phone_or_email,
+                    email: user.phone_or_email || '',
                     membership_id: membership.id,
                     order_id: orderId,
                     payment_id: paymentId,
