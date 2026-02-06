@@ -54,7 +54,7 @@ function HowItsWork() {
                         <div className="space-y-6 sm:space-y-8">
                             {steps.map((step, index) => (
                                 <div key={step.number} className="flex gap-4 sm:gap-6">
-                                    <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#D4E4D4] border border-[#C8D8C8] flex items-center justify-center text-[#2D3E2D] font-medium text-sm sm:text-base">
+                                    <div className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#D4E4D4] border border-[#C8D8C8] flex items-center justify-center text-[#2D3E2D] font-light text-sm sm:text-base">
                                         {step.number}
                                     </div>
                                     <div className="flex-1">
@@ -87,7 +87,7 @@ function HowItsWork() {
                             <div className="space-y-6 xl:space-y-8">
                                 {steps.map((step, index) => (
                                     <div key={step.number} className="flex gap-6">
-                                        <div className={`flex-shrink-0 w-12 h-12 xl:w-14 xl:h-14 -ml-6 xl:-ml-7 ${step.marginTop} rounded-full bg-[#D4E4D4] border border-[#C8D8C8] flex items-center justify-center text-[#2D3E2D] font-medium`}>
+                                        <div className={`flex-shrink-0 w-12 h-12 xl:w-14 xl:h-14 -ml-6 xl:-ml-7 ${step.marginTop} rounded-full bg-[#D4E4D4] border border-[#C8D8C8] flex items-center justify-center text-[#2D3E2D] font-light`}>
                                             {step.number}
                                         </div>
                                         <div>
@@ -122,7 +122,7 @@ function HowItsWork() {
                                 <div className="space-y-6">
                                     {steps.map((step, index) => (
                                         <div key={step.number} className="flex gap-6">
-                                            <div className="flex-shrink-0 w-14 h-14 rounded-full bg-[#D4E4D4] border border-[#C8D8C8] flex items-center justify-center text-[#2D3E2D] font-medium">
+                                            <div className="flex-shrink-0 w-14 h-14 rounded-full bg-[#D4E4D4] border border-[#C8D8C8] flex items-center justify-center text-[#2D3E2D] font-light">
                                                 {step.number}
                                             </div>
                                             <div className="flex-1">

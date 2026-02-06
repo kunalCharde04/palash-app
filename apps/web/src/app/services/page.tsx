@@ -45,99 +45,101 @@ export default function Page() {
   const regularServices = services?.createResponse.services.filter(service => !service.featured) || [];
 
   return (
-    <div className="container mx-auto py-12">
+    <div className="min-h-screen bg-[#F5F7F5]">
       <Toaster />
       <Navbar user={user} isLoading={loading} />
-      <header className="mb-16 text-center mt-40">
-        <h1 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 md:text-5xl lg:text-6xl">
-          Find Your <span className="text-emerald-600 font-black">Inner Balance</span>
-        </h1>
-        <p className="mx-auto max-w-2xl text-lg text-gray-600 md:text-xl">
-          Discover our curated wellness services designed to nurture your mind, body, and spirit.
-        </p>
-      </header>
+      <div className="container mx-auto px-6 py-12">
+        <header className="mb-16 text-center mt-32 sm:mt-40">
+          <h1 className="mb-4 text-4xl font-light tracking-tight text-[#2D3E2D] md:text-5xl lg:text-6xl">
+            Find Your <span className="text-[#7A9B7A] font-normal">Inner Balance</span>
+          </h1>
+          <p className="mx-auto max-w-2xl text-lg text-[#4A5F4A] md:text-xl">
+            Discover our curated wellness services designed to nurture your mind, body, and spirit.
+          </p>
+        </header>
 
-      {isServiceLoading ? (
-        <div className="flex justify-center items-center min-h-[200px]">
-          <div className="text-center">
-            <div className="rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4">
-              <Loader2 size={30} className="animate-spin" />
+        {isServiceLoading ? (
+          <div className="flex justify-center items-center min-h-[200px]">
+            <div className="text-center">
+              <div className="rounded-full h-12 w-12 border-b-2 border-[#7A9B7A] mx-auto mb-4">
+                <Loader2 size={30} className="animate-spin text-[#7A9B7A]" />
+              </div>
+              <p className="text-lg text-[#4A5F4A]">Loading available services...</p>
             </div>
-            <p className="text-lg text-gray-600">Loading available services...</p>
           </div>
-        </div>
-      ) : serviceError ? (
-        <div className="flex justify-center items-center min-h-[200px]">
-          <div className="text-center bg-red-50 p-8 rounded-lg">
-            <svg className="h-12 w-12 text-red-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <p className="text-lg text-red-600 font-medium mb-2">Oops! Something went wrong</p>
-            <p className="text-gray-600">{serviceError}</p>
-          </div>
-        </div>
-      ) : (
-        <>
-          {/* Featured Services Section */}
-          {featuredServices.length > 0 && (
-             <section className="mt-24">
-              <h2 className="text-2xl font-bold mb-8 text-[#012b2b]">Featured Services</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {featuredServices.map((service) => (
-                  <ServiceCard key={service.id} service={service as any} />
-                ))}
-              </div>
-            </section>
-         
-          )}
-
-          {/* Regular Services Section */}
-          {regularServices.length > 0 && (
-            <section className="mt-16">
-              <h2 className="text-2xl font-bold mb-8 text-[#012b2b]">All Services</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {regularServices.map((service) => (
-                  <ServiceCard key={service.id} service={service as any} />
-                ))}
-              </div>
-            </section>
-          )}
-
-          {services?.createResponse.services.length === 0 && (
-            <div className="text-center bg-gray-50 p-8 rounded-lg">
-              <svg className="h-12 w-12 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+        ) : serviceError ? (
+          <div className="flex justify-center items-center min-h-[200px]">
+            <div className="text-center bg-white border border-[#C8D8C8] p-8 rounded-sm">
+              <svg className="h-12 w-12 text-[#7A9B7A] mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <p className="text-lg text-gray-600 font-medium">No Services Available</p>
-              <p className="text-gray-500 mt-2">Please check back later for new services</p>
+              <p className="text-lg text-[#2D3E2D] font-normal mb-2">Oops! Something went wrong</p>
+              <p className="text-[#4A5F4A]">{serviceError}</p>
             </div>
-          )}
-        </>
-      )}
+          </div>
+        ) : (
+          <>
+            {/* Featured Services Section */}
+            {featuredServices.length > 0 && (
+               <section className="mt-24">
+                <h2 className="text-2xl font-light mb-8 text-[#2D3E2D]">Featured Services</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {featuredServices.map((service) => (
+                    <ServiceCard key={service.id} service={service as any} />
+                  ))}
+                </div>
+              </section>
+           
+            )}
 
-      {services?.createResponse.pagination && (
-        <div className="mt-8 flex justify-center">
-          <nav className="flex items-center gap-2">
-            <button
-              disabled={!services.createResponse.pagination.hasPrevPage}
-              className="px-3 py-1 rounded-lg bg-white border border-gray-200 text-sm disabled:opacity-50"
-              onClick={() => {/* Add pagination logic */}}
-            >
-              Previous
-            </button>
-            <span className="text-sm text-gray-600">
-              Page {services.createResponse.pagination.currentPage} of {services.createResponse.pagination.totalPages}
-            </span>
-            <button
-              disabled={!services.createResponse.pagination.hasNextPage}
-              className="px-3 py-1 rounded-lg bg-white border border-gray-200 text-sm disabled:opacity-50"
-              onClick={() => {/* Add pagination logic */}}
-            >
-              Next
-            </button>
-          </nav>
-        </div>
-      )}
+            {/* Regular Services Section */}
+            {regularServices.length > 0 && (
+              <section className="mt-16">
+                <h2 className="text-2xl font-light mb-8 text-[#2D3E2D]">All Services</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {regularServices.map((service) => (
+                    <ServiceCard key={service.id} service={service as any} />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {services?.createResponse.services.length === 0 && (
+              <div className="text-center bg-white border border-[#C8D8C8] p-8 rounded-sm">
+                <svg className="h-12 w-12 text-[#7A9B7A] mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                </svg>
+                <p className="text-lg text-[#2D3E2D] font-normal">No Services Available</p>
+                <p className="text-[#4A5F4A] mt-2">Please check back later for new services</p>
+              </div>
+            )}
+          </>
+        )}
+
+        {services?.createResponse.pagination && (
+          <div className="mt-8 flex justify-center">
+            <nav className="flex items-center gap-2">
+              <button
+                disabled={!services.createResponse.pagination.hasPrevPage}
+                className="px-3 py-1 rounded-sm bg-white border border-[#C8D8C8] text-sm text-[#2D3E2D] disabled:opacity-50 hover:bg-[#F5F7F5] transition-colors"
+                onClick={() => {/* Add pagination logic */}}
+              >
+                Previous
+              </button>
+              <span className="text-sm text-[#4A5F4A]">
+                Page {services.createResponse.pagination.currentPage} of {services.createResponse.pagination.totalPages}
+              </span>
+              <button
+                disabled={!services.createResponse.pagination.hasNextPage}
+                className="px-3 py-1 rounded-sm bg-white border border-[#C8D8C8] text-sm text-[#2D3E2D] disabled:opacity-50 hover:bg-[#F5F7F5] transition-colors"
+                onClick={() => {/* Add pagination logic */}}
+              >
+                Next
+              </button>
+            </nav>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

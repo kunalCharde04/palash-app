@@ -76,7 +76,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, isLoading }) => {
 
     return (
         <>
-            <nav className={`fixed top-2 sm:top-4 left-1/2 rounded-xl sm:rounded-2xl w-[98%] sm:w-[96%] md:w-[94%] lg:w-[90%] max-w-7xl z-50 transition-all -translate-x-1/2 duration-300 ${isScrolled ? 'bg-white/70 backdrop-blur-md shadow-md' : 'bg-gray-200'
+            <nav className={`fixed top-2 sm:top-4 left-1/2 rounded-sm w-[98%] sm:w-[96%] md:w-[94%] lg:w-[90%] max-w-7xl z-50 transition-all -translate-x-1/2 duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-md border border-[#C8D8C8]' : 'bg-white border border-[#C8D8C8]'
                 }`}>
                 <div className="mx-auto px-2 sm:px-3 md:px-4 lg:px-8">
                     <div className="flex items-center justify-between h-12 sm:h-14 md:h-16">
@@ -98,7 +98,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, isLoading }) => {
                                     <Link 
                                         key={link.href}
                                         href={link.href} 
-                                        className={`text-gray-500 hover:text-gray-900 transition-colors ${link.isActive ? 'text-gray-900 font-bold border-b-2 border-[#012b2b] underline' : ''}`}
+                                        className={`text-[#4A5F4A] hover:text-[#2D3E2D] transition-colors ${link.isActive ? 'text-[#2D3E2D] font-bold border-b-2 border-[#7A9B7A]' : ''}`}
                                     >
                                         {link.label}
                                     </Link>
@@ -112,8 +112,8 @@ const Navbar: React.FC<NavbarProps> = ({ user, isLoading }) => {
                                 <div className="h-6 w-16 sm:h-8 sm:w-20 md:h-10 md:w-24 bg-gray-200 animate-pulse rounded-full"></div>
                             ) : user ? (
                                 <div className="flex items-center space-x-1 sm:space-x-2">
-                                    <span className="hidden md:flex items-center space-x-2 p-1 sm:p-2 rounded-full hover:bg-gray-100">
-                                        <span className="text-xs font-medium text-gray-600">Hey👋, @{user.name}</span>
+                                    <span className="hidden md:flex items-center space-x-2 p-1 sm:p-2 rounded-sm hover:bg-[#F5F7F5]">
+                                        <span className="text-xs font-medium text-[#4A5F4A]">Hey👋, @{user.name}</span>
                                     </span>
                                     <PrimaryButton 
                                         onClick={handleLogout} 
@@ -127,7 +127,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, isLoading }) => {
                             ) : (
                                 <SecondaryButton 
                                     onClick={navigateToAuth} 
-                                    className="px-2 py-1 sm:px-4 sm:py-1.5 md:px-6 md:py-2 text-xs md:text-sm border-gray-600 font-semibold text-gray-800 hover:bg-gray-100"
+                                    className="px-2 py-1 sm:px-4 sm:py-1.5 md:px-6 md:py-2 text-xs md:text-sm border-[#2D3E2D] font-normal text-[#2D3E2D] hover:bg-[#F5F7F5]"
                                 >
                                     <span className="hidden sm:inline">Sign in &#8594;</span>
                                     <span className="sm:hidden">Sign in</span>
@@ -137,7 +137,7 @@ const Navbar: React.FC<NavbarProps> = ({ user, isLoading }) => {
                             {/* Mobile Menu Button */}
                             <button
                                 onClick={toggleMobileMenu}
-                                className="lg:hidden p-1 sm:p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500 transition-colors"
+                                className="lg:hidden p-1 sm:p-2 rounded-sm text-[#4A5F4A] hover:text-[#2D3E2D] hover:bg-[#F5F7F5] focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#7A9B7A] transition-colors"
                                 aria-expanded="false"
                             >
                                 <span className="sr-only">Open main menu</span>
@@ -187,14 +187,14 @@ const Navbar: React.FC<NavbarProps> = ({ user, isLoading }) => {
                     {/* Mobile Navigation Links */}
                     <nav className="space-y-1">
                         {navigationLinks.map((link) => (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                className={`block px-3 py-3 sm:py-4 text-base sm:text-lg font-medium rounded-md transition-colors ${
-                                    link.isActive 
-                                        ? 'text-[#012b2b] bg-[#012b2b]/10 border-l-4 border-[#012b2b]' 
-                                        : 'text-gray-700 hover:text-[#012b2b] hover:bg-gray-100'
-                                }`}
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    className={`block px-3 py-3 sm:py-4 text-base sm:text-lg font-normal rounded-sm transition-colors ${
+                                        link.isActive 
+                                            ? 'text-[#2D3E2D] bg-[#E8F0E8] border-l-4 border-[#7A9B7A]' 
+                                            : 'text-[#4A5F4A] hover:text-[#2D3E2D] hover:bg-[#F5F7F5]'
+                                    }`}
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 {link.label}

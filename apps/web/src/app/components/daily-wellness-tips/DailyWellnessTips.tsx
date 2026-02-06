@@ -221,7 +221,7 @@ export default function DailyWellnessTips() {
               <button
                 key={category.key}
                 onClick={() => handleCategoryChange(category.key)}
-                className={`flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 ${
+                className={`flex items-center space-x-1 sm:space-x-2 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-light transition-all duration-200 ${
                   selectedCategory === category.key
                     ? 'bg-[#2D3E2D] text-white shadow-lg transform scale-105'
                     : 'bg-white border border-[#C8D8C8] text-[#4A5F4A] hover:bg-[#F5F7F5] hover:text-[#2D3E2D] shadow-sm'
@@ -261,10 +261,10 @@ export default function DailyWellnessTips() {
               <div className="flex items-center justify-center space-x-3 mb-4 sm:mb-6">
                 <span className="text-4xl sm:text-5xl lg:text-6xl">{getCurrentTip().icon}</span>
                 <div className="text-left">
-                  <div className="text-xs sm:text-sm text-[#4A5F4A] font-medium">
+                  <div className="text-xs sm:text-sm text-[#4A5F4A] font-light">
                     Tip #{getCurrentTip().id} of 100
                   </div>
-                  <span className={`inline-block px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium border ${
+                  <span className={`inline-block px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-light border ${
                     categoryColors[getCurrentTip().category as keyof typeof categoryColors]
                   }`}>
                     {getCurrentTip().category.charAt(0).toUpperCase() + getCurrentTip().category.slice(1)}
@@ -306,7 +306,7 @@ export default function DailyWellnessTips() {
               {/* Auto-play Toggle */}
               <button
                 onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-                className={`text-xs sm:text-sm font-medium px-3 sm:px-4 py-1 sm:py-2 rounded-full transition-all duration-200 ${
+                className={`text-xs sm:text-sm font-light px-3 sm:px-4 py-1 sm:py-2 rounded-full transition-all duration-200 ${
                   isAutoPlaying
                     ? 'bg-[#D4E4D4] text-[#2D3E2D] hover:bg-[#9DB99D]'
                     : 'bg-[#F5F7F5] border border-[#C8D8C8] text-[#4A5F4A] hover:bg-[#E8F0E8]'

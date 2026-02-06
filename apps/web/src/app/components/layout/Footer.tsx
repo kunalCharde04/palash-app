@@ -48,7 +48,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-[#104844] w-[96%] sm:w-[94%] mx-auto rounded-xl text-gray-300 py-8 sm:py-12 lg:py-16 relative">
+    <footer className="bg-[#2D3E2D] w-[96%] sm:w-[94%] mx-auto rounded-sm text-gray-300 py-8 sm:py-12 lg:py-16 relative">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12 mb-8 sm:mb-12">
@@ -60,7 +60,7 @@ export default function Footer() {
                 alt="Palash Logo" 
                 className="w-32 sm:w-40 lg:w-48 mb-4" 
               />
-              <p className="text-sm sm:text-base text-[#FF7F50] leading-relaxed max-w-md">
+              <p className="text-sm sm:text-base text-[#9DB99D] leading-relaxed max-w-md">
                 Empowering your mental wellness journey with compassionate care and expert guidance.
               </p>
             </div>
@@ -70,13 +70,13 @@ export default function Footer() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-6 lg:gap-8 lg:col-span-3">
             {/* Services Column */}
             <div>
-              <h3 className="text-white font-semibold text-sm sm:text-base mb-3 sm:mb-4">Services</h3>
+              <h3 className="text-white font-normal text-sm sm:text-base mb-3 sm:mb-4">Services</h3>
               <ul className="space-y-2">
                 {footerLinks.services.map((link, index) => (
                   <li key={index}>
                     <Link 
                       href={link.href} 
-                      className="text-xs sm:text-sm text-gray-300 hover:text-[#FF7F50] transition-colors duration-200"
+                      className="text-xs sm:text-sm text-gray-300 hover:text-[#9DB99D] transition-colors duration-200"
                     >
                       {link.label}
                     </Link>
@@ -87,13 +87,13 @@ export default function Footer() {
 
             {/* Support Column */}
             <div>
-              <h3 className="text-white font-semibold text-sm sm:text-base mb-3 sm:mb-4">Support</h3>
+              <h3 className="text-white font-normal text-sm sm:text-base mb-3 sm:mb-4">Support</h3>
               <ul className="space-y-2">
                 {footerLinks.support.map((link, index) => (
                   <li key={index}>
                     <Link 
                       href={link.href} 
-                      className="text-xs sm:text-sm text-gray-300 hover:text-[#FF7F50] transition-colors duration-200"
+                      className="text-xs sm:text-sm text-gray-300 hover:text-[#9DB99D] transition-colors duration-200"
                     >
                       {link.label}
                     </Link>
@@ -104,7 +104,7 @@ export default function Footer() {
 
             {/* Contact Column */}
             <div className="col-span-2 sm:col-span-1">
-              <h3 className="text-white font-semibold text-sm sm:text-base mb-3 sm:mb-4">Contact</h3>
+              <h3 className="text-white font-normal text-sm sm:text-base mb-3 sm:mb-4">Contact</h3>
               <ul className="space-y-3">
                 {footerLinks.contact.map((contact, index) => {
                   const IconComponent = contact.icon;
@@ -112,9 +112,9 @@ export default function Footer() {
                     <li key={index}>
                       <Link 
                         href={contact.href} 
-                        className="flex items-center space-x-2 text-xs sm:text-sm text-gray-300 hover:text-[#FF7F50] transition-colors duration-200 group"
+                        className="flex items-center space-x-2 text-xs sm:text-sm text-gray-300 hover:text-[#9DB99D] transition-colors duration-200 group"
                       >
-                        <IconComponent className="h-3 w-3 sm:h-4 sm:w-4 group-hover:text-[#FF7F50]" />
+                        <IconComponent className="h-3 w-3 sm:h-4 sm:w-4 group-hover:text-[#9DB99D]" />
                         <span>{contact.label}</span>
                       </Link>
                     </li>
@@ -126,10 +126,10 @@ export default function Footer() {
         </div>
 
         {/* Footer Bottom */}
-        <div className="border-t border-gray-600/30 pt-6 sm:pt-8">
+        <div className="border-t border-[#4A5F4A] pt-6 sm:pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
             {/* Copyright */}
-            <div className="text-xs sm:text-sm text-[#FF7F50] text-center sm:text-left">
+            <div className="text-xs sm:text-sm text-[#9DB99D] text-center sm:text-left">
               <p>© 2024 Palash Wellness. All rights reserved.</p>
             </div>
 
@@ -139,7 +139,7 @@ export default function Footer() {
                 href="https://www.instagram.com/thepalashclub/" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs sm:text-sm text-gray-300 hover:text-[#FF7F50] transition-colors duration-200"
+                className="text-xs sm:text-sm text-gray-300 hover:text-[#9DB99D] transition-colors duration-200"
               >
                 Instagram
               </Link>
@@ -147,7 +147,7 @@ export default function Footer() {
                 href="https://www.linkedin.com/in/the-palash-club-14b6aa362/" 
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs sm:text-sm text-gray-300 hover:text-[#FF7F50] transition-colors duration-200"
+                className="text-xs sm:text-sm text-gray-300 hover:text-[#9DB99D] transition-colors duration-200"
               >
                 LinkedIn
               </Link>
@@ -159,7 +159,7 @@ export default function Footer() {
         {showBackToTop && (
           <button
             onClick={scrollToTop}
-            className="fixed bottom-6 sm:bottom-8 right-6 sm:right-8 bg-[#FF7F50] text-white p-2 sm:p-3 rounded-full hover:bg-[#FF7F50]/80 transition-all duration-200 shadow-lg z-50"
+            className="fixed bottom-6 sm:bottom-8 right-6 sm:right-8 bg-[#7A9B7A] text-white p-2 sm:p-3 rounded-full hover:bg-[#2D3E2D] transition-all duration-200 shadow-lg z-50"
             aria-label="Back to top"
           >
             <ArrowUpCircle className="h-5 w-5 sm:h-6 sm:w-6" />
