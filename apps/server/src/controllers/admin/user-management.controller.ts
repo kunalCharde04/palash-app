@@ -176,7 +176,7 @@ class UserProfileManagement {
 
     async adminCreateUser(req: Request, res: Response, next: NextFunction): Promise<any> {
         try {
-            const { name, phoneOrEmail, planId, memberEmails, paymentStatus } = req.body;
+            const { name, phoneOrEmail, planId, memberEmails, beneficiaries, paymentStatus } = req.body;
             const currentUser = req.user;
 
             if (currentUser?.role !== "ADMIN") {
@@ -187,17 +187,25 @@ class UserProfileManagement {
                 return res.status(400).json({ message: "Name and email are required" });
             }
 
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(phoneOrEmail)) {
+                return res.status(400).json({ message: "Invalid email format" });
+            }
+
             const result = await userManagementServiceInstance.adminCreateUser({
                 name,
                 phoneOrEmail,
                 planId,
                 memberEmails,
+                beneficiaries,
                 paymentStatus,
             });
 
             return res.json(result);
         } catch (err: any) {
-            return res.status(500).json({ success: false, message: err.message });
+            console.error('Error in adminCreateUser controller:', err);
+            return res.status(500).json({ success: false, message: err.message || 'Internal server error' });
         }
     }
 
@@ -217,6 +225,56 @@ class UserProfileManagement {
             const result = await userManagementServiceInstance.verifyAdminCreateUserOtp({
                 phoneOrEmail,
                 otp,
+            });
+
+            return res.json(result);
+        } catch (err: any) {
+            return res.status(500).json({ success: false, message: err.message });
+        }
+    }
+
+    async sendBeneficiaryOtp(req: Request, res: Response, next: NextFunction): Promise<any> {
+        try {
+            const { beneficiaryEmail, beneficiaryName, primaryUserEmail } = req.body;
+            const currentUser = req.user;
+
+            if (currentUser?.role !== "ADMIN") {
+                return res.status(403).json({ message: "You are not authorized to send OTP" });
+            }
+
+            if (!beneficiaryEmail || !beneficiaryName || !primaryUserEmail) {
+                return res.status(400).json({ message: "Beneficiary email, name, and primary user email are required" });
+            }
+
+            const result = await userManagementServiceInstance.sendBeneficiaryOtp({
+                beneficiaryEmail,
+                beneficiaryName,
+                primaryUserEmail,
+            });
+
+            return res.json(result);
+        } catch (err: any) {
+            return res.status(500).json({ success: false, message: err.message });
+        }
+    }
+
+    async verifyBeneficiaryOtp(req: Request, res: Response, next: NextFunction): Promise<any> {
+        try {
+            const { beneficiaryEmail, otp, primaryMembershipId } = req.body;
+            const currentUser = req.user;
+
+            if (currentUser?.role !== "ADMIN") {
+                return res.status(403).json({ message: "You are not authorized to verify beneficiaries" });
+            }
+
+            if (!beneficiaryEmail || !otp || !primaryMembershipId) {
+                return res.status(400).json({ message: "Beneficiary email, OTP, and primary membership ID are required" });
+            }
+
+            const result = await userManagementServiceInstance.verifyBeneficiaryOtp({
+                beneficiaryEmail,
+                otp,
+                primaryMembershipId,
             });
 
             return res.json(result);
@@ -303,6 +361,55 @@ class UserProfileManagement {
             }
             
             const result = await userManagementServiceInstance.updateMembershipPaymentStatus(membershipId, paymentStatus);
+            return res.json(result);
+        } catch (err: any) {
+            return res.status(500).json({ success: false, message: err.message });
+        }
+    }
+
+    async updateUser(req: Request, res: Response, next: NextFunction): Promise<any> {
+        try {
+            const { userId } = req.params;
+            const { name, email, role, isVerified, isAgreedToTerms } = req.body;
+            const currentUser = req.user;
+            
+            if (currentUser?.role !== "ADMIN") {
+                return res.status(403).json({ message: "You are not authorized to update users" });
+            }
+            
+            if (!userId) {
+                return res.status(400).json({ message: "User ID is required" });
+            }
+            
+            const result = await userManagementServiceInstance.updateUser(userId, {
+                name,
+                email,
+                role,
+                isVerified,
+                isAgreedToTerms
+            });
+            
+            return res.json(result);
+        } catch (err: any) {
+            return res.status(500).json({ success: false, message: err.message });
+        }
+    }
+
+    async assignMembershipToUser(req: Request, res: Response, next: NextFunction): Promise<any> {
+        try {
+            const { userId, planId, paymentStatus } = req.body;
+            const currentUser = req.user;
+            
+            if (currentUser?.role !== "ADMIN") {
+                return res.status(403).json({ message: "You are not authorized to assign memberships" });
+            }
+            
+            if (!userId || !planId) {
+                return res.status(400).json({ message: "User ID and Plan ID are required" });
+            }
+            
+            const result = await userManagementServiceInstance.assignMembershipToUser(userId, planId, paymentStatus || 'PENDING');
+            
             return res.json(result);
         } catch (err: any) {
             return res.status(500).json({ success: false, message: err.message });

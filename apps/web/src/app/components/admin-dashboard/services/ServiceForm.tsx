@@ -491,7 +491,7 @@ export function ServiceForm({ initialData, serviceId, isEditMode = false, existi
                   {existingImages.map((imageUrl, index) => (
                     <div key={index} className="relative group">
                       <img
-                        src={imageUrl}
+                        src={`${process.env.NEXT_PUBLIC_API_URL}/api/v1${imageUrl}`}
                         alt={`Service image ${index + 1}`}
                         className="w-full h-24 object-cover rounded-lg border"
                       />
