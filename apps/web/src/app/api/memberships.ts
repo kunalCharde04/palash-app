@@ -62,7 +62,7 @@ export const submitMembershipInterest = async (data: {
 export const getMembershipInterests = async (status?: string) => {
   const url = status ? `/memberships/interests?status=${status}` : '/memberships/interests';
   const response = await api.get(url);
-  return response.data;
+  return response.data.interests; // Return the interests array from the response
 };
 
 export const updateMembershipInterestStatus = async (id: string, status: string) => {
