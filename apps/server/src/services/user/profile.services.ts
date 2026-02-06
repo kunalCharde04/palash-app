@@ -13,14 +13,26 @@ class ProfileServices {
 
     async updateProfile(userId: string, userData: Partial<UserData>): Promise<any> {
         const user = await prisma.user.findFirst({ where: { OR: [{ username: userData.username }, { 'phone_or_email': userData.phone_or_email }] } });
-        if (user) {
+        if (user && user.id !== userId) {
             throw new Error("Duplicate Username or email");
         }
 
-        let fieldsToUpdated: Partial<UserData> = {};
+        let fieldsToUpdated: any = {};
         for (let key of Object.keys(userData) as Array<keyof UserData>) {
             if (userData[key]) {
-                fieldsToUpdated[key] = userData[key];
+                // Handle date_of_birth field mapping and conversion
+                if (key === 'dob') {
+                    const dobValue = userData[key];
+                    if (dobValue && dobValue.trim() !== '') {
+                        try {
+                            fieldsToUpdated['date_of_birth'] = new Date(dobValue);
+                        } catch (error) {
+                            throw new Error("Invalid date format for date of birth");
+                        }
+                    }
+                } else {
+                    fieldsToUpdated[key] = userData[key];
+                }
             }
         }
         return await prisma.user.update({
