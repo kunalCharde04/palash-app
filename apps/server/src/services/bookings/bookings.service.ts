@@ -284,9 +284,21 @@ class BookingService {
             console.log(`  Cancelled bookings: ${cancelledBookings.length}`);
             console.log(`  Just expired: ${expiredBookingIds.length}`);
 
+            // Helper function to convert Decimal fields to numbers
+            const normalizeBooking = (booking: any) => ({
+                ...booking,
+                total_amount: Number(booking.total_amount),
+                service: booking.service ? {
+                    ...booking.service,
+                    price: Number(booking.service.price),
+                    average_rating: Number(booking.service.average_rating),
+                    total_reviews: Number(booking.service.total_reviews),
+                } : null
+            });
+
             return {
-                activeBookings,
-                cancelledBookings,
+                activeBookings: activeBookings.map(normalizeBooking),
+                cancelledBookings: cancelledBookings.map(normalizeBooking),
                 totalBookings: allUserBookings.length,
                 expiredCount: expiredBookingIds.length
             };
