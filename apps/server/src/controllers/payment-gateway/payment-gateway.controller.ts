@@ -26,17 +26,22 @@ class PaymentGatewayController {
     verifyPayment = asyncHandler(async (req: Request, res: Response) => {
         const params: IVerifyPaymentParams = req.body;
         
+        // Basic validation for required fields
         if (!params.orderId || !params.paymentId || !params.signature) {
             throw new ValidationError('Order ID, payment ID and signature are required');
         }
 
-        const verifiedPayment = this.paymentGatewayInstance.verifyPaymentSignature(params);
+        // Razorpay signature verification
+        const verifiedPayment = await this.paymentGatewayInstance.verifyPaymentSignature(params);
         
         if (!verifiedPayment) {
             throw new UnauthorizedError('Payment verification failed');
         }
 
-        return res.json({ message: "Verified transaction" });
+        return res.json({ 
+            message: "Verified transaction",
+            verified: true 
+        });
     });
 
     newRazorpayCustomer = asyncHandler(async (req: Request, res: Response) => {
